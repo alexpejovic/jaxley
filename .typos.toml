@@ -1,0 +1,20 @@
+[files]
+extend-exclude = [
+  ".git/",
+  "*.csv",
+  "*.svg",
+]
+ignore-hidden = false
+
+[default]
+extend-ignore-re = [
+  '"id": ".+"',
+]
+
+[default.extend-words]
+arange = "arange"
+ser = "ser"
+splitted = "splitted"
+strat = "strat"
+inh = "inh"
+
