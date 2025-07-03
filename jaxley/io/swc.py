@@ -183,7 +183,7 @@ def _radius_generating_fns(
         radius_fn = _radius_generating_fn(
             radiuses=rads_in_branch, each_length=each_length[i]
         )
-        # Beause SWC starts counting at 1, but numpy counts from 0.
+        # Because SWC starts counting at 1, but numpy counts from 0.
         # ind_of_branch_endpoint = np.asarray(b) - 1
         radius_fns.append(radius_fn)
     return radius_fns
@@ -370,7 +370,7 @@ def read_swc_custom(
     Jaxley assumes cylindrical compartments and therefore defines length and radius
     for every compartment. The surface area is then 2*pi*r*length. For branches
     consisting of a single traced point we assume for them to have area 4*pi*r*r.
-    Therefore, in these cases, we set lenght=2*r.
+    Therefore, in these cases, we set length=2*r.
 
     Args:
         fname: Path to the swc file.
@@ -448,7 +448,7 @@ def read_swc(
     Jaxley assumes cylindrical compartments and therefore defines length and radius
     for every compartment. The surface area is then 2*pi*r*length. For branches
     consisting of a single traced point we assume for them to have area 4*pi*r*r.
-    Therefore, in these cases, we set lenght=2*r.
+    Therefore, in these cases, we set length=2*r.
 
     Args:
         fname: Path to the swc file.
