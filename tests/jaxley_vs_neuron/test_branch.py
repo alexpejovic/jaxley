@@ -15,14 +15,17 @@ import jax.numpy as jnp
 import numpy as np
 import pytest
 from jaxley_mech.channels.l5pc import CaHVA
-from neuron import h, rxd
+import importlib.util
+
+if importlib.util.find_spec("neuron"):
+    from neuron import h, rxd
+
+    _ = h.load_file("stdlib.hoc")
+    _ = h.load_file("import3d.hoc")
 
 import jaxley as jx
 from jaxley.channels import HH
 from jaxley.pumps import CaFaradayConcentrationChange, CaNernstReversal
-
-_ = h.load_file("stdlib.hoc")
-_ = h.load_file("import3d.hoc")
 
 
 @pytest.mark.parametrize("solver", ["bwd_euler", "crank_nicolson"])
