@@ -3,6 +3,7 @@
 
 import numpy as np
 import pandas as pd
+import importlib.util
 
 
 def get_segment_xyzrL(section, comp_idx=None, loc=None, ncomp=8):
@@ -126,10 +127,13 @@ def match_stim_loc(jx_cell, neuron_sec, comp_idx=None, loc=None, ncomp=8):
 
 
 def import_neuron_morph(fname, ncomp=8):
-    from neuron import h
 
-    _ = h.load_file("stdlib.hoc")
-    _ = h.load_file("import3d.hoc")
+    if importlib.util.find_spec("neuron"):
+        from neuron import h
+
+        _ = h.load_file("stdlib.hoc")
+        _ = h.load_file("import3d.hoc")
+
     ncomp = 8
 
     ##################### NEURON ##################
