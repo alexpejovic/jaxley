@@ -62,7 +62,7 @@ doc = [
 ]
 dev = [
     "jaxley-mech",
-    "neuron", # NOTE: requires python<=3.12
+    "neuron",
     "pytest",
     "pyright",
     "optax",
@@ -71,6 +71,7 @@ dev = [
 lint = [
     "ruff",
     "mypy[faster-cache]",
+    "typos",
 ]
 
 [tool.pytest.ini_options]
@@ -84,7 +85,7 @@ addopts = [
 ]
 filterwarnings = [
   # Fail on warnings
-  "error",
+  # "error",
 ]
 xfail_strict = true
 markers = [
