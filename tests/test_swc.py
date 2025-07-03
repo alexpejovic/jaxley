@@ -11,12 +11,15 @@ import os
 os.environ["XLA_PYTHON_CLIENT_MEM_FRACTION"] = ".8"
 import numpy as np
 import pytest
-from neuron import h
+import importlib.util
+
+if importlib.util.find_spec("neuron"):
+    from neuron import h, rxd
+
+    _ = h.load_file("stdlib.hoc")
+    _ = h.load_file("import3d.hoc")
 
 import jaxley as jx
-
-_ = h.load_file("stdlib.hoc")
-_ = h.load_file("import3d.hoc")
 
 
 # Test is failing for "morph_ca1_n120.swc". This is because NEURON and Jaxley handle
