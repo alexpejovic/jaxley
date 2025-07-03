@@ -43,6 +43,12 @@ lint: .venv  ## Run lint checks (only)
 fmt: .venv  ## Run autoformatting (and lint)
 	$(VENV_BIN)/ruff check
 	$(VENV_BIN)/ruff format
-	$(VENV_BIN)/typos ..
+	$(VENV_BIN)/typos .
 	-$(VENV_BIN)/mypy
 
+.PHONY: clean
+clean:  ## Clean up caches and build artifacts
+	@rm -rf .mypy_cache/
+	@rm -rf .pytest_cache/
+	@$(VENV_BIN)/ruff clean
+	@find . -type f -name '*.py[co]' -delete -or -type d -name __pycache__ -exec rm -r {} +
