@@ -34,6 +34,10 @@ test: .venv build  ## Run fast unittests
 test-all: .venv build  ## Run all tests
 	$(VENV_BIN)/pytest -m "" $(PYTEST_ARGS)
 
+.PHONY: ruff-lint
+ruff-lint: .venv  ## Run lint checks (only)
+	$(VENV_BIN)/ruff check --output-format concise
+
 .PHONY: lint
 lint: .venv  ## Run lint checks (only)
 	$(VENV_BIN)/ruff check
@@ -41,8 +45,8 @@ lint: .venv  ## Run lint checks (only)
 
 .PHONY: fmt
 fmt: .venv  ## Run autoformatting (and lint)
-	$(VENV_BIN)/ruff check
 	$(VENV_BIN)/ruff format
+	$(VENV_BIN)/ruff check
 	$(VENV_BIN)/typos .
 	-$(VENV_BIN)/mypy
 
