@@ -99,7 +99,7 @@ def test_network_grad(SimpleNet):
         {"TestSynapse_gC": jnp.asarray([-75.34438431, -163.50398586])},
     ]
 
-    for true_g, new_g in zip(grad_300724, g):
+    for true_g, new_g in zip(grad_300724, g, strict=False):
         for key in true_g:
             max_error = np.max(np.abs(true_g[key] - new_g[key]))
             tolerance = 1e-3  # Leak cond has a huge gradient...

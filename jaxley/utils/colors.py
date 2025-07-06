@@ -15,7 +15,7 @@ def network_cols(num_neurons_in_layers: list):
         orange_shades,
     ]
     cols = []
-    for num_in_layer, col_builder in zip(num_neurons_in_layers, fn_order):
+    for num_in_layer, col_builder in zip(num_neurons_in_layers, fn_order, strict=False):
         cols_in_layer = col_builder(num_in_layer)
         cols += cols_in_layer
     return cols

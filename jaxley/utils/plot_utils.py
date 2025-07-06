@@ -1,12 +1,11 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Dict, Optional, Tuple, Union
+from typing import Union
 from warnings import warn
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 from matplotlib.axes import Axes
 from matplotlib.patches import Circle
 from numpy import ndarray
@@ -17,9 +16,9 @@ from jaxley.utils.cell_utils import v_interp
 
 def plot_graph(
     xyzr: ndarray,
-    dims: Tuple[int] = (0, 1),
+    dims: tuple[int] = (0, 1),
     color: str = "k",
-    ax: Optional[Axes] = None,
+    ax: Axes | None = None,
     type: str = "line",
     **kwargs,
 ) -> Axes:
@@ -34,7 +33,6 @@ def plot_graph(
         type: Either `line` or `scatter`.
         kwargs: The plot kwargs for plt.plot or plt.scatter.
     """
-
     if ax is None:
         fig = plt.figure(figsize=(3, 3))
         ax = fig.add_subplot(111) if len(dims) < 3 else plt.axes(projection="3d")
@@ -81,8 +79,7 @@ def extract_outline(points: ndarray) -> ndarray:
 
 
 def compute_rotation_matrix(axis: ndarray, angle: float) -> ndarray:
-    """
-    Return the rotation matrix associated with counterclockwise rotation about
+    """Return the rotation matrix associated with counterclockwise rotation about
     the given axis by the given angle.
 
     Can be used to rotate a coordinate vector by multiplying it with the rotation
@@ -140,7 +137,6 @@ def create_cone_frustum_mesh(
     Returns:
         An array of mesh points.
     """
-
     t = np.linspace(0, 2 * np.pi, resolution)
 
     # Determine the total height including domes
@@ -251,7 +247,7 @@ def plot_mesh(
     mesh_points: ndarray,
     orientation: ndarray,
     center: ndarray,
-    dims: Tuple[int],
+    dims: tuple[int],
     ax: Axes = None,
     **kwargs,
 ) -> Axes:
@@ -318,9 +314,9 @@ def plot_mesh(
 
 def plot_comps(
     module_or_view: Union["jx.Module", "jx.View"],
-    dims: Tuple[int] = (0, 1),
+    dims: tuple[int] = (0, 1),
     color: str = "k",
-    ax: Optional[Axes] = None,
+    ax: Axes | None = None,
     true_comp_length: bool = True,
     resolution: int = 100,
     **kwargs,
@@ -359,7 +355,7 @@ def plot_comps(
     if "x" not in module_or_view.nodes.columns:
         module_or_view.compute_compartment_centers()
 
-    for idx, xyzr in zip(module_or_view._branches_in_view, module_or_view.xyzr):
+    for idx, xyzr in zip(module_or_view._branches_in_view, module_or_view.xyzr, strict=False):
         locs = xyzr[:, :3]
         if locs.shape[0] == 1:  # assume spherical comp
             radius = xyzr[:, -1]
@@ -389,7 +385,7 @@ def plot_comps(
             branch_df = module_or_view.nodes[
                 module_or_view.nodes["global_branch_index"] == idx
             ]
-            for l, axis, (i, comp) in zip(cylinder_lens, axes, branch_df.iterrows()):
+            for l, axis, (i, comp) in zip(cylinder_lens, axes, branch_df.iterrows(), strict=False):
                 center = comp[["x", "y", "z"]].astype(float)
                 radius = comp["radius"]
                 length = comp["length"] if true_comp_length else l
@@ -408,9 +404,9 @@ def plot_comps(
 
 def plot_morph(
     module_or_view: Union["jx.Module", "jx.View"],
-    dims: Tuple[int] = (0, 1),
+    dims: tuple[int] = (0, 1),
     color: str = "k",
-    ax: Optional[Axes] = None,
+    ax: Axes | None = None,
     resolution: int = 100,
     **kwargs,
 ) -> Axes:
@@ -435,7 +431,8 @@ def plot_morph(
             Useful too have a simpler mesh for plotting.
 
     Returns:
-        Plot of the detailed morphology."""
+        Plot of the detailed morphology.
+    """
     if ax is None:
         fig = plt.figure(figsize=(3, 3))
         ax = fig.add_subplot(111) if len(dims) < 3 else plt.axes(projection="3d")
@@ -450,7 +447,7 @@ def plot_morph(
 
     for xyzr in module_or_view.xyzr:
         if len(xyzr) > 1:
-            for xyzr1, xyzr2 in zip(xyzr[1:, :], xyzr[:-1, :]):
+            for xyzr1, xyzr2 in zip(xyzr[1:, :], xyzr[:-1, :], strict=False):
                 dxyz = xyzr2[:3] - xyzr1[:3]
                 length = np.sqrt(np.sum(dxyz**2))
                 points = create_cone_frustum_mesh(

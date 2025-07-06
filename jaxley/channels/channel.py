@@ -1,9 +1,6 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
-
-from abc import ABC, abstractmethod
-from typing import Dict, Optional, Tuple
-from warnings import warn
+from __future__ import annotations
 
 import jax.numpy as jnp
 
@@ -16,14 +13,15 @@ class Channel:
 
     As in NEURON, a `Channel` is considered a distributed process, which means that its
     conductances are to be specified in `S/cm2` and its currents are to be specified in
-    `uA/cm2`."""
+    `uA/cm2`.
+    """
 
     _name = None
     channel_params = None
     channel_states = None
     current_name = None
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None) -> None:
         contact = (
             "If you have any questions, please reach out via email to "
             "michael.deistler@uni-tuebingen.de or create an issue on Github: "
@@ -45,11 +43,11 @@ class Channel:
         self._name = name if name else self.__class__.__name__
 
     @property
-    def name(self) -> Optional[str]:
+    def name(self) -> str | None:
         """The name of the channel (by default, this is the class name)."""
         return self._name
 
-    def change_name(self, new_name: str):
+    def change_name(self, new_name: str) -> Channel:
         """Change the channel name.
 
         Args:
@@ -82,13 +80,13 @@ class Channel:
         return self
 
     def update_states(
-        self, states, dt, v, params
-    ) -> Tuple[jnp.ndarray, Tuple[jnp.ndarray, jnp.ndarray]]:
+        self, states: None, dt: None, v: None, params: None
+    ) -> tuple[jnp.ndarray, tuple[jnp.ndarray, jnp.ndarray]]:
         """Return the updated states."""
         raise NotImplementedError
 
     def compute_current(
-        self, states: Dict[str, jnp.ndarray], v, params: Dict[str, jnp.ndarray]
+        self, states: dict[str, jnp.ndarray], v: float, params: dict[str, jnp.ndarray]
     ):
         """Given channel states and voltage, return the current through the channel.
 
@@ -104,10 +102,10 @@ class Channel:
 
     def init_state(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         v: jnp.ndarray,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
         delta_t: float,
-    ):
+    ) -> dict:
         """Initialize states of channel."""
         return {}

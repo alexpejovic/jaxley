@@ -1,7 +1,6 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Dict, Optional
 
 import jax.numpy as jnp
 
@@ -16,7 +15,7 @@ from jaxley.solver_gate import (
 # Leak, Na, K, Km, CaT, CaL
 # [Pospischil et al. Biological Cybernetics (2008)]
 
-__all__ = ["Leak", "Na", "K", "Km", "CaT", "CaL"]
+__all__ = ["CaL", "CaT", "K", "Km", "Leak", "Na"]
 
 
 # Helper function
@@ -35,7 +34,7 @@ def efun(x):
 class Leak(Channel):
     """Leak current based on Pospischil et al., 2008."""
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         self.current_is_in_mA_per_cm2 = True
 
         super().__init__(name)
@@ -49,16 +48,16 @@ class Leak(Channel):
 
     def update_states(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         dt,
         v,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
     ):
         """No state to update."""
         return {}
 
     def compute_current(
-        self, states: Dict[str, jnp.ndarray], v, params: Dict[str, jnp.ndarray]
+        self, states: dict[str, jnp.ndarray], v, params: dict[str, jnp.ndarray]
     ):
         """Return current."""
         prefix = self._name
@@ -72,7 +71,7 @@ class Leak(Channel):
 class Na(Channel):
     """Sodium channel based on Pospischil et al., 2008."""
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         self.current_is_in_mA_per_cm2 = True
 
         super().__init__(name)
@@ -83,14 +82,14 @@ class Na(Channel):
             "vt": -60.0,  # Global parameter, not prefixed with `Na`.
         }
         self.channel_states = {f"{prefix}_m": 0.2, f"{prefix}_h": 0.2}
-        self.current_name = f"i_Na"
+        self.current_name = "i_Na"
 
     def update_states(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         dt,
         v,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
     ):
         """Update state."""
         prefix = self._name
@@ -100,7 +99,7 @@ class Na(Channel):
         return {f"{prefix}_m": new_m, f"{prefix}_h": new_h}
 
     def compute_current(
-        self, states: Dict[str, jnp.ndarray], v, params: Dict[str, jnp.ndarray]
+        self, states: dict[str, jnp.ndarray], v, params: dict[str, jnp.ndarray]
     ):
         """Return current."""
         prefix = self._name
@@ -143,7 +142,7 @@ class Na(Channel):
 class K(Channel):
     """Potassium channel based on Pospischil et al., 2008."""
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         self.current_is_in_mA_per_cm2 = True
 
         super().__init__(name)
@@ -154,14 +153,14 @@ class K(Channel):
             "vt": -60.0,  # Global parameter, not prefixed with `Na`.
         }
         self.channel_states = {f"{prefix}_n": 0.2}
-        self.current_name = f"i_K"
+        self.current_name = "i_K"
 
     def update_states(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         dt,
         v,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
     ):
         """Update state."""
         prefix = self._name
@@ -170,7 +169,7 @@ class K(Channel):
         return {f"{prefix}_n": new_n}
 
     def compute_current(
-        self, states: Dict[str, jnp.ndarray], v, params: Dict[str, jnp.ndarray]
+        self, states: dict[str, jnp.ndarray], v, params: dict[str, jnp.ndarray]
     ):
         """Return current."""
         prefix = self._name
@@ -199,7 +198,7 @@ class K(Channel):
 class Km(Channel):
     """Slow M Potassium channel based on Pospischil et al., 2008."""
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         self.current_is_in_mA_per_cm2 = True
 
         super().__init__(name)
@@ -207,17 +206,17 @@ class Km(Channel):
         self.channel_params = {
             f"{prefix}_gKm": 0.004e-3,
             f"{prefix}_taumax": 4000.0,
-            f"eK": -90.0,
+            "eK": -90.0,
         }
         self.channel_states = {f"{prefix}_p": 0.2}
-        self.current_name = f"i_K"
+        self.current_name = "i_K"
 
     def update_states(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         dt,
         v,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
     ):
         """Update state."""
         prefix = self._name
@@ -228,7 +227,7 @@ class Km(Channel):
         return {f"{prefix}_p": new_p}
 
     def compute_current(
-        self, states: Dict[str, jnp.ndarray], v, params: Dict[str, jnp.ndarray]
+        self, states: dict[str, jnp.ndarray], v, params: dict[str, jnp.ndarray]
     ):
         """Return current."""
         prefix = self._name
@@ -256,7 +255,7 @@ class Km(Channel):
 class CaL(Channel):
     """L-type Calcium channel based on Pospischil et al., 2008."""
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         self.current_is_in_mA_per_cm2 = True
 
         super().__init__(name)
@@ -266,14 +265,14 @@ class CaL(Channel):
             "eCa": 120.0,
         }
         self.channel_states = {f"{prefix}_q": 0.2, f"{prefix}_r": 0.2}
-        self.current_name = f"i_Ca"
+        self.current_name = "i_Ca"
 
     def update_states(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         dt,
         v,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
     ):
         """Update state."""
         prefix = self._name
@@ -283,7 +282,7 @@ class CaL(Channel):
         return {f"{prefix}_q": new_q, f"{prefix}_r": new_r}
 
     def compute_current(
-        self, states: Dict[str, jnp.ndarray], v, params: Dict[str, jnp.ndarray]
+        self, states: dict[str, jnp.ndarray], v, params: dict[str, jnp.ndarray]
     ):
         """Return current."""
         prefix = self._name
@@ -324,7 +323,7 @@ class CaL(Channel):
 class CaT(Channel):
     """T-type Calcium channel based on Pospischil et al., 2008."""
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         self.current_is_in_mA_per_cm2 = True
 
         super().__init__(name)
@@ -335,14 +334,14 @@ class CaT(Channel):
             "eCa": 120.0,  # Global parameter, not prefixed with `CaT`.
         }
         self.channel_states = {f"{prefix}_u": 0.2}
-        self.current_name = f"i_Ca"
+        self.current_name = "i_Ca"
 
     def update_states(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         dt,
         v,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
     ):
         """Update state."""
         prefix = self._name
@@ -353,7 +352,7 @@ class CaT(Channel):
         return {f"{prefix}_u": new_u}
 
     def compute_current(
-        self, states: Dict[str, jnp.ndarray], v, params: Dict[str, jnp.ndarray]
+        self, states: dict[str, jnp.ndarray], v, params: dict[str, jnp.ndarray]
     ):
         """Return current."""
         prefix = self._name

@@ -3,7 +3,6 @@
 
 import itertools
 from copy import deepcopy
-from typing import Dict, List, Optional, Tuple, Union
 from warnings import warn
 
 import jax.numpy as jnp
@@ -32,12 +31,12 @@ class Network(Module):
     synapses via `jx.connect`.
     """
 
-    network_params: Dict = {}
-    network_states: Dict = {}
+    network_params: dict = {}
+    network_states: dict = {}
 
     def __init__(
         self,
-        cells: List[Cell],
+        cells: list[Cell],
     ):
         """Initialize network of cells and synapses.
 
@@ -234,12 +233,12 @@ class Network(Module):
 
     def _step_synapse(
         self,
-        states: Dict,
-        syn_channels: List,
-        params: Dict,
+        states: dict,
+        syn_channels: list,
+        params: dict,
         delta_t: float,
         edges: pd.DataFrame,
-    ) -> Tuple[Dict, Tuple[jnp.ndarray, jnp.ndarray]]:
+    ) -> tuple[dict, tuple[jnp.ndarray, jnp.ndarray]]:
         """Perform one step of the synapses and obtain their currents."""
         states = self._step_synapse_state(states, syn_channels, params, delta_t, edges)
         states, current_terms = self._synapse_currents(
@@ -249,12 +248,12 @@ class Network(Module):
 
     def _step_synapse_state(
         self,
-        states: Dict,
-        syn_channels: List,
-        params: Dict,
+        states: dict,
+        syn_channels: list,
+        params: dict,
         delta_t: float,
         edges: pd.DataFrame,
-    ) -> Dict:
+    ) -> dict:
         voltages = states["v"]
 
         grouped_syns = edges.groupby("type", sort=False, group_keys=False)
@@ -296,12 +295,12 @@ class Network(Module):
 
     def _synapse_currents(
         self,
-        states: Dict,
-        syn_channels: List,
-        params: Dict,
+        states: dict,
+        syn_channels: list,
+        params: dict,
         delta_t: float,
         edges: pd.DataFrame,
-    ) -> Tuple[Dict, Tuple[jnp.ndarray, jnp.ndarray]]:
+    ) -> tuple[dict, tuple[jnp.ndarray, jnp.ndarray]]:
         voltages = states["v"]
 
         grouped_syns = edges.groupby("type", sort=False, group_keys=False)
@@ -377,7 +376,7 @@ class Network(Module):
 
     def arrange_in_layers(
         self,
-        layers: List[int],
+        layers: list[int],
         within_layer_offset: float = 500.0,
         between_layer_offset: float = 1500.0,
         vertical_layers: bool = False,
@@ -415,13 +414,13 @@ class Network(Module):
     def vis(
         self,
         detail: str = "full",
-        ax: Optional[Axes] = None,
+        ax: Axes | None = None,
         color: str = "k",
         synapse_color: str = "b",
-        dims: Tuple[int] = (0, 1),
-        cell_plot_kwargs: Dict = {},
-        synapse_plot_kwargs: Dict = {},
-        synapse_scatter_kwargs: Dict = {},
+        dims: tuple[int] = (0, 1),
+        cell_plot_kwargs: dict = {},
+        synapse_plot_kwargs: dict = {},
+        synapse_scatter_kwargs: dict = {},
         **kwargs,  # absorb add. kwargs, i.e. to enable net.cell(0).vis(type="line")
     ) -> Axes:
         """Visualize the module.
@@ -524,7 +523,7 @@ class Network(Module):
         if is_new:  # synapse is not known
             self._update_synapse_state_names(synapse_type)
             self.base.synapse_current_names.append(synapse_current_name)
-            index_within_type = list(range(0, len(pre_nodes)))
+            index_within_type = list(range(len(pre_nodes)))
         else:
             # Figure out how many synapses of this type already exist
             n_existing = len(self.base.edges[self.base.edges.type == synapse_name])

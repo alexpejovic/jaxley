@@ -1,22 +1,19 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Dict, Optional, Tuple
 
-import jax.numpy as jnp
 
 from jaxley.solver_gate import save_exp
 from jaxley.synapses.synapse import Synapse
 
 
 class TestSynapse(Synapse):
-    """
-    Compute syanptic current and update synapse state for a test synapse.
+    """Compute syanptic current and update synapse state for a test synapse.
     """
 
     __test__ = False  # Not a unit test - pytest ignores
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         super().__init__(name)
         prefix = self._name
         self.synapse_params = {f"{prefix}_gC": 1e-4}
@@ -24,12 +21,12 @@ class TestSynapse(Synapse):
 
     def update_states(
         self,
-        states: Dict,
+        states: dict,
         delta_t: float,
         pre_voltage: float,
         post_voltage: float,
-        params: Dict,
-    ) -> Dict:
+        params: dict,
+    ) -> dict:
         """Return updated synapse state and current."""
         prefix = self._name
         v_th = -35.0
@@ -46,7 +43,7 @@ class TestSynapse(Synapse):
         return {f"{prefix}_c": new_s}
 
     def compute_current(
-        self, states: Dict, pre_voltage: float, post_voltage: float, params: Dict
+        self, states: dict, pre_voltage: float, post_voltage: float, params: dict
     ) -> float:
         prefix = self._name
         e_syn = 0.0

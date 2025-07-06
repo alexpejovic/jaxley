@@ -7,7 +7,6 @@ import pytest
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 
-import jax.numpy as jnp
 import numpy as np
 
 import jaxley as jx
@@ -60,7 +59,6 @@ def test_record_synaptic_and_membrane_states(SimpleNet):
     Tests are functional, not just API. They test whether the voltage and synaptic
     states spike at (almost) the same times.
     """
-
     _ = np.random.seed(0)  # Seed because connectivity is at random postsyn locs.
 
     net = SimpleNet(3, 1, 4)

@@ -1,10 +1,8 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-import os
 import re
 from pathlib import Path
-from typing import List
 
 import numpy as np
 
@@ -23,7 +21,7 @@ def test_rm_all_deprecated_functions():
 
     violations = []
     for py_file in package_dir.rglob("*.py"):
-        with open(py_file, "r") as f:
+        with open(py_file) as f:
             for line_num, line in enumerate(f, 1):
                 if re.search(decorator_pattern, line):
                     version_match = re.search(version_pattern, line)

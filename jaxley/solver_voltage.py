@@ -1,7 +1,7 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 import jax.numpy as jnp
 import numpy as np
@@ -18,7 +18,7 @@ def step_voltage_implicit_with_dhs_solve(
     internal_node_inds,
     sinks,
     n_nodes,
-    solve_indexer: Dict[str, Any],
+    solve_indexer: dict[str, Any],
     optimize_for_gpu: bool,
     delta_t,
 ):
@@ -178,7 +178,7 @@ def _comp_based_backsub_recursive_doubling(
     steps: int,
     n_nodes: int,
     parent_lookup: np.ndarray,
-) -> Tuple[jnp.ndarray, jnp.ndarray]:
+) -> tuple[jnp.ndarray, jnp.ndarray]:
     """Backsubstitute with recursive doubling.
 
     This function contains a lot of math, so I will describe what is going on here:
@@ -329,7 +329,7 @@ def _voltage_vectorfield(
     """Evaluate the vectorfield of the nerve equation."""
     if np.sum(np.isin(types, [1, 2, 3, 4])) > 0:
         raise NotImplementedError(
-            f"Forward Euler is not implemented for branched morphologies."
+            "Forward Euler is not implemented for branched morphologies."
         )
 
     # Membrane current update.
@@ -359,7 +359,7 @@ def step_voltage_implicit_with_stone(
     """Solve one timestep of branched nerve equations with implicit (backward) Euler."""
     if np.sum(np.isin(types, [1, 2, 3, 4])) > 0:
         raise NotImplementedError(
-            f"The stone solver is not implemented for branched morphologies."
+            "The stone solver is not implemented for branched morphologies."
         )
 
     axial_conductances = delta_t * axial_conductances

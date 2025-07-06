@@ -8,14 +8,12 @@ from jaxley.synapses.ionotropic import IonotropicSynapse
 
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
-from typing import Optional
 
 import jax.numpy as jnp
 import numpy as np
-import pytest
 
 import jaxley as jx
-from jaxley.channels import HH, CaL, CaT, Channel, K, Km, Leak, Na
+from jaxley.channels import HH
 
 
 def test_clamp_pointneuron(SimpleComp):

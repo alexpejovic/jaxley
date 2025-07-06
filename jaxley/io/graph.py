@@ -1,7 +1,7 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 from warnings import warn
 
 import matplotlib.pyplot as plt
@@ -36,7 +36,7 @@ def _has_same_id(
     graph: nx.Graph,
     node_i: Any,
     node_j: Any,
-    relevant_type_ids: List[int],
+    relevant_type_ids: list[int],
 ):
     """Return whether two nodes in a graph have the same value for the `id` attribute.
 
@@ -59,7 +59,7 @@ def _get_soma_idxs(graph: nx.Graph):
     return [i for i, n in nx.get_node_attributes(graph, "id").items() if n == 1]
 
 
-def _unpack(d: Dict, keys: list[str]) -> List:
+def _unpack(d: dict, keys: list[str]) -> list:
     """Return all values of a dictionary whose key is in `keys`."""
     return [d[k] for k in keys]
 
@@ -76,14 +76,16 @@ def _branch_e2n(branch_edges):
 def _branch_n2e(branch_nodes):
     """Return all edges given the nodes within a branch.
 
-    E.g. `branch_nodes = [0, 1, 2]` -> [(0, 1), (1, 2)]`"""
-    return [e for e in zip(branch_nodes[:-1], branch_nodes[1:])]
+    E.g. `branch_nodes = [0, 1, 2]` -> [(0, 1), (1, 2)]`
+    """
+    return [e for e in zip(branch_nodes[:-1], branch_nodes[1:], strict=False)]
 
 
 def _find_root(G: nx.Graph):
     """Return a possible root for tracing the graph.
 
-    Roots are nodes which have degree = 0."""
+    Roots are nodes which have degree = 0.
+    """
     roots = [n for n in sorted(G.nodes) if _is_leaf(G, n)]
     return roots[0]
 
@@ -145,7 +147,8 @@ def _add_missing_graph_attrs(graph: nx.Graph) -> nx.Graph:
         graph: A networkx graph.
 
     Returns:
-        The graph with the added attributes."""
+        The graph with the added attributes.
+    """
     available_keys = graph.nodes[1].keys()
     defaults = {
         "id": 0,
@@ -190,11 +193,11 @@ def _add_edge_lengths(graph: nx.Graph, min_len: float = 1e-5) -> nx.DiGraph:
 def build_compartment_graph(
     swc_graph: nx.DiGraph,
     ncomp: int,
-    root: Optional[int] = None,
-    min_radius: Optional[float] = None,
+    root: int | None = None,
+    min_radius: float | None = None,
     max_len=None,
     ignore_swc_tracing_interruptions=True,
-    relevant_type_ids: Optional[List[int]] = None,
+    relevant_type_ids: list[int] | None = None,
 ) -> nx.DiGraph:
     """Return a networkX graph that indicates the compartment structure.
 
@@ -421,11 +424,11 @@ def build_compartment_graph(
 
 def _trace_branches(
     swc_graph: nx.DiGraph,
-    root: Optional[int] = None,
-    max_len: Optional[float] = None,
+    root: int | None = None,
+    max_len: float | None = None,
     ignore_swc_tracing_interruptions: bool = True,
-    relevant_type_ids: Optional[List[int]] = None,
-) -> List[np.ndarray]:
+    relevant_type_ids: list[int] | None = None,
+) -> list[np.ndarray]:
     """Get all uninterrupted paths in a graph (i.e. branches).
 
     The graph is traversed depth-first starting from the source node, which is the only
@@ -589,8 +592,8 @@ def _trace_branches(
 
 
 def _split_branches(
-    branches: List[np.ndarray], type_inds, edge_lens: Dict, max_len: int = 1000
-) -> List[np.ndarray]:
+    branches: list[np.ndarray], type_inds, edge_lens: dict, max_len: int = 1000
+) -> list[np.ndarray]:
     """Split branches into approximately equally long sections <= max_len.
 
     Args:
@@ -606,7 +609,7 @@ def _split_branches(
     # TODO: split branches into exactly equally long sections
     edge_lens.update({(j, i): l for (i, j), l in edge_lens.items()})
     additional_branchpoints, new_branches, new_type_inds = [], [], []
-    for branch, type_ind in zip(branches, type_inds):
+    for branch, type_ind in zip(branches, type_inds, strict=False):
         cum_branch_len = np.cumsum([edge_lens[i, j] for i, j, _ in branch])
 
         k = cum_branch_len // max_len
@@ -624,8 +627,8 @@ def _split_branches(
 
 
 def _split_branches_if_swc_nodes_were_traced_with_interruption(
-    graph: nx.Graph, branches: List[np.ndarray], type_inds: List[int]
-) -> List[np.ndarray]:
+    graph: nx.Graph, branches: list[np.ndarray], type_inds: list[int]
+) -> list[np.ndarray]:
     """Simulate swc trace errors in the branches.
 
     Both NEURON and Jaxley's hand coded swc reader introduce breaks in the trace
@@ -745,7 +748,7 @@ def _set_branchpoint_indices(jaxley_graph: nx.DiGraph) -> nx.DiGraph:
 
 def _set_comp_and_branch_index(
     comp_graph: nx.DiGraph,
-    root: Optional[int] = None,
+    root: int | None = None,
 ) -> nx.DiGraph:
     """Given a compartment graph, return a comp_graph with new comp and branch index.
 
@@ -800,11 +803,7 @@ def _set_comp_and_branch_index(
             solve_graph.nodes[j]["comp_index"] = comp_index
             node_mapping[j] = comp_index
 
-        if _is_leaf(undirected_comp_graph, j):
-            branch_index += 1
-
-        # Increase the branch counter if a branchpoint is encountered.
-        elif undirected_comp_graph.nodes[j]["type"] == "branchpoint":
+        if _is_leaf(undirected_comp_graph, j) or undirected_comp_graph.nodes[j]["type"] == "branchpoint":
             branch_index += 1
 
         # Increase the counter for the compartment index only if the node was a
@@ -834,7 +833,8 @@ def _set_comp_and_branch_index(
 def _remove_branch_points_at_tips(comp_graph: nx.DiGraph) -> nx.DiGraph:
     """Delete branch points at tips.
 
-    These only occur if the user was editing the morphology."""
+    These only occur if the user was editing the morphology.
+    """
     nodes_to_keep = []
     for node in comp_graph.nodes:
         degree = comp_graph.in_degree(node) + comp_graph.out_degree(node)
@@ -845,7 +845,6 @@ def _remove_branch_points_at_tips(comp_graph: nx.DiGraph) -> nx.DiGraph:
 
 def _remove_branch_points(solve_graph: nx.DiGraph) -> nx.DiGraph:
     """Remove branch points and label edges as `inter_branch` or `intra_branch`."""
-
     # Copy the graph because, otherwise, its input gets modified.
     solve_graph = solve_graph.copy()
 
@@ -929,7 +928,7 @@ def _add_meta_data(solve_graph: nx.DiGraph) -> nx.DiGraph:
 def from_graph(
     comp_graph: nx.DiGraph,
     assign_groups: bool = True,
-    solve_root: Optional[int] = None,
+    solve_root: int | None = None,
     traverse_for_solve_order: bool = True,
 ):
     """Return a Jaxley module from a compartmentalized networkX graph.
@@ -1083,10 +1082,10 @@ def _build_module(
 
 def _build_module_scaffold(
     idxs: pd.DataFrame,
-    return_type: Optional[str] = None,
-    parent_branches: Optional[List[np.ndarray]] = None,
-    xyzr: List[np.ndarray] = [],
-) -> Union[Network, Cell, Branch, Compartment]:
+    return_type: str | None = None,
+    parent_branches: list[np.ndarray] | None = None,
+    xyzr: list[np.ndarray] = [],
+) -> Network | Cell | Branch | Compartment:
     """Builds a skeleton module from a DataFrame of indices.
 
     This is useful for instantiating a module that can be filled with data later.
@@ -1100,7 +1099,8 @@ def _build_module_scaffold(
 
     Returns:
         A skeleton module with the correct number of compartments, branches, cells, or
-        networks."""
+        networks.
+    """
     return_types = ["compartment", "branch", "cell", "network"]
     build_cache = {k: [] for k in return_types}
 
@@ -1217,8 +1217,8 @@ def vis_compartment_graph(
 def connect_graphs(
     graph1: nx.DiGraph,
     graph2: nx.DiGraph,
-    node1: Union[str, int],
-    node2: Union[str, int],
+    node1: str | int,
+    node2: str | int,
 ) -> nx.DiGraph:
     """Return a new graph that connects two comp_graphs at particular nodes."""
     # For each `group` and `channel` in `graph1`, ensure that it is `False` in `graph2`
@@ -1342,7 +1342,7 @@ def _assign_false_for_group_and_channel(
     return graph2
 
 
-def _infer_coord(comp_graph: nx.DiGraph, node: Union[str, int], key: str) -> float:
+def _infer_coord(comp_graph: nx.DiGraph, node: str | int, key: str) -> float:
     """Return the coordinate of a node in a comp_graph.
 
     Args:

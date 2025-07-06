@@ -1,7 +1,6 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Dict, Optional
 
 import jax.numpy as jnp
 
@@ -9,14 +8,13 @@ from jaxley.synapses.synapse import Synapse
 
 
 class TanhConductanceSynapse(Synapse):
-    """
-    Compute synaptic current for a simple conductance synapse (no state).
+    """Compute synaptic current for a simple conductance synapse (no state).
 
     This is just the TanhRateSynapse with current affected by the postsynaptic
     conductance.
     """
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         super().__init__(name)
         prefix = self._name
         self.synapse_params = {
@@ -29,17 +27,17 @@ class TanhConductanceSynapse(Synapse):
 
     def update_states(
         self,
-        states: Dict,
+        states: dict,
         delta_t: float,
         pre_voltage: float,
         post_voltage: float,
-        params: Dict,
-    ) -> Dict:
+        params: dict,
+    ) -> dict:
         """Return updated synapse state and current."""
         return {}
 
     def compute_current(
-        self, states: Dict, pre_voltage: float, post_voltage: float, params: Dict
+        self, states: dict, pre_voltage: float, post_voltage: float, params: dict
     ) -> float:
         """Return updated synapse state and current."""
         prefix = self._name

@@ -18,7 +18,7 @@ import pytest
 from jaxley_mech.channels.l5pc import *
 
 import jaxley as jx
-from jaxley.channels import HH, K, Leak, Na
+from jaxley.channels import HH, Leak
 from jaxley.synapses import IonotropicSynapse
 
 
@@ -301,13 +301,13 @@ def test_swc_morph(swc_backend, SimpleMorphCell):
     cell.set("eK", -85.0)
     cell.set("v", -65.0)
 
-    for key in gt_apical.keys():
+    for key in gt_apical:
         cell.apical.set(key, gt_apical[key])
 
-    for key in gt_soma.keys():
+    for key in gt_soma:
         cell.soma.set(key, gt_soma[key])
 
-    for key in gt_axon.keys():
+    for key in gt_axon:
         cell.axon.set(key, gt_axon[key])
 
     dt = 0.025

@@ -1,10 +1,9 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
+from collections.abc import Callable
 from math import prod
-from typing import Callable, Dict, List, Optional, Tuple, Union
 
-import jax
 import jax.numpy as jnp
 import pandas as pd
 
@@ -17,7 +16,7 @@ def build_init_and_step_fn(
     module: Module,
     voltage_solver: str = "jaxley.dhs",
     solver: str = "bwd_euler",
-) -> Tuple[Callable, Callable]:
+) -> tuple[Callable, Callable]:
     """Return ``init_fn`` and ``step_fn`` which initialize modules and run update steps.
 
     This method can be used to gain additional control over the simulation workflow.
@@ -99,11 +98,11 @@ def build_init_and_step_fn(
     external_inds = module.external_inds.copy()
 
     def init_fn(
-        params: List[Dict[str, jnp.ndarray]],
-        all_states: Optional[Dict] = None,
-        param_state: Optional[List[Dict]] = None,
+        params: list[dict[str, jnp.ndarray]],
+        all_states: dict | None = None,
+        param_state: list[dict] | None = None,
         delta_t: float = 0.025,
-    ) -> Tuple[Dict, Dict]:
+    ) -> tuple[dict, dict]:
         """Initializes the parameters and states of the neuron model.
 
         Args:
@@ -130,12 +129,12 @@ def build_init_and_step_fn(
         return all_states, all_params
 
     def step_fn(
-        all_states: Dict,
-        all_params: Dict,
-        externals: Dict,
-        external_inds: Dict = external_inds,
+        all_states: dict,
+        all_params: dict,
+        externals: dict,
+        external_inds: dict = external_inds,
         delta_t: float = 0.025,
-    ) -> Dict:
+    ) -> dict:
         """Performs a single integration step with step size delta_t.
 
         Args:
@@ -164,10 +163,10 @@ def build_init_and_step_fn(
 
 
 def add_stimuli(
-    externals: Dict,
-    external_inds: Dict,
-    data_stimuli: Optional[Tuple[jnp.ndarray, pd.DataFrame]] = None,
-) -> Tuple[Dict, Dict]:
+    externals: dict,
+    external_inds: dict,
+    data_stimuli: tuple[jnp.ndarray, pd.DataFrame] | None = None,
+) -> tuple[dict, dict]:
     """Extends the external inputs with the stimuli.
 
     Args:
@@ -179,8 +178,8 @@ def add_stimuli(
         Updated external inputs and indices.
     """
     # If stimulus is inserted, add it to the external inputs.
-    if "i" in externals.keys() or data_stimuli is not None:
-        if "i" in externals.keys():
+    if "i" in externals or data_stimuli is not None:
+        if "i" in externals:
             if data_stimuli is not None:
                 externals["i"] = jnp.concatenate([externals["i"], data_stimuli[1]])
                 external_inds["i"] = jnp.concatenate(
@@ -194,10 +193,10 @@ def add_stimuli(
 
 
 def add_clamps(
-    externals: Dict,
-    external_inds: Dict,
-    data_clamps: Optional[Tuple[str, jnp.ndarray, pd.DataFrame]] = None,
-) -> Tuple[Dict, Dict]:
+    externals: dict,
+    external_inds: dict,
+    data_clamps: tuple[str, jnp.ndarray, pd.DataFrame] | None = None,
+) -> tuple[dict, dict]:
     """Adds clamps to the external inputs.
 
     Args:
@@ -211,7 +210,7 @@ def add_clamps(
     # If a clamp is inserted, add it to the external inputs.
     if data_clamps is not None:
         state_name, clamps, inds = data_clamps
-        if state_name in externals.keys():
+        if state_name in externals:
             externals[state_name] = jnp.concatenate([externals[state_name], clamps])
             external_inds[state_name] = jnp.concatenate(
                 [external_inds[state_name], inds.index.to_numpy()]
@@ -225,21 +224,20 @@ def add_clamps(
 
 def integrate(
     module: Module,
-    params: List[Dict[str, jnp.ndarray]] = [],
+    params: list[dict[str, jnp.ndarray]] = [],
     *,
-    param_state: Optional[List[Dict]] = None,
-    data_stimuli: Optional[Tuple[jnp.ndarray, pd.DataFrame]] = None,
-    data_clamps: Optional[Tuple[str, jnp.ndarray, pd.DataFrame]] = None,
-    t_max: Optional[float] = None,
+    param_state: list[dict] | None = None,
+    data_stimuli: tuple[jnp.ndarray, pd.DataFrame] | None = None,
+    data_clamps: tuple[str, jnp.ndarray, pd.DataFrame] | None = None,
+    t_max: float | None = None,
     delta_t: float = 0.025,
     solver: str = "bwd_euler",
     voltage_solver: str = "jaxley.dhs",
-    checkpoint_lengths: Optional[List[int]] = None,
-    all_states: Optional[Dict] = None,
+    checkpoint_lengths: list[int] | None = None,
+    all_states: dict | None = None,
     return_states: bool = False,
 ) -> jnp.ndarray:
-    """
-    Solves ODE and simulates neuron model.
+    """Solves ODE and simulates neuron model.
 
     Args:
         params: Trainable parameters returned by `get_parameters()`.
@@ -370,7 +368,7 @@ def integrate(
         recs = jnp.asarray(
             [
                 state[rec_state][rec_ind]
-                for rec_state, rec_ind in zip(rec_states, rec_inds)
+                for rec_state, rec_ind in zip(rec_states, rec_inds, strict=False)
             ]
         )
         return state, recs
@@ -404,7 +402,7 @@ def integrate(
     init_recs = jnp.asarray(
         [
             all_states[rec_state][rec_ind]
-            for rec_state, rec_ind in zip(rec_states, rec_inds)
+            for rec_state, rec_ind in zip(rec_states, rec_inds, strict=False)
         ]
     )
     init_recording = jnp.expand_dims(init_recs, axis=0)

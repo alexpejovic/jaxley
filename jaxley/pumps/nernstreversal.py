@@ -1,7 +1,6 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Optional
 
 import jax.numpy as jnp
 
@@ -13,7 +12,7 @@ class CaNernstReversal(Pump):
 
     def __init__(
         self,
-        name: Optional[str] = None,
+        name: str | None = None,
     ):
         self.current_is_in_mA_per_cm2 = True
         super().__init__(name)
@@ -28,7 +27,7 @@ class CaNernstReversal(Pump):
         # returns 0.0 (and `self.ion_name` only sets which ion concentration the
         # current should be added to).
         self.ion_name = "CaCon_i"
-        self.current_name = f"i_Ca"
+        self.current_name = "i_Ca"
         self.META = {"ion": "Ca"}
 
     def update_states(self, u, dt, voltages, params):

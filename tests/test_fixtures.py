@@ -2,7 +2,6 @@
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
 import time
-import warnings
 
 import pytest
 
@@ -23,7 +22,7 @@ def test_module_retrieval(SimpleNet):
     t2 = time.time()
 
     assert ((t2 - t1) - (t1 - t0)) / (t1 - t0) < 0.1, (
-        f"Fixture is slower than manual init."
+        "Fixture is slower than manual init."
     )
 
     net = SimpleNet(2, 4, 4, force_init=False)

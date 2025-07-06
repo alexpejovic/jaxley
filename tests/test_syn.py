@@ -6,14 +6,11 @@ import jax
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 
-from typing import List
 
 import numpy as np
 
-import jaxley as jx
-from jaxley.channels import HH
 from jaxley.connect import connect
-from jaxley.synapses import IonotropicSynapse, Synapse, TestSynapse
+from jaxley.synapses import IonotropicSynapse
 
 
 def test_set_and_querying_params_one_type(SimpleNet):

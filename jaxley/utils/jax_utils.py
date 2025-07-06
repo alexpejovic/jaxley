@@ -2,11 +2,11 @@
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
 import math
-from typing import Any, Callable, Dict, Optional, Sequence, Tuple, TypeVar
+from collections.abc import Callable, Sequence
+from typing import TypeVar
 
 import jax
 import jax.numpy as jnp
-import pandas as pd
 
 Carry = TypeVar("Carry")
 Input = TypeVar("Input")
@@ -15,10 +15,10 @@ Func = TypeVar("Func", bound=Callable)
 
 
 def nested_checkpoint_scan(
-    f: Callable[[Carry, Dict[str, jnp.ndarray]], Tuple[Carry, Output]],
+    f: Callable[[Carry, dict[str, jnp.ndarray]], tuple[Carry, Output]],
     init: Carry,
-    xs: Dict[str, jnp.ndarray],
-    length: Optional[int] = None,
+    xs: dict[str, jnp.ndarray],
+    length: int | None = None,
     *,
     nested_lengths: Sequence[int],
     scan_fn=jax.lax.scan,
@@ -80,7 +80,8 @@ def infer_device() -> str:
     """Automatically infer the jax device.
 
     Returns:
-        Either of `gpu`, `tpu`, `cpu`, as a string."""
+        Either of `gpu`, `tpu`, `cpu`, as a string.
+    """
     platform = jax.devices()[0].platform
     if platform == "gpu":
         return "gpu"

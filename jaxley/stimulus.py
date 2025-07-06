@@ -12,8 +12,7 @@ def step_current(
     t_max: float,
     i_offset: float = 0.0,
 ):
-    """
-    Return step current in unit nA.
+    """Return step current in unit nA.
 
     Unlike the `datapoint_to_step()` method, this takes a single value for the amplitude
     and returns a single step current. The output of this function can be passed to
@@ -35,8 +34,7 @@ def datapoint_to_step_currents(
     t_max: float,
     i_offset: float = 0.0,
 ):
-    """
-    Return several step currents in unit nA.
+    """Return several step currents in unit nA.
 
     Unlike the `step_current()` method, this takes a vector of amplitude and returns
     a step current for each value in the vector. The output of this function can be

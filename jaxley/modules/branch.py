@@ -1,8 +1,6 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Callable, Dict, List, Optional, Tuple, Union
-from warnings import warn
 
 import jax.numpy as jnp
 import numpy as np
@@ -11,7 +9,7 @@ import pandas as pd
 from jaxley.modules.base import Module
 from jaxley.modules.compartment import Compartment
 from jaxley.utils.cell_utils import compute_children_and_parents
-from jaxley.utils.misc_utils import cumsum_leading_zero, deprecated_kwargs
+from jaxley.utils.misc_utils import cumsum_leading_zero
 
 
 class Branch(Module):
@@ -23,24 +21,23 @@ class Branch(Module):
     build more intricate cell morphologies (via ``jx.Cell``).
     """
 
-    branch_params: Dict = {}
-    branch_states: Dict = {}
+    branch_params: dict = {}
+    branch_states: dict = {}
 
     def __init__(
         self,
-        compartments: Optional[Union[Compartment, List[Compartment]]] = None,
-        ncomp: Optional[int] = None,
+        compartments: Compartment | list[Compartment] | None = None,
+        ncomp: int | None = None,
     ):
-        """
-        Args:
-            compartments: A single compartment or a list of compartments that make up the
-                branch.
-            ncomp: Number of segments to divide the branch into. If `compartments` is an
-                a single compartment, than the compartment is repeated `ncomp` times to
-                create the branch.
+        """Args:
+        compartments: A single compartment or a list of compartments that make up the
+            branch.
+        ncomp: Number of segments to divide the branch into. If `compartments` is an
+            a single compartment, than the compartment is repeated `ncomp` times to
+            create the branch.
         """
         super().__init__()
-        assert isinstance(compartments, (Compartment, List)) or compartments is None, (
+        assert isinstance(compartments, (Compartment, list)) or compartments is None, (
             "Only Compartment or List[Compartment] is allowed."
         )
         if isinstance(compartments, Compartment):
@@ -89,7 +86,8 @@ class Branch(Module):
     def _init_comp_graph(self):
         """Initialize `._comp_edges`, `._branchpoints`, and `comp_to_index_mapping`.
 
-        It also initializes `_comp_edges_in_view` and `_branchpoints_in_view`."""
+        It also initializes `_comp_edges_in_view` and `_branchpoints_in_view`.
+        """
         # Compartment edges.
         self._comp_edges = pd.DataFrame().from_dict(
             {

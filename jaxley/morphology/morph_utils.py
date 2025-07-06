@@ -37,7 +37,7 @@ def morph_delete(module_view) -> "Cell":
     """
     # The `connect_graph` method cannot yet handle networks and branches.
     assert module_view.base.__class__.__name__ == "Cell", (
-        f"You are trying to delete parts of a "
+        "You are trying to delete parts of a "
         "`jx.{module_view.base.__class__.__name__}`. "
         "Only `jx.Cell` is allowed in `morph_delete()`."
     )

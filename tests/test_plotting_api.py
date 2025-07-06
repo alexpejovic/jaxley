@@ -13,7 +13,6 @@ jax.config.update("jax_platform_name", "cpu")
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pytest
 
 import jaxley as jx
 from jaxley.synapses import IonotropicSynapse
@@ -153,7 +152,7 @@ def test_mixed_network(SimpleMorphCell):
     net.cell(1).rotate(90)
     after_xyzrs = net.xyzr[len(cell1.xyzr) :]
     # Test that rotation worked as expected.
-    for b, a in zip(before_xyzrs, after_xyzrs):
+    for b, a in zip(before_xyzrs, after_xyzrs, strict=False):
         assert np.allclose(b[:, 0], -a[:, 1], atol=1e-6)
         assert np.allclose(b[:, 1], a[:, 0], atol=1e-6)
 

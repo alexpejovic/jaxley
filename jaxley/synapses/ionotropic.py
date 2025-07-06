@@ -1,17 +1,14 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Dict, Optional, Tuple
 
-import jax.numpy as jnp
 
 from jaxley.solver_gate import save_exp
 from jaxley.synapses.synapse import Synapse
 
 
 class IonotropicSynapse(Synapse):
-    """
-    Compute synaptic current and update synapse state for a generic ionotropic synapse.
+    """Compute synaptic current and update synapse state for a generic ionotropic synapse.
 
     The synapse state "s" is the probability that a postsynaptic receptor channel is
     open, and this depends on the amount of neurotransmitter released, which is in turn
@@ -29,7 +26,7 @@ class IonotropicSynapse(Synapse):
 
     """
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         super().__init__(name)
         prefix = self._name
         self.synapse_params = {
@@ -43,12 +40,12 @@ class IonotropicSynapse(Synapse):
 
     def update_states(
         self,
-        states: Dict,
+        states: dict,
         delta_t: float,
         pre_voltage: float,
         post_voltage: float,
-        params: Dict,
-    ) -> Dict:
+        params: dict,
+    ) -> dict:
         """Return updated synapse state and current."""
         prefix = self._name
         v_th = params[f"{prefix}_v_th"]
@@ -63,7 +60,7 @@ class IonotropicSynapse(Synapse):
         return {f"{prefix}_s": new_s}
 
     def compute_current(
-        self, states: Dict, pre_voltage: float, post_voltage: float, params: Dict
+        self, states: dict, pre_voltage: float, post_voltage: float, params: dict
     ) -> float:
         prefix = self._name
         g_syn = params[f"{prefix}_gS"] * states[f"{prefix}_s"]

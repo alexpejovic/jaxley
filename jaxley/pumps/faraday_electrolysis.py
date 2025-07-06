@@ -1,7 +1,6 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Dict, Optional
 
 import jax.numpy as jnp
 
@@ -96,7 +95,7 @@ class CaFaradayConcentrationChange(Pump):
     that calcium currents stop when no more ions are available).
     """
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         super().__init__(name)
         self.channel_params = {}
         self.channel_states = {"i_Ca": 1e-8, "CaCon_i": 5e-05}
@@ -106,19 +105,19 @@ class CaFaradayConcentrationChange(Pump):
 
     def update_states(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         dt,
         v,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
     ):
         """Update states if necessary (but this mechanism has no states to update)."""
         return {"CaCon_i": states["CaCon_i"], "i_Ca": states["i_Ca"]}
 
     def compute_current(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         modified_state,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
     ):
         """Return change of calcium concentration as the calcium current."""
         # 2.0 is valence of calcium.
@@ -126,9 +125,9 @@ class CaFaradayConcentrationChange(Pump):
 
     def init_state(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         v: jnp.ndarray,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
         delta_t: float,
     ):
         """Initialize states of channel."""

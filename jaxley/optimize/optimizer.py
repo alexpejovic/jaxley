@@ -1,7 +1,8 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from collections.abc import Callable
+from typing import Any
 
 import jax.numpy as jnp
 
@@ -12,8 +13,8 @@ class TypeOptimizer:
     def __init__(
         self,
         optimizer: Callable,
-        optimizer_args: Dict[str, Any],
-        opt_params: List[Dict[str, jnp.ndarray]],
+        optimizer_args: dict[str, Any],
+        opt_params: list[dict[str, jnp.ndarray]],
     ):
         """Create the optimizers.
 
@@ -56,20 +57,20 @@ class TypeOptimizer:
             optimizer = self.base_optimizer(optimizer_args[name])
             self.optimizers.append({name: optimizer})
 
-    def init(self, opt_params: List[Dict[str, jnp.ndarray]]) -> List:
+    def init(self, opt_params: list[dict[str, jnp.ndarray]]) -> list:
         """Initialize the optimizers. Equivalent to `optax.optimizers.init()`."""
         opt_states = []
-        for params, optimizer in zip(opt_params, self.optimizers):
+        for params, optimizer in zip(opt_params, self.optimizers, strict=False):
             name = list(optimizer.keys())[0]
             opt_state = optimizer[name].init(params)
             opt_states.append(opt_state)
         return opt_states
 
-    def update(self, gradient: jnp.ndarray, opt_state: List) -> Tuple[List, List]:
+    def update(self, gradient: jnp.ndarray, opt_state: list) -> tuple[list, list]:
         """Update the optimizers. Equivalent to `optax.optimizers.update()`."""
         all_updates = []
         new_opt_states = []
-        for grad, state, opt in zip(gradient, opt_state, self.optimizers):
+        for grad, state, opt in zip(gradient, opt_state, self.optimizers, strict=False):
             name = list(opt.keys())[0]
             updates, new_opt_state = opt[name].update(grad, state)
             all_updates.append(updates)

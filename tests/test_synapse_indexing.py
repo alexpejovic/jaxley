@@ -6,7 +6,6 @@ import jax
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 
-from typing import List
 
 import numpy as np
 import pytest
@@ -16,7 +15,6 @@ from jaxley.channels import HH
 from jaxley.connect import connect
 from jaxley.synapses import (
     IonotropicSynapse,
-    Synapse,
     TanhConductanceSynapse,
     TanhRateSynapse,
     TestSynapse,
@@ -24,8 +22,7 @@ from jaxley.synapses import (
 
 
 def test_multiparameter_setting(SimpleNet):
-    """
-    Test if the correct parameters are set if one type of synapses is inserted.
+    """Test if the correct parameters are set if one type of synapses is inserted.
 
     Tests global index dropping: d4daaf019596589b9430219a15f1dda0b1c34d85
     """
@@ -113,7 +110,7 @@ def test_set_and_querying_params_two_types(synapse_type, SimpleNet):
     net = SimpleNet(4, 1, 4)
 
     for pre_ind in [0, 1]:
-        for post_ind, synapse in zip([2, 3], [IonotropicSynapse(), synapse_type]):
+        for post_ind, synapse in zip([2, 3], [IonotropicSynapse(), synapse_type], strict=False):
             pre = net.cell(pre_ind).branch(0).loc(0.0)
             post = net.cell(post_ind).branch(0).loc(0.0)
             connect(pre, post, synapse)

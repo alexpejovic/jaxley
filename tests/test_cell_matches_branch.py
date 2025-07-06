@@ -7,7 +7,6 @@ jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 
 
-import jax.numpy as jnp
 import numpy as np
 import pytest
 from jax import jit, value_and_grad
@@ -67,6 +66,6 @@ def test_equivalence(SimpleBranch, SimpleCell):
 
     assert np.allclose(l1, l2), "Losses do not match."
 
-    for g_1, g_2 in zip(g1, g2):
+    for g_1, g_2 in zip(g1, g2, strict=False):
         for key in g_1:
             assert np.allclose(g_1[key], g_2[key]), "Gradients do not match."

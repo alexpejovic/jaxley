@@ -9,15 +9,15 @@ from jaxley.channels.non_capacitive.spike import Fire
 from jaxley.channels.pospischil import CaL, CaT, K, Km, Leak, Na
 
 __all__ = [
-    "Channel",
     "HH",
-    "Izhikevich",
-    "Rate",
-    "Fire",
     "CaL",
     "CaT",
+    "Channel",
+    "Fire",
+    "Izhikevich",
     "K",
     "Km",
     "Leak",
     "Na",
+    "Rate",
 ]

@@ -11,11 +11,12 @@ import os
 
 os.environ["XLA_PYTHON_CLIENT_MEM_FRACTION"] = ".4"
 
+import importlib.util
+
 import jax.numpy as jnp
 import numpy as np
 import pytest
 from jaxley_mech.channels.l5pc import CaHVA
-import importlib.util
 
 if importlib.util.find_spec("neuron"):
     from neuron import h, rxd

@@ -1,7 +1,6 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import List, Optional
 
 from jaxley.io.graph import build_compartment_graph, from_graph, to_swc_graph
 from jaxley.modules import Cell
@@ -9,13 +8,13 @@ from jaxley.modules import Cell
 
 def read_swc(
     fname: str,
-    ncomp: Optional[int],
-    max_branch_len: Optional[float] = None,
-    min_radius: Optional[float] = None,
+    ncomp: int | None,
+    max_branch_len: float | None = None,
+    min_radius: float | None = None,
     assign_groups: bool = True,
     backend: str = "graph",
     ignore_swc_tracing_interruptions: bool = True,
-    relevant_type_ids: Optional[List[int]] = None,
+    relevant_type_ids: list[int] | None = None,
 ) -> Cell:
     """Reads SWC file into a `Cell`.
 
@@ -43,8 +42,8 @@ def read_swc(
             If `None`, we default to `[1, 2, 3, 4]`.
 
     Returns:
-        A `Cell` object."""
-
+        A `Cell` object.
+    """
     if backend == "graph":
         swc_graph = to_swc_graph(fname)
         comp_graph = build_compartment_graph(

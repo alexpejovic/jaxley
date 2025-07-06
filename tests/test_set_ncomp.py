@@ -198,7 +198,8 @@ def test_set_ncomp_raises_for_inhomogeneous(SimpleCell):
 def test_dlambda_rule(SimpleMorphCell):
     """Run `set_ncomp` on every branch with the d-lambda rule.
 
-    If you have to modify this test, make sure to also modify the how-to guide."""
+    If you have to modify this test, make sure to also modify the how-to guide.
+    """
     file = "morph_ca1_n120_250.swc"
     dirname = os.path.dirname(__file__)
     fname = os.path.join(dirname, "swc_files", file)
