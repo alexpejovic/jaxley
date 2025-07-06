@@ -278,7 +278,7 @@ def test_that_order_of_insert_does_not_matter():
 
     for i, v_compare in enumerate([v2, v3, v4]):
         max_error = np.max(np.abs(v1 - v_compare))
-        assert max_error < 1e-8, f"Gap between v1 and v{i+1} is {max_error}."
+        assert max_error < 1e-8, f"Gap between v1 and v{i + 1} is {max_error}."
 
 
 def _build_calcium_cell():

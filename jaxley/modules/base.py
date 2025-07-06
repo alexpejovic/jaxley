@@ -120,6 +120,7 @@ class Module(ABC):
             branch_lens = comp_lens.groupby("global_branch_index").sum()
             return np.sum(branch_lens < 10)
 
+
         # Change data in view.
         def change_attr_in_view(self):
             # changes to attrs have to be made via self.base.attr + viewed indices
@@ -274,9 +275,9 @@ class Module(ABC):
         supported_parents = ["network", "cell", "branch"]  # cannot index into comp
 
         not_group_view = self._current_view not in self.group_names
-        assert (
-            self._current_view in supported_parents or not_group_view
-        ), "Lazy indexing is only supported for `Network`, `Cell`, `Branch` and Views thereof."
+        assert self._current_view in supported_parents or not_group_view, (
+            "Lazy indexing is only supported for `Network`, `Cell`, `Branch` and Views thereof."
+        )
         index = index if isinstance(index, tuple) else (index,)
 
         child_views = self._childviews()
@@ -1410,9 +1411,9 @@ class Module(ABC):
         assert data is not None, f"Key '{key}' not found in nodes or edges"
         not_nan = ~data[key].isna()
         data = data.loc[not_nan].copy()
-        assert (
-            len(data) > 0
-        ), "No settable parameters found in the selected compartments."
+        assert len(data) > 0, (
+            "No settable parameters found in the selected compartments."
+        )
 
         grouped_view = data.groupby("controlled_by_param")
         # Because of this `x.index.values` we cannot support `make_trainable()` on
@@ -1627,9 +1628,9 @@ class Module(ABC):
 
         .. code-block:: python
 
-            params = module.get_parameters() # i.e. [0, 1, 2]
+            params = module.get_parameters()  # i.e. [0, 1, 2]
             pstate = params_to_pstate(params, module.indices_set_by_trainables)
-            module.to_jax() # needed for call to module.jaxnodes
+            module.to_jax()  # needed for call to module.jaxnodes
 
         Args:
             pstate: The state of the trainable parameters. pstate takes the form
@@ -1942,7 +1943,7 @@ class Module(ABC):
         self.base.recordings = self.base.recordings.loc[~has_duplicates]
         if verbose:
             print(
-                f"Added {len(in_view)-sum(has_duplicates)} recordings. See `.recordings` for details."
+                f"Added {len(in_view) - sum(has_duplicates)} recordings. See `.recordings` for details."
             )
 
     def _update_view(self):
@@ -2227,9 +2228,9 @@ class Module(ABC):
         Args:
             state: Name of the state that should no longer be diffused.
         """
-        assert (
-            state in self.base.diffusion_states
-        ), f"State {state} is not part of `self.diffusion_states`."
+        assert state in self.base.diffusion_states, (
+            f"State {state} is not part of `self.diffusion_states`."
+        )
         self.base.diffusion_states.remove(state)
         self.base.nodes.drop(columns=[f"axial_diffusion_{state}"], inplace=True)
 
@@ -2826,7 +2827,7 @@ class Module(ABC):
                     num_children_of_parent = num_children[parents[b]]
                     if num_children_of_parent > 1:
                         y_offset = (
-                            ((index_of_child[b] / (num_children_of_parent - 1))) - 0.5
+                            (index_of_child[b] / (num_children_of_parent - 1)) - 0.5
                         ) * y_offset_multiplier[levels[b]]
                     else:
                         y_offset = 0.0
@@ -3044,6 +3045,7 @@ class View(Module):
             comp_lens = self.nodes["length"]
             branch_lens = comp_lens.groupby("global_branch_index").sum()
             return np.sum(branch_lens < 10)
+
 
         # Change data in view.
         def change_attr_in_view(self):

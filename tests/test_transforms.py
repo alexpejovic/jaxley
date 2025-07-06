@@ -34,15 +34,15 @@ def test_joint_inverse():
     forward = tf.forward(params)
     inverse = tf.inverse(forward)
 
-    assert np.allclose(
-        inverse[0]["param_array_1"], params[0]["param_array_1"]
-    ), "SigmoidTransform forward, inverse failed."
-    assert np.allclose(
-        inverse[1]["param_array_2"], params[1]["param_array_2"]
-    ), "SoftplusTransform forward, inverse failed."
-    assert np.allclose(
-        inverse[2]["param_array_3"], params[2]["param_array_3"]
-    ), "NegSoftplusTransform forward, inverse failed."
+    assert np.allclose(inverse[0]["param_array_1"], params[0]["param_array_1"]), (
+        "SigmoidTransform forward, inverse failed."
+    )
+    assert np.allclose(inverse[1]["param_array_2"], params[1]["param_array_2"]), (
+        "SoftplusTransform forward, inverse failed."
+    )
+    assert np.allclose(inverse[2]["param_array_3"], params[2]["param_array_3"]), (
+        "NegSoftplusTransform forward, inverse failed."
+    )
 
 
 def test_bounds():
@@ -65,18 +65,18 @@ def test_bounds():
     tf = ParamTransform(tf_dict)
     forward = tf.forward(params)
 
-    assert all(
-        forward[0]["param_array_1"] > lowers["param_array_1"]
-    ), "SigmoidTransform failed to match lower bound."
-    assert all(
-        forward[0]["param_array_1"] < uppers["param_array_1"]
-    ), "SigmoidTransform failed to match upper bound."
-    assert all(
-        forward[1]["param_array_2"] < uppers["param_array_2"]
-    ), "SoftplusTransform failed to match lower bound."
-    assert all(
-        forward[2]["param_array_3"] > lowers["param_array_3"]
-    ), "NegSoftplusTransform failed to match lower bound."
+    assert all(forward[0]["param_array_1"] > lowers["param_array_1"]), (
+        "SigmoidTransform failed to match lower bound."
+    )
+    assert all(forward[0]["param_array_1"] < uppers["param_array_1"]), (
+        "SigmoidTransform failed to match upper bound."
+    )
+    assert all(forward[1]["param_array_2"] < uppers["param_array_2"]), (
+        "SoftplusTransform failed to match lower bound."
+    )
+    assert all(forward[2]["param_array_3"] > lowers["param_array_3"]), (
+        "NegSoftplusTransform failed to match lower bound."
+    )
 
 
 @pytest.mark.parametrize(
@@ -130,9 +130,9 @@ def test_correct(transform):
     forward = tf.forward(params)
     inverse = tf.inverse(forward)
 
-    assert np.allclose(
-        inverse[0]["param_array_1"], params[0]["param_array_1"]
-    ), f"{transform} forward, inverse failed."
+    assert np.allclose(inverse[0]["param_array_1"], params[0]["param_array_1"]), (
+        f"{transform} forward, inverse failed."
+    )
 
     # Test correctness plain Array
     for shape in [(4,), (4, 1), (4, 4)]:
@@ -142,9 +142,9 @@ def test_correct(transform):
         y = tf.forward(x)
         x_inv = tf.inverse(y)
 
-        assert np.allclose(
-            x, x_inv
-        ), f"{transform} forward, inverse failed on non PyTree."
+        assert np.allclose(x, x_inv), (
+            f"{transform} forward, inverse failed on non PyTree."
+        )
 
 
 @pytest.mark.parametrize(
@@ -175,6 +175,6 @@ def test_user_api(transform, SimpleCell):
 
     flat_params, _ = jax.tree_util.tree_flatten(params)
     flat_reverse, _ = jax.tree_util.tree_flatten(reverse)
-    assert all(
-        [np.allclose(a, b) for a, b in zip(flat_params, flat_reverse)]
-    ), f"{transform} forward, inverse failed."
+    assert all([np.allclose(a, b) for a, b in zip(flat_params, flat_reverse)]), (
+        f"{transform} forward, inverse failed."
+    )

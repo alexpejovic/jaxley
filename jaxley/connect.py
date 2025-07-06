@@ -69,9 +69,9 @@ def connect(
         )
         print(net.edges)
     """
-    assert is_same_network(
-        pre, post
-    ), "Pre and post compartments must be part of the same network."
+    assert is_same_network(pre, post), (
+        "Pre and post compartments must be part of the same network."
+    )
 
     pre.base._append_multiple_synapses(pre.nodes, post.nodes, synapse_type)
 
