@@ -22,6 +22,7 @@ if importlib.util.find_spec("neuron"):
     _ = h.load_file("stdlib.hoc")
     _ = h.load_file("import3d.hoc")
 
+
 @pytest.mark.parametrize(
     "file",
     [

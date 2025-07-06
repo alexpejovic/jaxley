@@ -7,12 +7,12 @@ import importlib.util
 
 
 def get_segment_xyzrL(section, comp_idx=None, loc=None, ncomp=8):
-    assert (
-        comp_idx is not None or loc is not None
-    ), "Either comp_idx or loc must be provided."
-    assert not (
-        comp_idx is not None and loc is not None
-    ), "Only one of comp_idx or loc can be provided."
+    assert comp_idx is not None or loc is not None, (
+        "Either comp_idx or loc must be provided."
+    )
+    assert not (comp_idx is not None and loc is not None), (
+        "Only one of comp_idx or loc can be provided."
+    )
 
     comp_len = 1 / ncomp
     loc = comp_len / 2 + comp_idx * comp_len if loc is None else loc
@@ -127,7 +127,6 @@ def match_stim_loc(jx_cell, neuron_sec, comp_idx=None, loc=None, ncomp=8):
 
 
 def import_neuron_morph(fname, ncomp=8):
-
     if importlib.util.find_spec("neuron"):
         from neuron import h
 

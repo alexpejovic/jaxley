@@ -32,7 +32,7 @@ class TypeOptimizer:
         optimizer = TypeOptimizer(
             lambda args: optax.sgd(args[0], momentum=args[1]),
             optimizer_args,
-            opt_params
+            opt_params,
         )
         opt_state = optimizer.init(opt_params)
         ```

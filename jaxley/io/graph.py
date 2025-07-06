@@ -961,6 +961,7 @@ def from_graph(
     ::
 
         from jaxley.io.graph import to_swc_graph, build_compartment_graph, from_graph
+
         swc_graph = to_swc_graph("path_to_swc.swc")
         comp_graph = build_compartment_graph(swc_graph, ncomp=1)
         cell = from_graph(comp_graph)
@@ -1179,6 +1180,7 @@ def vis_compartment_graph(
     ::
 
         from jaxley.io.graph import to_graph, vis_compartment_graph
+
         cell = jx.read_swc("path_to_swc.swc", ncomp=1)
         comp_graph = to_graph(cell)
         vis_compartment_graph(comp_graph)

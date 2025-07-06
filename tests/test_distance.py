@@ -78,9 +78,9 @@ def test_pathwise_distance(SimpleCell):
     cell.nodes["path_dist"] = pathdist
 
     dist_to_tip = cell[3, 3].nodes["path_dist"].item()
-    assert (
-        dist_to_tip == (ncomp * 3 - 1) * length
-    ), f"{dist_to_tip} != {(ncomp * 3 - 1) * length}"
+    assert dist_to_tip == (ncomp * 3 - 1) * length, (
+        f"{dist_to_tip} != {(ncomp * 3 - 1) * length}"
+    )
 
 
 @pytest.mark.parametrize("kind", ["direct", "pathwise"])

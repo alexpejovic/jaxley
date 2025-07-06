@@ -157,9 +157,9 @@ def test_api_equivalence_swc_lengths_and_radiuses(SimpleMorphCell, new_ncomp, fi
     for property_name in ["radius", "length"]:
         cell1_vals = cell1.nodes[property_name].to_numpy()
         cell2_vals = cell2.nodes[property_name].to_numpy()
-        assert np.allclose(
-            cell1_vals, cell2_vals
-        ), f"Too large difference in {property_name}"
+        assert np.allclose(cell1_vals, cell2_vals), (
+            f"Too large difference in {property_name}"
+        )
 
 
 @pytest.mark.parametrize("new_ncomp", [1, 2, 4, 5, 8])

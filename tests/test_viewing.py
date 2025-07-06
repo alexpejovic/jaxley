@@ -279,9 +279,9 @@ def test_view_attrs(SimpleComp, SimpleBranch, SimpleCell, SimpleNet):
                 view = View(module)
                 assert hasattr(view, name), f"View missing attribute: {name}"
                 # check if types match
-                assert type(getattr(module, name)) == type(
-                    getattr(view, name)
-                ), f"Type mismatch: {name}, Module type: {type(getattr(module, name))}, View type: {type(getattr(view, name))}"
+                assert type(getattr(module, name)) == type(getattr(view, name)), (
+                    f"Type mismatch: {name}, Module type: {type(getattr(module, name))}, View type: {type(getattr(view, name))}"
+                )
 
 
 def test_view_supported_index_types(SimpleComp, SimpleBranch, SimpleCell, SimpleNet):
@@ -312,9 +312,9 @@ def test_view_supported_index_types(SimpleComp, SimpleBranch, SimpleCell, Simple
         if not isinstance(module, jx.Compartment):
             # `_reformat_index` should always return a np.ndarray
             for index in index_types:
-                assert isinstance(
-                    module._reformat_index(index), np.ndarray
-                ), f"Failed for {type(index)}"
+                assert isinstance(module._reformat_index(index), np.ndarray), (
+                    f"Failed for {type(index)}"
+                )
 
                 # test indexing into module and view
                 assert module.comp(index), f"Failed for {type(index)}"
@@ -359,20 +359,20 @@ def test_select(SimpleNet):
     edge_node_inds = np.unique(
         view.edges[["pre_index", "post_index"]].to_numpy().flatten()
     )
-    assert np.all(
-        view.nodes.index == edge_node_inds
-    ), "Selecting edges did not yield the correct nodes."
+    assert np.all(view.nodes.index == edge_node_inds), (
+        "Selecting edges did not yield the correct nodes."
+    )
 
     # select nodes and edges
     node_inds = np.random.choice(net.nodes.index, replace=False, size=5)
     edge_inds = np.random.choice(net.edges.index, replace=False, size=2)
     view = net.select(nodes=node_inds, edges=edge_inds)
-    assert np.all(
-        view.nodes.index == node_inds
-    ), "Selecting nodes and edges by index failed for nodes."
-    assert np.all(
-        view.edges.index == edge_inds
-    ), "Selecting nodes and edges by index failed for edges."
+    assert np.all(view.nodes.index == node_inds), (
+        "Selecting nodes and edges by index failed for nodes."
+    )
+    assert np.all(view.edges.index == edge_inds), (
+        "Selecting nodes and edges by index failed for edges."
+    )
 
 
 def test_viewing(SimpleCell, SimpleNet):
@@ -388,15 +388,15 @@ def test_viewing(SimpleCell, SimpleNet):
     control_params2 = nodes2.pop("controlled_by_param")
     control_params3 = nodes3.pop("controlled_by_param")
     assert np.all(nodes1 == nodes2), "Nodes are not the same"
-    assert np.all(
-        control_params1 == nodes1["global_comp_index"]
-    ), "Parameter sharing is not correct"
-    assert np.all(
-        control_params2 == nodes2["global_branch_index"]
-    ), "Parameter sharing is not correct"
-    assert np.all(
-        control_params3 == nodes3["global_cell_index"]
-    ), "Parameter sharing is not correct"
+    assert np.all(control_params1 == nodes1["global_comp_index"]), (
+        "Parameter sharing is not correct"
+    )
+    assert np.all(control_params2 == nodes2["global_branch_index"]), (
+        "Parameter sharing is not correct"
+    )
+    assert np.all(control_params3 == nodes3["global_cell_index"]), (
+        "Parameter sharing is not correct"
+    )
 
     # test local and global indexes match the expected targets
     for view, local_targets, global_targets in zip(
@@ -416,12 +416,12 @@ def test_viewing(SimpleCell, SimpleNet):
             list(range(0, 9, 3)),
         ],
     ):
-        assert np.all(
-            view.nodes["local_comp_index"] == local_targets
-        ), "Indices do not match that of the target"
-        assert np.all(
-            view.nodes["global_comp_index"] == global_targets
-        ), "Indices do not match that of the target"
+        assert np.all(view.nodes["local_comp_index"] == local_targets), (
+            "Indices do not match that of the target"
+        )
+        assert np.all(view.nodes["global_comp_index"] == global_targets), (
+            "Indices do not match that of the target"
+        )
 
     with pytest.raises(ValueError):
         net.scope("global").comp(999)  # Nothing should be in View
@@ -434,28 +434,28 @@ def test_scope(SimpleCell):
     view = cell.scope("global").branch(1)
     assert view._scope == "global"
     view = view.scope("local").comp(0)
-    assert np.all(
-        view.nodes[["global_branch_index", "global_comp_index"]] == [1, 3]
-    ), "Expected [1,3] but got {}".format(
-        view.nodes[["global_branch_index", "global_comp_index"]]
+    assert np.all(view.nodes[["global_branch_index", "global_comp_index"]] == [1, 3]), (
+        "Expected [1,3] but got {}".format(
+            view.nodes[["global_branch_index", "global_comp_index"]]
+        )
     )
 
     cell.set_scope("global")
     assert cell._scope == "global"
     view = cell.branch(1).comp(3)
-    assert np.all(
-        view.nodes[["global_branch_index", "global_comp_index"]] == [1, 3]
-    ), "Expected [1,3] but got {}".format(
-        view.nodes[["global_branch_index", "global_comp_index"]]
+    assert np.all(view.nodes[["global_branch_index", "global_comp_index"]] == [1, 3]), (
+        "Expected [1,3] but got {}".format(
+            view.nodes[["global_branch_index", "global_comp_index"]]
+        )
     )
 
     cell.set_scope("local")
     assert cell._scope == "local"
     view = cell.branch(1).comp(0)
-    assert np.all(
-        view.nodes[["global_branch_index", "global_comp_index"]] == [1, 3]
-    ), "Expected [1,3] but got {}".format(
-        view.nodes[["global_branch_index", "global_comp_index"]]
+    assert np.all(view.nodes[["global_branch_index", "global_comp_index"]] == [1, 3]), (
+        "Expected [1,3] but got {}".format(
+            view.nodes[["global_branch_index", "global_comp_index"]]
+        )
     )
 
 
@@ -471,15 +471,15 @@ def test_context_manager(SimpleCell):
         comps.set("v", -71)
         comps.set("radius", 0.123)
 
-    assert np.all(
-        cell.branch(0).comp(1).nodes[["v", "radius"]] == [-70, 1.0]
-    ), "Set affected nodes not in context manager View."
-    assert np.all(
-        cell.branch(0).comp(0).nodes[["v", "radius"]] == [-71, 0.123]
-    ), "Context management of View not working."
-    assert np.all(
-        cell.branch(1).comp([0, 1]).nodes[["v", "radius"]] == [-71, 0.123]
-    ), "Context management of View not working."
+    assert np.all(cell.branch(0).comp(1).nodes[["v", "radius"]] == [-70, 1.0]), (
+        "Set affected nodes not in context manager View."
+    )
+    assert np.all(cell.branch(0).comp(0).nodes[["v", "radius"]] == [-71, 0.123]), (
+        "Context management of View not working."
+    )
+    assert np.all(cell.branch(1).comp([0, 1]).nodes[["v", "radius"]] == [-71, 0.123]), (
+        "Context management of View not working."
+    )
 
 
 def test_iter(SimpleBranch):
@@ -511,23 +511,23 @@ def test_iter(SimpleBranch):
             for comp in branch:
                 nodes2.append(comp.nodes)
     assert len(nodes2) == len(net.nodes), "Some compartments were skipped in iteration."
-    assert np.all(
-        [np.all(n1 == n2) for n1, n2 in zip(nodes1, nodes2)]
-    ), "__iter__ is not consistent with [comp.nodes for cell in net.cells for branches in cell.branches for comp in branches.comps]"
+    assert np.all([np.all(n1 == n2) for n1, n2 in zip(nodes1, nodes2)]), (
+        "__iter__ is not consistent with [comp.nodes for cell in net.cells for branches in cell.branches for comp in branches.comps]"
+    )
 
-    assert np.all(
-        [len(comp.nodes) for comp in net[0, 0].comps] == [1, 1]
-    ), "Iterator yielded unexpected number of compartments"
+    assert np.all([len(comp.nodes) for comp in net[0, 0].comps] == [1, 1]), (
+        "Iterator yielded unexpected number of compartments"
+    )
 
     # 0th comp in every branch (3), 1st comp in every branch (3), 2nd comp in (every) branch (only 1 branch with > 2 comps)
-    assert np.all(
-        [len(comp.nodes) for comp in net[0].comps] == [3, 3, 1]
-    ), "Iterator yielded unexpected number of compartments"
+    assert np.all([len(comp.nodes) for comp in net[0].comps] == [3, 3, 1]), (
+        "Iterator yielded unexpected number of compartments"
+    )
 
     # 0th comp in every branch for every cell (6), 1st comp in every branch for every cell , 2nd comp in (every) branch for every cell
-    assert np.all(
-        [len(comp.nodes) for comp in net.comps] == [6, 6, 2]
-    ), "Iterator yielded unexpected number of compartments"
+    assert np.all([len(comp.nodes) for comp in net.comps] == [6, 6, 2]), (
+        "Iterator yielded unexpected number of compartments"
+    )
 
     for comp in branch1:
         comp.set("v", -72)

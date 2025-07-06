@@ -47,17 +47,17 @@ class Cell(Module):
                 the stick representation coordinates.
         """
         super().__init__()
-        assert (
-            isinstance(branches, (Branch, List)) or branches is None
-        ), "Only Branch or List[Branch] is allowed."
+        assert isinstance(branches, (Branch, List)) or branches is None, (
+            "Only Branch or List[Branch] is allowed."
+        )
         if branches is not None:
-            assert (
-                parents is not None
-            ), "If `branches` is not a list then you have to set `parents`."
+            assert parents is not None, (
+                "If `branches` is not a list then you have to set `parents`."
+            )
         if isinstance(branches, List):
-            assert len(parents) == len(
-                branches
-            ), "Ensure equally many parents, i.e. len(branches) == len(parents)."
+            assert len(parents) == len(branches), (
+                "Ensure equally many parents, i.e. len(branches) == len(parents)."
+            )
 
         branches = Branch() if branches is None else branches
         parents = [-1] if parents is None else parents

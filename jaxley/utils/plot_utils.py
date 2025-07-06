@@ -353,9 +353,9 @@ def plot_comps(
         fig = plt.figure(figsize=(3, 3))
         ax = fig.add_subplot(111) if len(dims) < 3 else plt.axes(projection="3d")
 
-    assert not np.any(
-        np.isnan(module_or_view.xyzr[0][:, :3])
-    ), "missing xyz coordinates."
+    assert not np.any(np.isnan(module_or_view.xyzr[0][:, :3])), (
+        "missing xyz coordinates."
+    )
     if "x" not in module_or_view.nodes.columns:
         module_or_view.compute_compartment_centers()
 
@@ -444,9 +444,9 @@ def plot_morph(
             "rendering large morphologies in 3D can take a while. Consider projecting to 2D instead."
         )
 
-    assert not np.any(
-        np.isnan(module_or_view.xyzr[0][:, :3])
-    ), "missing xyz coordinates."
+    assert not np.any(np.isnan(module_or_view.xyzr[0][:, :3])), (
+        "missing xyz coordinates."
+    )
 
     for xyzr in module_or_view.xyzr:
         if len(xyzr) > 1:
