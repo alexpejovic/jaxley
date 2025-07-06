@@ -391,9 +391,9 @@ def integrate(
     else:
         length = prod(checkpoint_lengths)
         size_difference = length - nsteps_to_return
-        assert (
-            nsteps_to_return <= length
-        ), "The desired simulation duration is longer than `prod(nested_length)`."
+        assert nsteps_to_return <= length, (
+            "The desired simulation duration is longer than `prod(nested_length)`."
+        )
         if externals:
             dummy_external = jnp.zeros(
                 (size_difference, externals[example_key].shape[1])

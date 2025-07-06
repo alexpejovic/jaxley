@@ -46,9 +46,9 @@ def test_api_equivalence_morphology(SimpleComp):
 
     voltages1 = jx.integrate(cell1, delta_t=dt)
     voltages2 = jx.integrate(cell2, delta_t=dt)
-    assert (
-        jnp.max(jnp.abs(voltages1 - voltages2)) < 1e-8
-    ), "Voltages do not match between morphology APIs."
+    assert jnp.max(jnp.abs(voltages1 - voltages2)) < 1e-8, (
+        "Voltages do not match between morphology APIs."
+    )
 
 
 def test_solver_backends_comp(SimpleComp):
@@ -184,9 +184,9 @@ def test_api_equivalence_synapses(SimpleNet):
     voltages1 = jx.integrate(net1)
     voltages2 = jx.integrate(net2)
 
-    assert (
-        np.max(np.abs(voltages1 - voltages2)) < 1e-8
-    ), "Voltages do not match between synapse APIs."
+    assert np.max(np.abs(voltages1 - voltages2)) < 1e-8, (
+        "Voltages do not match between synapse APIs."
+    )
 
 
 def test_api_equivalence_continued_simulation(SimpleCell):

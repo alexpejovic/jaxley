@@ -49,9 +49,9 @@ def test_record_shape(SimpleCell):
     cell.branch(1).loc(0.1).record()
 
     voltages = jx.integrate(cell)
-    assert (
-        voltages.shape[0] == 2
-    ), f"Shape of recordings ({voltages.shape}) is not right."
+    assert voltages.shape[0] == 2, (
+        f"Shape of recordings ({voltages.shape}) is not right."
+    )
 
 
 def test_record_synaptic_and_membrane_states(SimpleNet):

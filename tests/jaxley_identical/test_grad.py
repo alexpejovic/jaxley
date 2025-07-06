@@ -103,6 +103,6 @@ def test_network_grad(SimpleNet):
         for key in true_g:
             max_error = np.max(np.abs(true_g[key] - new_g[key]))
             tolerance = 1e-3  # Leak cond has a huge gradient...
-            assert (
-                max_error <= tolerance
-            ), f"Error for {key} is {max_error} > {tolerance}"
+            assert max_error <= tolerance, (
+                f"Error for {key} is {max_error} > {tolerance}"
+            )
