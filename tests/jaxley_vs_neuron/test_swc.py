@@ -11,14 +11,16 @@ import os
 os.environ["XLA_PYTHON_CLIENT_MEM_FRACTION"] = ".8"
 import numpy as np
 import pytest
-from neuron import h
 
 import jaxley as jx
 from jaxley.channels import HH
+import importlib.util
 
-_ = h.load_file("stdlib.hoc")
-_ = h.load_file("import3d.hoc")
+if importlib.util.find_spec("neuron"):
+    from neuron import h
 
+    _ = h.load_file("stdlib.hoc")
+    _ = h.load_file("import3d.hoc")
 
 @pytest.mark.parametrize(
     "file",

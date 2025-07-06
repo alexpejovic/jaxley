@@ -14,7 +14,7 @@ import pytest
 import importlib.util
 
 if importlib.util.find_spec("neuron"):
-    from neuron import h, rxd
+    from neuron import h
 
     _ = h.load_file("stdlib.hoc")
     _ = h.load_file("import3d.hoc")
