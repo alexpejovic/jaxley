@@ -53,9 +53,9 @@ def test_swc_reader_lengths(file):
         dists = np.abs(neuron_pathlengths - p)
         assert np.min(dists) < 1e-3, "Some branches have too large distance."
 
-    assert len(pathlengths) == len(
-        neuron_pathlengths
-    ), "Number of branches does not match."
+    assert len(pathlengths) == len(neuron_pathlengths), (
+        "Number of branches does not match."
+    )
 
 
 def test_dummy_compartment_length():
@@ -147,9 +147,9 @@ def test_swc_types(reader_backend, file):
             if i == 1 and key in ["soma", "basal"]:
                 n_desired += 2  # After `set_ncomp` we should have two more comps.
             n_comps_in_morph = len(cell.__getattr__(key).nodes)
-            assert (
-                n_comps_in_morph == n_desired
-            ), f"{key} has {n_comps_in_morph} != {n_desired} comps!"
+            assert n_comps_in_morph == n_desired, (
+                f"{key} has {n_comps_in_morph} != {n_desired} comps!"
+            )
 
         # Additional tests to ensure that `groups` get updated appropriately.
         cell.soma.branch(0).set_ncomp(3)

@@ -22,15 +22,15 @@ def test_module_retrieval(SimpleNet):
     net = SimpleNet(2, 4, 4, force_init=False)
     t2 = time.time()
 
-    assert ((t2 - t1) - (t1 - t0)) / (
-        t1 - t0
-    ) < 0.1, f"Fixture is slower than manual init."
+    assert ((t2 - t1) - (t1 - t0)) / (t1 - t0) < 0.1, (
+        f"Fixture is slower than manual init."
+    )
 
     net = SimpleNet(2, 4, 4, force_init=False)
     t3 = time.time()
-    assert (
-        t1 - t0 > t2 - t1 > t3 - t2
-    ), f"T_get: from pre-existing fixture {t3 - t2}, from fixture: {(t2 - t1)}, manual: {(t1 - t0)}"
+    assert t1 - t0 > t2 - t1 > t3 - t2, (
+        f"T_get: from pre-existing fixture {t3 - t2}, from fixture: {(t2 - t1)}, manual: {(t1 - t0)}"
+    )
 
 
 def test_direct_submodule_retrieval(SimpleBranch):
@@ -39,9 +39,9 @@ def test_direct_submodule_retrieval(SimpleBranch):
     t2 = time.time()
     branch = SimpleBranch(4, 3, force_init=False)
     t3 = time.time()
-    assert (
-        t2 - t1 > t3 - t2
-    ), f"T_get: from pre-existing fixture {t3 - t2}, from fixture: {(t2 - t1)}"
+    assert t2 - t1 > t3 - t2, (
+        f"T_get: from pre-existing fixture {t3 - t2}, from fixture: {(t2 - t1)}"
+    )
 
 
 def test_recursive_submodule_retrieval(SimpleNet):
@@ -50,9 +50,9 @@ def test_recursive_submodule_retrieval(SimpleNet):
     t2 = time.time()
     net = SimpleNet(3, 4, 3, force_init=False)
     t3 = time.time()
-    assert (
-        t2 - t1 > t3 - t2
-    ), f"T_get: from pre-existing fixture {t3 - t2}, from fixture: {(t2 - t1)}"
+    assert t2 - t1 > t3 - t2, (
+        f"T_get: from pre-existing fixture {t3 - t2}, from fixture: {(t2 - t1)}"
+    )
 
 
 def test_module_reinit(SimpleComp):

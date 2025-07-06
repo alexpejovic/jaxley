@@ -40,13 +40,13 @@ class Branch(Module):
                 create the branch.
         """
         super().__init__()
-        assert (
-            isinstance(compartments, (Compartment, List)) or compartments is None
-        ), "Only Compartment or List[Compartment] is allowed."
+        assert isinstance(compartments, (Compartment, List)) or compartments is None, (
+            "Only Compartment or List[Compartment] is allowed."
+        )
         if isinstance(compartments, Compartment):
-            assert (
-                ncomp is not None
-            ), "If `compartments` is not a list then you have to set `ncomp`."
+            assert ncomp is not None, (
+                "If `compartments` is not a list then you have to set `ncomp`."
+            )
         compartments = Compartment() if compartments is None else compartments
         ncomp = 1 if ncomp is None else ncomp
 

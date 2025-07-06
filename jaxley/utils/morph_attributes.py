@@ -62,9 +62,9 @@ def morph_attrs_from_xyzr(
         resistive_load = [length / radii[0] ** 2 / np.pi] * 2
 
     if min_radius is None:
-        assert (
-            avg_radius > 0.0
-        ), "Radius 0.0 in SWC file. Set `read_swc(..., min_radius=...)`."
+        assert avg_radius > 0.0, (
+            "Radius 0.0 in SWC file. Set `read_swc(..., min_radius=...)`."
+        )
     else:
         avg_radius = (
             min_radius
