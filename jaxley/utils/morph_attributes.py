@@ -11,7 +11,7 @@ from jax.typing import ArrayLike
 
 def morph_attrs_from_xyzr(
     xyzr: np.ndarray,
-    min_radius: Optional[float],
+    min_radius: float | None,
     ncomp: int,
 ) -> float:
     """Return radius, area, volume, and resistive loads of a comp given its SWC xyzr.
@@ -77,7 +77,7 @@ def morph_attrs_from_xyzr(
 
 def split_xyzr_into_equal_length_segments(
     xyzr: np.ndarray, ncomp: int
-) -> List[np.ndarray]:
+) -> list[np.ndarray]:
     """Split xyzr into equal-length segments by inserting interpolated points as needed.
 
     This function was written by ChatGPT, based on the prompt:
@@ -154,7 +154,8 @@ def swc_radius(lengths: np.ndarray, radii: np.ndarray) -> np.ndarray:
         radii: Array of shape `(N)`, indicating the radius of each SWC point.
 
     Returns:
-        A radius as a scalar value."""
+        A radius as a scalar value.
+    """
     radius_weights = np.zeros(len(lengths) + 1)
     radius_weights[1:] += lengths
     radius_weights[:-1] += lengths
@@ -174,7 +175,8 @@ def swc_area(lengths: np.ndarray, radii: np.ndarray) -> np.ndarray:
         radii: Array of shape `(N)`, indicating the radius of each SWC point.
 
     Returns:
-        A membrane surface area as a scalar value."""
+        A membrane surface area as a scalar value.
+    """
     radius_start = radii[:-1]
     radius_end = radii[1:]
     delta_radii = radius_end - radius_start
@@ -195,7 +197,8 @@ def swc_volume(lengths: np.ndarray, radii: np.ndarray) -> np.ndarray:
         radii: Array of shape `(N)`, indicating the radius of each SWC point.
 
     Returns:
-        A volume as a scalar value."""
+        A volume as a scalar value.
+    """
     radius_start = radii[:-1]
     radius_end = radii[1:]
     volume = (
@@ -230,7 +233,8 @@ def swc_resistive_load(lengths: np.ndarray, radii: np.ndarray) -> np.ndarray:
         radii: Array of shape `(N)`, indicating the radius of each SWC point.
 
     Returns:
-        A resistive load as a scalar value."""
+        A resistive load as a scalar value.
+    """
     lengths = np.asarray(lengths)
     radius_start = np.asarray(radii[:-1])
     radius_end = np.asarray(radii[1:])
@@ -263,7 +267,8 @@ def cylinder_area(length: ArrayLike, radius: ArrayLike) -> Array:
         radii: The radii of M cylindric compartments, shape (M,).
 
     Returns:
-        The membrane surface area of each M cylindric compartments, shape (M,)."""
+        The membrane surface area of each M cylindric compartments, shape (M,).
+    """
     return 2.0 * jnp.pi * radius * length
 
 
@@ -284,7 +289,8 @@ def cylinder_volume(length: ArrayLike, radius: ArrayLike) -> Array:
         radii: The radii of M cylindric compartments, shape (M,).
 
     Returns:
-        The volume of each M cylindric compartments, shape (M,)."""
+        The volume of each M cylindric compartments, shape (M,).
+    """
     return length * radius**2 * jnp.pi
 
 
@@ -305,7 +311,8 @@ def cylinder_resistive_load(length: ArrayLike, radius: ArrayLike) -> Array:
         radii: The radii of M cylindric compartments, shape (M,).
 
     Returns:
-        The resistive load of each M cylindric compartments, shape (M,)."""
+        The resistive load of each M cylindric compartments, shape (M,).
+    """
     return length / radius**2 / jnp.pi
 
 

@@ -1,7 +1,8 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 import math
-from typing import Any, Callable, Dict, Optional, Sequence, Tuple, TypeVar
+from collections.abc import Callable, Sequence
+from typing import TypeVar
 
 import jax
 import jax.numpy as jnp
@@ -79,7 +80,8 @@ def infer_device() -> str:
     """Automatically infer the jax device.
 
     Returns:
-        Either of `gpu`, `tpu`, `cpu`, as a string."""
+        Either of `gpu`, `tpu`, `cpu`, as a string.
+    """
     platform = jax.devices()[0].platform
     if platform == "gpu":
         return "gpu"

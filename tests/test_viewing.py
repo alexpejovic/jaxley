@@ -10,7 +10,6 @@ import pytest
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 
-import jax.numpy as jnp
 import numpy as np
 
 import jaxley as jx
@@ -19,7 +18,6 @@ from jaxley.connect import connect
 from jaxley.modules.base import View
 from jaxley.synapses import TestSynapse
 from jaxley.utils.cell_utils import loc_of_index, local_index_of_loc
-from jaxley.utils.misc_utils import cumsum_leading_zero
 
 
 def test_getitem(SimpleBranch, SimpleCell, SimpleNet):
@@ -414,7 +412,7 @@ def test_viewing(SimpleCell, SimpleNet):
             [0, 3, 6],
             list(range(0, 27, 3)),
             list(range(0, 9, 3)),
-        ],
+        ], strict=False,
     ):
         assert np.all(view.nodes["local_comp_index"] == local_targets), (
             "Indices do not match that of the target"
@@ -493,7 +491,7 @@ def test_iter(SimpleBranch):
     assert np.all(
         [
             len(branch.nodes) == expected_len
-            for branch, expected_len in zip(cell.branches, [2, 2, 3])
+            for branch, expected_len in zip(cell.branches, [2, 2, 3], strict=False)
         ]
     ), "__iter__ failed for branches with different numbers of compartments."
 
@@ -511,7 +509,7 @@ def test_iter(SimpleBranch):
             for comp in branch:
                 nodes2.append(comp.nodes)
     assert len(nodes2) == len(net.nodes), "Some compartments were skipped in iteration."
-    assert np.all([np.all(n1 == n2) for n1, n2 in zip(nodes1, nodes2)]), (
+    assert np.all([np.all(n1 == n2) for n1, n2 in zip(nodes1, nodes2, strict=False)]), (
         "__iter__ is not consistent with [comp.nodes for cell in net.cells for branches in cell.branches for comp in branches.comps]"
     )
 
@@ -610,7 +608,7 @@ def test_view_equals_module(SimpleComp, SimpleBranch):
         [
             np.all([np.all(v1 == v2), k1 == k2])
             for (k1, v1), (k2, v2) in zip(
-                comp.externals.items(), branch.comp(0).externals.items()
+                comp.externals.items(), branch.comp(0).externals.items(), strict=False
             )
         ]
     )

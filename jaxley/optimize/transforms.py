@@ -1,7 +1,7 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Dict, List, Sequence
+from collections.abc import Callable, Sequence
 
 import jax
 import jax.numpy as jnp
@@ -183,16 +183,17 @@ class ParamTransform:
         tf_dict: A PyTree of transforms for each parameter.
     """
 
-    def __init__(self, tf_dict: List[Dict[str, Transform]] | Transform) -> None:
+    def __init__(self, tf_dict: list[dict[str, Transform]] | Transform) -> None:
         """Creates a new ParamTransform object.
 
         Args:
             tf_dict: A PyTree of transforms for each parameter.
         """
-
         self.tf_dict = tf_dict
 
-    def forward(self, params: List[Dict[str, Array]] | Array) -> Dict[str, Array]:
+    def forward(
+        self, params: list[dict[str, ArrayLike]] | ArrayLike
+    ) -> dict[str, Array]:
         """Pushes unconstrained parameters through a tf such that they fit the interval.
 
         Args:
@@ -202,10 +203,11 @@ class ParamTransform:
             A list of dictionaries (or any PyTree) with transformed parameters.
 
         """
-
         return jax.tree_util.tree_map(lambda x, tf: tf.forward(x), params, self.tf_dict)
 
-    def inverse(self, params: List[Dict[str, Array]] | Array) -> Dict[str, Array]:
+    def inverse(
+        self, params: list[dict[str, ArrayLike]] | ArrayLike
+    ) -> dict[str, Array]:
         """Takes parameters from within the interval and makes them unconstrained.
 
         Args:
@@ -214,5 +216,4 @@ class ParamTransform:
         Returns:
             A list of dictionaries (or any PyTree) with unconstrained parameters.
         """
-
         return jax.tree_util.tree_map(lambda x, tf: tf.inverse(x), params, self.tf_dict)

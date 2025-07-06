@@ -2,9 +2,7 @@
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 from collections.abc import Callable
 from math import prod
-from typing import Callable, Dict, List, Optional, Tuple, Union
 
-import jax
 import jax.numpy as jnp
 import pandas as pd
 from jax import Array
@@ -19,7 +17,7 @@ def build_init_and_step_fn(
     module: Module,
     voltage_solver: str = "jaxley.dhs",
     solver: str = "bwd_euler",
-) -> Tuple[Callable, Callable]:
+) -> tuple[Callable, Callable]:
     """Return ``init_fn`` and ``step_fn`` which initialize modules and run update steps.
 
     This method can be used to gain additional control over the simulation workflow.
@@ -105,7 +103,7 @@ def build_init_and_step_fn(
         all_states: dict | None = None,
         param_state: list[dict] | None = None,
         delta_t: float = 0.025,
-    ) -> Tuple[Dict, Dict]:
+    ) -> tuple[dict, dict]:
         """Initializes the parameters and states of the neuron model.
 
         Args:
@@ -132,12 +130,12 @@ def build_init_and_step_fn(
         return all_states, all_params
 
     def step_fn(
-        all_states: Dict,
-        all_params: Dict,
-        externals: Dict,
-        external_inds: Dict = external_inds,
+        all_states: dict,
+        all_params: dict,
+        externals: dict,
+        external_inds: dict = external_inds,
         delta_t: float = 0.025,
-    ) -> Dict:
+    ) -> dict:
         """Performs a single integration step with step size delta_t.
 
         Args:
@@ -181,8 +179,8 @@ def add_stimuli(
         Updated external inputs and indices.
     """
     # If stimulus is inserted, add it to the external inputs.
-    if "i" in externals.keys() or data_stimuli is not None:
-        if "i" in externals.keys():
+    if "i" in externals or data_stimuli is not None:
+        if "i" in externals:
             if data_stimuli is not None:
                 externals["i"] = jnp.concatenate([externals["i"], data_stimuli[1]])
                 external_inds["i"] = jnp.concatenate(
@@ -213,7 +211,7 @@ def add_clamps(
     # If a clamp is inserted, add it to the external inputs.
     if data_clamps is not None:
         state_name, clamps, inds = data_clamps
-        if state_name in externals.keys():
+        if state_name in externals:
             externals[state_name] = jnp.concatenate([externals[state_name], clamps])
             external_inds[state_name] = jnp.concatenate(
                 [external_inds[state_name], inds.index.to_numpy()]
@@ -236,8 +234,8 @@ def integrate(
     delta_t: float = 0.025,
     solver: str = "bwd_euler",
     voltage_solver: str = "jaxley.dhs",
-    checkpoint_lengths: Optional[List[int]] = None,
-    all_states: Optional[Dict] = None,
+    checkpoint_lengths: list[int] | None = None,
+    all_states: dict | None = None,
     return_states: bool = False,
 ) -> Array:
     """Solves ODE and simulates neuron model.
@@ -371,7 +369,7 @@ def integrate(
         recs = jnp.asarray(
             [
                 state[rec_state][rec_ind]
-                for rec_state, rec_ind in zip(rec_states, rec_inds)
+                for rec_state, rec_ind in zip(rec_states, rec_inds, strict=False)
             ]
         )
         return state, recs
@@ -405,7 +403,7 @@ def integrate(
     init_recs = jnp.asarray(
         [
             all_states[rec_state][rec_ind]
-            for rec_state, rec_ind in zip(rec_states, rec_inds)
+            for rec_state, rec_ind in zip(rec_states, rec_inds, strict=False)
         ]
     )
     init_recording = jnp.expand_dims(init_recs, axis=0)

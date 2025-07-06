@@ -1,23 +1,18 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Callable, Dict, List, Optional, Tuple
 
 import jax.numpy as jnp
 import numpy as np
 import pandas as pd
-from matplotlib.axes import Axes
 
 from jaxley.modules.base import Module
 from jaxley.utils.cell_utils import compute_children_and_parents
 from jaxley.utils.misc_utils import cumsum_leading_zero
 from jaxley.utils.morph_attributes import (
-    compute_axial_conductances,
     cylinder_area,
     cylinder_resistive_load,
     cylinder_volume,
-    morph_attrs_from_xyzr,
-    split_xyzr_into_equal_length_segments,
 )
 
 
@@ -28,13 +23,13 @@ class Compartment(Module):
     connected up into branches. It is the basic building block of a neuron model.
     """
 
-    compartment_params: Dict = {
+    compartment_params: dict = {
         "length": 10.0,  # um
         "radius": 1.0,  # um
         "axial_resistivity": 5_000.0,  # ohm cm
         "capacitance": 1.0,  # uF/cm^2
     }
-    compartment_states: Dict = {"v": -70.0}
+    compartment_states: dict = {"v": -70.0}
 
     def __init__(self):
         """Initialize a compartment."""
@@ -90,7 +85,8 @@ class Compartment(Module):
         - `_n_nodes`
         - `_off_diagonal_inds`
 
-        It also initializes `_comp_edges_in_view` and `_branchpoints_in_view`."""
+        It also initializes `_comp_edges_in_view` and `_branchpoints_in_view`.
+        """
         # Compartment edges.
         self._comp_edges = pd.DataFrame().from_dict(
             {"source": [], "sink": [], "ordered": [], "type": []}

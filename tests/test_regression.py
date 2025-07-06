@@ -65,7 +65,7 @@ def generate_regression_report(base_results, new_results):
 
         new_runtimes = new_data["runtimes"]
         base_runtimes = (
-            {k: None for k in new_data.keys()}
+            dict.fromkeys(new_data.keys())
             if base_data is None
             else base_data["runtimes"]
         )
@@ -113,7 +113,7 @@ def compute_conf_bounds(X):
 def load_json(fpath):
     dct = {}
     if os.path.exists(fpath):
-        with open(fpath, "r") as f:
+        with open(fpath) as f:
             dct = json.load(f)
     return dct
 
@@ -182,7 +182,7 @@ def build_net(
         comp = jx.Compartment()
         branch = jx.Branch(comp, 2)
         depth = 3
-        parents = [-1] + [b // 2 for b in range(0, 2**depth - 2)]
+        parents = [-1] + [b // 2 for b in range(2**depth - 2)]
         cell = jx.Cell(branch, parents=parents)
     else:
         dirname = os.path.dirname(__file__)

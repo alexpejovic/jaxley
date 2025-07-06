@@ -8,9 +8,7 @@ jax.config.update("jax_platform_name", "cpu")
 
 import os
 
-import jax.numpy as jnp
 import numpy as np
-from jax import jit
 
 import jaxley as jx
 

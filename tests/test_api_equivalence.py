@@ -23,7 +23,7 @@ def test_api_equivalence_morphology(SimpleComp):
     depth = 2
     dt = 0.025
 
-    parents = [-1] + [b // 2 for b in range(0, 2**depth - 2)]
+    parents = [-1] + [b // 2 for b in range(2**depth - 2)]
     parents = jnp.asarray(parents)
     num_branches = len(parents)
 
@@ -205,7 +205,8 @@ def test_api_equivalence_continued_simulation(SimpleCell):
 def test_api_equivalence_network_matches_cell(SimpleBranch):
     """Test whether a network with w=0 synapses equals the individual cells.
 
-    This runs an unequal number of compartments per branch."""
+    This runs an unequal number of compartments per branch.
+    """
     dt = 0.025  # ms
     current = jx.step_current(
         i_delay=0.5, i_dur=1.0, i_amp=0.1, delta_t=0.025, t_max=5.0
@@ -266,7 +267,7 @@ def test_api_init_step_to_integrate(SimpleCell):
     steps = int(4.0 / delta_t)  # Steps to integrate
     recordings = [
         states[rec_state][rec_ind][None]
-        for rec_state, rec_ind in zip(rec_states, rec_inds)
+        for rec_state, rec_ind in zip(rec_states, rec_inds, strict=False)
     ]
     externals = cell.externals
     for _ in range(steps):
@@ -274,7 +275,7 @@ def test_api_init_step_to_integrate(SimpleCell):
         recs = jnp.asarray(
             [
                 states[rec_state][rec_ind]
-                for rec_state, rec_ind in zip(rec_states, rec_inds)
+                for rec_state, rec_ind in zip(rec_states, rec_inds, strict=False)
             ]
         )
         recordings.append(recs)

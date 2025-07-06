@@ -60,7 +60,7 @@ class TypeOptimizer:
     def init(self, opt_params: list[dict[str, Array]]) -> list:
         """Initialize the optimizers. Equivalent to `optax.optimizers.init()`."""
         opt_states = []
-        for params, optimizer in zip(opt_params, self.optimizers):
+        for params, optimizer in zip(opt_params, self.optimizers, strict=False):
             name = list(optimizer.keys())[0]
             opt_state = optimizer[name].init(params)
             opt_states.append(opt_state)
@@ -70,7 +70,7 @@ class TypeOptimizer:
         """Update the optimizers. Equivalent to `optax.optimizers.update()`."""
         all_updates = []
         new_opt_states = []
-        for grad, state, opt in zip(gradient, opt_state, self.optimizers):
+        for grad, state, opt in zip(gradient, opt_state, self.optimizers, strict=False):
             name = list(opt.keys())[0]
             updates, new_opt_state = opt[name].update(grad, state)
             all_updates.append(updates)

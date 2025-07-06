@@ -49,13 +49,12 @@ def linear_segments(
 
 
 def merge_cells(
-    cumsum_num_branches: List[int],
-    cumsum_num_branchpoints: List[int],
-    arrs: List[List[np.ndarray]],
+    cumsum_num_branches: list[int],
+    cumsum_num_branchpoints: list[int],
+    arrs: list[list[np.ndarray]],
     exclude_first: bool = True,
 ) -> np.ndarray:
-    """
-    Build full list of which branches are solved in which iteration.
+    """Build full list of which branches are solved in which iteration.
 
     From the branching pattern of single cells, this "merges" them into a single
     ordering of branches.
@@ -112,7 +111,7 @@ def compute_levels(parents):
 
 def compute_children_in_level(
     levels: np.ndarray, children_row_and_col: np.ndarray
-) -> List[np.ndarray]:
+) -> list[np.ndarray]:
     num_branches = len(levels)
     children_in_each_level = []
     for l in range(1, np.max(levels) + 1):
@@ -173,10 +172,9 @@ def get_num_neighbours(
     ncomp_per_branch: int,
     num_branches: int,
 ):
+    """Number of neighbours of each compartment.
     """
-    Number of neighbours of each compartment.
-    """
-    num_neighbours = 2 * jnp.ones((num_branches * ncomp_per_branch))
+    num_neighbours = 2 * jnp.ones(num_branches * ncomp_per_branch)
     num_neighbours = num_neighbours.at[ncomp_per_branch - 1].set(1.0)
     num_neighbours = num_neighbours.at[jnp.arange(num_branches) * ncomp_per_branch].set(
         num_children + 1.0
@@ -253,10 +251,11 @@ def params_to_pstate(
     because these indices would also be differentiated by `jax.grad` (as soon as
     the `params` are passed to `def simulate(params)`. Therefore, in `jx.integrate`,
     we run the function to add indices to the dict. The outputs of `params_to_pstate`
-    are of the same shape as the outputs of `.data_set()`."""
+    are of the same shape as the outputs of `.data_set()`.
+    """
     return [
         {"key": list(p.keys())[0], "val": list(p.values())[0], "indices": i}
-        for p, i in zip(params, indices_set_by_trainables)
+        for p, i in zip(params, indices_set_by_trainables, strict=False)
     ]
 
 
@@ -287,8 +286,9 @@ def query_channel_states_and_params(d, keys, idcs):
     will be
     ```states = {'eCa': Array([ 0.,  0.]}```
 
-    Only loops over necessary keys, as opposed to looping over `d.items()`."""
-    return dict(zip(keys, (v[idcs] for v in map(d.get, keys))))
+    Only loops over necessary keys, as opposed to looping over `d.items()`.
+    """
+    return dict(zip(keys, (v[idcs] for v in map(d.get, keys)), strict=False))
 
 
 def compute_children_and_parents(

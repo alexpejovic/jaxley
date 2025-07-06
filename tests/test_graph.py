@@ -2,7 +2,6 @@
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
 import os
-from copy import deepcopy
 
 import jax
 
@@ -30,7 +29,7 @@ from jaxley.io.graph import (
 )
 from jaxley.modules.base import to_graph
 from jaxley.morphology import morph_connect, morph_delete
-from jaxley.synapses import IonotropicSynapse, TestSynapse
+from jaxley.synapses import IonotropicSynapse
 
 # from jaxley.utils.misc_utils import recursive_compare
 from tests.helpers import (
@@ -91,14 +90,14 @@ def test_graph_import_export_cycle(
         for k in module.group_names:
             assert k in re_module.group_names
 
-        for re_xyzr, xyzr in zip(re_module.xyzr, module.xyzr):
+        for re_xyzr, xyzr in zip(re_module.xyzr, module.xyzr, strict=False):
             re_xyzr[np.isnan(re_xyzr)] = -1
             xyzr[np.isnan(xyzr)] = -1
 
             assert np.all(re_xyzr == xyzr)
 
         re_imported_mechs = re_module.channels + re_module.synapses
-        for re_mech, mech in zip(re_imported_mechs, module.channels + module.synapses):
+        for re_mech, mech in zip(re_imported_mechs, module.channels + module.synapses, strict=False):
             assert np.all(re_mech.name == mech.name)
 
         # ensure exported graph and re-exported graph are equal
@@ -402,7 +401,6 @@ def test_trim_dendrites_of_swc():
     When the morphology is being trimmed, it deletes node [0] which had caused issues
     at some point.
     """
-
     dirname = os.path.dirname(__file__)
     fname = os.path.join(dirname, "swc_files", "morph_ca1_n120.swc")
     swc_graph = to_swc_graph(fname)

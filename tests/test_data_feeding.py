@@ -11,7 +11,6 @@ import numpy as np
 from jax import jit
 
 import jaxley as jx
-from jaxley.channels import HH
 
 
 def test_constant_and_data_stimulus(SimpleCell):

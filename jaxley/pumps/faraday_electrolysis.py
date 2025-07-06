@@ -96,7 +96,7 @@ class CaFaradayConcentrationChange(Pump):
     that calcium currents stop when no more ions are available).
     """
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         super().__init__(name)
         self.channel_params = {}
         self.channel_states = {"i_Ca": 1e-8, "CaCon_i": 5e-05}

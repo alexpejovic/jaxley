@@ -11,9 +11,9 @@ import os
 
 os.environ["XLA_PYTHON_CLIENT_MEM_FRACTION"] = ".4"
 
-import jax.numpy as jnp
-import numpy as np
 import importlib.util
+
+import numpy as np
 
 if importlib.util.find_spec("neuron"):
     from neuron import h

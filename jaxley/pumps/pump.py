@@ -1,7 +1,11 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
+<<<<<<< HEAD
 from abc import ABC, abstractmethod
 from typing import Dict, Optional, Tuple
+=======
+
+>>>>>>> 080c752 (implemented automatic ruff lint fixes)
 
 from jax import Array
 from jax.typing import ArrayLike
@@ -18,11 +22,11 @@ class Pump:
     channel_states: dict[str, Array]
     current_name: str
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         self._name = name if name else self.__class__.__name__
 
     @property
-    def name(self) -> Optional[str]:
+    def name(self) -> str | None:
         """The name of the channel (by default, this is the class name)."""
         return self._name
 

@@ -2,18 +2,13 @@
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
 import jax
-import pytest
 
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 
 
 import jax.numpy as jnp
-import numpy as np
-from jax import jit, value_and_grad
 
-import jaxley as jx
-from jaxley.channels import HH
 from jaxley.connect import fully_connect
 from jaxley.synapses import IonotropicSynapse
 
@@ -102,7 +97,7 @@ def test_subclassing_groups_net_make_trainable_equivalence(SimpleNet):
     assert jnp.array_equal(params1, params2)
 
     for inds1, inds2 in zip(
-        net1.indices_set_by_trainables, net2.indices_set_by_trainables
+        net1.indices_set_by_trainables, net2.indices_set_by_trainables, strict=False
     ):
         assert jnp.array_equal(inds1, inds2)
 

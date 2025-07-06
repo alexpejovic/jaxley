@@ -12,7 +12,7 @@ jax.config.update("jax_platform_name", "cpu")
 
 import jax.numpy as jnp
 import numpy as np
-from jaxley_mech.channels.l5pc import CaHVA, CaLVA
+from jaxley_mech.channels.l5pc import CaHVA
 from jaxley_mech.channels.l5pc import CaPump as CaPumpAsChannel
 
 import jaxley as jx
@@ -27,7 +27,7 @@ class NaPump(Pump):
     Modeled after the calcium channel in Destexhe et al. 1994.
     """
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         super().__init__(name)
         self.channel_params = {
             f"{self._name}_gamma": 0.05,  # Fraction of free calcium (not buffered).
@@ -91,7 +91,7 @@ class NaNernstReversal(Channel):
 
     def __init__(
         self,
-        name: Optional[str] = None,
+        name: str | None = None,
     ):
         self.current_is_in_mA_per_cm2 = True
         super().__init__(name)
@@ -102,7 +102,7 @@ class NaNernstReversal(Channel):
         }
         self.channel_params = {}
         self.channel_states = {"eNa": 0.0, "NaCon_i": 5e-05, "NaCon_e": 3.0}
-        self.current_name = f"i_Na"
+        self.current_name = "i_Na"
         self.META = {"ion": "Na"}
 
     def update_states(self, u, dt, voltages, params):
@@ -133,7 +133,7 @@ class CaPump2(Pump):
     Modeled after Destexhe et al. 1994.
     """
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         super().__init__(name)
         self.channel_params = {
             f"{self._name}_gamma": 0.05,  # Fraction of free calcium (not buffered).

@@ -19,7 +19,7 @@ def step_voltage_implicit_with_dhs_solve(
     internal_node_inds,
     sinks,
     n_nodes,
-    solve_indexer: Dict[str, Any],
+    solve_indexer: dict[str, Any],
     optimize_for_gpu: bool,
     delta_t,
 ):
@@ -330,7 +330,7 @@ def _voltage_vectorfield(
     """Evaluate the vectorfield of the nerve equation."""
     if np.sum(np.isin(types, [1, 2, 3, 4])) > 0:
         raise NotImplementedError(
-            f"Forward Euler is not implemented for branched morphologies."
+            "Forward Euler is not implemented for branched morphologies."
         )
 
     # Membrane current update.
@@ -360,7 +360,7 @@ def step_voltage_implicit_with_stone(
     """Solve one timestep of branched nerve equations with implicit (backward) Euler."""
     if np.sum(np.isin(types, [1, 2, 3, 4])) > 0:
         raise NotImplementedError(
-            f"The stone solver is not implemented for branched morphologies."
+            "The stone solver is not implemented for branched morphologies."
         )
 
     axial_conductances = delta_t * axial_conductances

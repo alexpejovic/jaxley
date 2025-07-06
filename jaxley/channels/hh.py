@@ -13,7 +13,7 @@ from jaxley.solver_gate import save_exp, solve_gate_exponential
 class HH(Channel):
     """Hodgkin-Huxley channel based on Sterratt, Graham, Gillies & Einevoll."""
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None) -> None:
         self.current_is_in_mA_per_cm2 = True
 
         super().__init__(name)
@@ -31,7 +31,7 @@ class HH(Channel):
             f"{prefix}_h": 0.2,
             f"{prefix}_n": 0.2,
         }
-        self.current_name = f"i_HH"
+        self.current_name = "i_HH"
 
     def update_states(
         self,
@@ -84,19 +84,19 @@ class HH(Channel):
         }
 
     @staticmethod
-    def m_gate(v):
+    def m_gate(v: float) -> tuple[float, float]:
         alpha = 0.1 * _vtrap(-(v + 40), 10)
         beta = 4.0 * save_exp(-(v + 65) / 18)
         return alpha, beta
 
     @staticmethod
-    def h_gate(v):
+    def h_gate(v: float) -> tuple[float, float]:
         alpha = 0.07 * save_exp(-(v + 65) / 20)
         beta = 1.0 / (save_exp(-(v + 35) / 10) + 1)
         return alpha, beta
 
     @staticmethod
-    def n_gate(v):
+    def n_gate(v: float) -> tuple[float, float]:
         alpha = 0.01 * _vtrap(-(v + 55), 10)
         beta = 0.125 * save_exp(-(v + 65) / 80)
         return alpha, beta

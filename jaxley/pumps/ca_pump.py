@@ -11,7 +11,7 @@ from jaxley.pumps.pump import Pump
 class CaPump(Pump):
     """Calcium dynamics based on Destexhe et al. 1994."""
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         super().__init__(name)
         self.channel_params = {
             f"{self._name}_gamma": 0.05,  # Fraction of free calcium (not buffered).

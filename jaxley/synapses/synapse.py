@@ -18,11 +18,11 @@ class Synapse:
     synapse_params = None
     synapse_states = None
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         self._name = name if name else self.__class__.__name__
 
     @property
-    def name(self) -> Optional[str]:
+    def name(self) -> str | None:
         return self._name
 
     def change_name(self, new_name: str):
@@ -74,7 +74,8 @@ class Synapse:
             params: Parameters of the synapse. Conductances in `uS`.
 
         Returns:
-            Updated states."""
+            Updated states.
+        """
         raise NotImplementedError
 
     def compute_current(

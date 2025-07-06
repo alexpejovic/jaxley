@@ -7,7 +7,6 @@ from jax.typing import ArrayLike
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 from math import pi
-from typing import Dict, Optional
 
 import jax.numpy as jnp
 import numpy as np
@@ -35,7 +34,7 @@ class CaPump(Channel):
 
     def __init__(
         self,
-        name: Optional[str] = None,
+        name: str | None = None,
     ):
         self.current_is_in_mA_per_cm2 = True
         super().__init__(name)
@@ -46,9 +45,9 @@ class CaPump(Channel):
             f"{self._name}_minCai": 1e-4,  # Minimum intracellular calcium concentration in mM
         }
         self.channel_states = {
-            f"CaCon_i": 5e-05,  # Initial internal calcium concentration in mM
+            "CaCon_i": 5e-05,  # Initial internal calcium concentration in mM
         }
-        self.current_name = f"i_Ca"
+        self.current_name = "i_Ca"
         self.META = {
             "reference": "Modified from Destexhe et al., 1994",
             "mechanism": "Calcium dynamics",
@@ -73,7 +72,7 @@ class CaPump(Channel):
         cai_inf = minCai + decay * drive_channel
         new_cai = exponential_euler(cai, dt, cai_inf, cai_tau)
 
-        return {f"CaCon_i": new_cai}
+        return {"CaCon_i": new_cai}
 
     def compute_current(self, u, voltages, params):
         """This dynamics model does not directly contribute to the membrane current."""
@@ -89,7 +88,7 @@ class CaNernstReversal(Channel):
 
     def __init__(
         self,
-        name: Optional[str] = None,
+        name: str | None = None,
     ):
         self.current_is_in_mA_per_cm2 = True
         super().__init__(name)
@@ -100,7 +99,7 @@ class CaNernstReversal(Channel):
         }
         self.channel_params = {}
         self.channel_states = {"eCa": 0.0, "CaCon_i": 5e-05, "CaCon_e": 2.0}
-        self.current_name = f"i_Ca"
+        self.current_name = "i_Ca"
 
     def update_states(self, u, dt, voltages, params):
         """Update internal calcium concentration based on calcium current and decay."""
@@ -210,7 +209,7 @@ def test_init_states(SimpleCell):
 
 
 class KCA11(Channel):
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         self.current_is_in_mA_per_cm2 = True
         super().__init__(name)
         prefix = self._name
@@ -220,7 +219,7 @@ class KCA11(Channel):
             "celsius": 22,
         }
         self.channel_states = {f"{prefix}_m": 0.02, "CaCon_i": 1e-4}
-        self.current_name = f"i_K"
+        self.current_name = "i_K"
 
     def update_states(
         self,
@@ -300,12 +299,12 @@ def test_multiple_channel_currents(SimpleCell):
     class User(Channel):
         """The channel which uses currents of Dummy1 and Dummy2 to update its states."""
 
-        def __init__(self, name: Optional[str] = None):
+        def __init__(self, name: str | None = None):
             self.current_is_in_mA_per_cm2 = True
             super().__init__(name)
             self.channel_params = {}
             self.channel_states = {"cumulative": 0.0}
-            self.current_name = f"i_User"
+            self.current_name = "i_User"
 
         def update_states(self, states, dt, v, params):
             state = states["cumulative"]
@@ -316,12 +315,12 @@ def test_multiple_channel_currents(SimpleCell):
             return 0.01 * jnp.ones_like(v)
 
     class Dummy1(Channel):
-        def __init__(self, name: Optional[str] = None):
+        def __init__(self, name: str | None = None):
             self.current_is_in_mA_per_cm2 = True
             super().__init__(name)
             self.channel_params = {}
             self.channel_states = {}
-            self.current_name = f"i_Dummy"
+            self.current_name = "i_Dummy"
 
         def update_states(self, states, dt, v, params):
             return {}
@@ -330,12 +329,12 @@ def test_multiple_channel_currents(SimpleCell):
             return 0.01 * jnp.ones_like(v)
 
     class Dummy2(Channel):
-        def __init__(self, name: Optional[str] = None):
+        def __init__(self, name: str | None = None):
             self.current_is_in_mA_per_cm2 = True
             super().__init__(name)
             self.channel_params = {}
             self.channel_states = {}
-            self.current_name = f"i_Dummy"
+            self.current_name = "i_Dummy"
 
         def update_states(self, states, dt, v, params):
             return {}

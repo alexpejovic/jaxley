@@ -1,8 +1,12 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
+<<<<<<< HEAD
 from abc import ABC, abstractmethod
 from typing import Dict, Optional, Tuple
 from warnings import warn
+=======
+from __future__ import annotations
+>>>>>>> 080c752 (implemented automatic ruff lint fixes)
 
 from jax import Array
 from jax.typing import ArrayLike
@@ -16,14 +20,15 @@ class Channel:
 
     As in NEURON, a `Channel` is considered a distributed process, which means that its
     conductances are to be specified in `S/cm2` and its currents are to be specified in
-    `uA/cm2`."""
+    `uA/cm2`.
+    """
 
     _name = None
     channel_params = None
     channel_states = None
     current_name = None
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None) -> None:
         contact = (
             "If you have any questions, please reach out via email to "
             "michael.deistler@uni-tuebingen.de or create an issue on Github: "
@@ -45,11 +50,11 @@ class Channel:
         self._name = name if name else self.__class__.__name__
 
     @property
-    def name(self) -> Optional[str]:
+    def name(self) -> str | None:
         """The name of the channel (by default, this is the class name)."""
         return self._name
 
-    def change_name(self, new_name: str):
+    def change_name(self, new_name: str) -> Channel:
         """Change the channel name.
 
         Args:
@@ -106,6 +111,6 @@ class Channel:
         v: ArrayLike,
         params: dict[str, ArrayLike],
         delta_t: float,
-    ):
+    ) -> dict:
         """Initialize states of channel."""
         return {}

@@ -50,7 +50,7 @@ def solve_inf_gate_exponential(
     s_inf: ArrayLike,
     tau_s: ArrayLike,
 ):
-    """solves dx/dt = (s_inf - x) / tau_s
+    """Solves dx/dt = (s_inf - x) / tau_s
     via exponential Euler
 
     Args:

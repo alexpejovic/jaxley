@@ -14,7 +14,8 @@ def is_same_network(pre: "View", post: "View") -> bool:
 def sample_comp(cell_view: "View", num: int = 1, replace=True) -> "CompartmentView":
     """Sample a compartment from a cell.
 
-    Returns View with shape (num, num_cols)."""
+    Returns View with shape (num, num_cols).
+    """
     return np.random.choice(cell_view._comps_in_view, num, replace=replace)
 
 
@@ -135,7 +136,7 @@ def fully_connect(
         global_post_comp_indices = (
             post_cell_view.nodes.groupby("global_cell_index").first()["orig_index"]
         ).to_numpy()
-        to_idx = np.tile(range(0, num_post), num_pre)
+        to_idx = np.tile(range(num_post), num_pre)
         global_post_comp_indices = global_post_comp_indices[to_idx]
         post_cell_view.nodes.drop(columns="orig_index", inplace=True)
 
@@ -228,7 +229,7 @@ def sparse_connect(
         ].copy()
         # Determine how many comps to sample for each post-synaptic neuron
         unique_cells, counts = np.unique(post_syn_neurons, return_counts=True)
-        n_samples_dict = dict(zip(unique_cells, counts))
+        n_samples_dict = dict(zip(unique_cells, counts, strict=False))
         post_syn_view["orig_index"] = post_syn_view.index
         sampled_inds = post_syn_view.groupby("global_cell_index").apply(
             lambda x: x.sample(n=n_samples_dict[x.name], replace=True)
@@ -331,7 +332,7 @@ def connectivity_matrix_connect(
         # Determine how many comps to sample for each post-synaptic neuron
         unique_cells, counts = np.unique(global_to_idx, return_counts=True)
         # Sample the post-synaptic compartments
-        n_samples_dict = dict(zip(unique_cells, counts))
+        n_samples_dict = dict(zip(unique_cells, counts, strict=False))
         sampled_inds = post_syn_view.groupby("global_cell_index").apply(
             lambda x: x.sample(n=n_samples_dict[x.name], replace=True)
         )
