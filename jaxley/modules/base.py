@@ -3,17 +3,17 @@
 from __future__ import annotations
 
 import warnings
-from abc import ABC, abstractmethod
+from abc import ABC
 from copy import deepcopy
 from itertools import chain
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Any
 from warnings import warn
 
 import jax.numpy as jnp
 import networkx as nx
 import numpy as np
 import pandas as pd
-from jax import jit, vmap
+from jax import vmap
 from jax.lax import ScatterDimensionNumbers, scatter_add
 from matplotlib.axes import Axes
 
@@ -61,7 +61,8 @@ def only_allow_module(func):
     """Decorator to only allow the function to be called on Module instances.
 
     Decorates methods of Module that cannot be called on Views of Modules instances.
-    and have to be called on the Module itself."""
+    and have to be called on the Module itself.
+    """
 
     def wrapper(self, *args, **kwargs):
         module_name = self.base.__class__.__name__
@@ -133,11 +134,11 @@ class Module(ABC):
         self._solver_device = infer_device()
         self.ncomp: int = None
         self.total_nbranches: int = 0
-        self.nbranches_per_cell: List[int] = None
+        self.nbranches_per_cell: list[int] = None
 
-        self.group_names: List[str] = []
+        self.group_names: list[str] = []
 
-        self.nodes: Optional[pd.DataFrame] = None
+        self.nodes: pd.DataFrame | None = None
         self._scope = "local"  # defaults to local scope
         self._nodes_in_view: np.ndarray = None
         self._edges_in_view: np.ndarray = None
@@ -158,7 +159,7 @@ class Module(ABC):
             ]
         )
 
-        self._cumsum_nbranches: Optional[np.ndarray] = None
+        self._cumsum_nbranches: np.ndarray | None = None
 
         self.comb_parents: jnp.ndarray = jnp.asarray([-1])
 
@@ -166,26 +167,26 @@ class Module(ABC):
         self.initialized_syns: bool = False
 
         # List of all types of `jx.Synapse`s.
-        self.synapses: List = []
+        self.synapses: list = []
         self.synapse_param_names = []
         self.synapse_state_names = []
         self.synapse_names = []
-        self.synapse_current_names: List[str] = []
+        self.synapse_current_names: list[str] = []
 
         # List of types of all `jx.Channel`s.
-        self.channels: List[Channel] = []
-        self.membrane_current_names: List[str] = []
+        self.channels: list[Channel] = []
+        self.membrane_current_names: list[str] = []
 
         # List of all pumps.
-        self.pumped_ions: List[str] = []
-        self.pumps: List[Pump] = []
+        self.pumped_ions: list[str] = []
+        self.pumps: list[Pump] = []
 
         # List of all states (excluding voltage) that are being diffused.
-        self.diffusion_states: List[str] = []
+        self.diffusion_states: list[str] = []
 
         # For trainable parameters.
-        self.indices_set_by_trainables: List[jnp.ndarray] = []
-        self.trainable_params: List[Dict[str, jnp.ndarray]] = []
+        self.indices_set_by_trainables: list[jnp.ndarray] = []
+        self.trainable_params: list[dict[str, jnp.ndarray]] = []
         self.allow_make_trainable: bool = True
         self.num_trainable_params: int = 0
 
@@ -195,12 +196,12 @@ class Module(ABC):
         # For stimuli or clamps.
         # E.g. `self.externals = {"v": zeros(1000,2), "i": ones(1000, 2)}`
         # for 1000 timesteps and two compartments.
-        self.externals: Dict[str, jnp.ndarray] = {}
+        self.externals: dict[str, jnp.ndarray] = {}
         # E.g. `self.external)inds = {"v": jnp.asarray([0,1]), "i": jnp.asarray([2,3])}`
-        self.external_inds: Dict[str, jnp.ndarray] = {}
+        self.external_inds: dict[str, jnp.ndarray] = {}
 
         # x, y, z coordinates and radius.
-        self.xyzr: List[np.ndarray] = []
+        self.xyzr: list[np.ndarray] = []
         self._radius_generating_fns = None  # Defined by `.read_swc()`.
 
         # For debugging the solver. Will be empty by default and only filled if
@@ -256,10 +257,11 @@ class Module(ABC):
             view.edges["local_edge_index"] = np.arange(len(view.edges))
             return view
 
-    def _childviews(self) -> List[str]:
+    def _childviews(self) -> list[str]:
         """Returns levels that module can be viewed at.
 
-        I.e. for net -> [cell, branch, comp]. For branch -> [comp]"""
+        I.e. for net -> [cell, branch, comp]. For branch -> [comp]
+        """
         levels = ["network", "cell", "branch", "comp"]
         if self._current_view in levels:
             children = levels[levels.index(self._current_view) + 1 :]
@@ -283,18 +285,19 @@ class Module(ABC):
         child_views = self._childviews()
         assert len(index) <= len(child_views), "Too many indices."
         view = self
-        for i, child in zip(index, child_views):
+        for i, child in zip(index, child_views, strict=False):
             view = view._at_nodes(child, i)
         return view
 
     def _update_local_indices(self) -> pd.DataFrame:
         """Compute local indices from the global indices that are in view.
 
-        This is recomputed everytime a View is created."""
+        This is recomputed everytime a View is created.
+        """
         rerank = lambda df: df.rank(method="dense").astype(int) - 1
 
         def reorder_cols(
-            df: pd.DataFrame, cols: List[str], first: bool = True
+            df: pd.DataFrame, cols: list[str], first: bool = True
         ) -> pd.DataFrame:
             """Move cols to front/back.
 
@@ -304,16 +307,18 @@ class Module(ABC):
                 first: If True, cols are placed in front, otherwise at the end.
 
             Returns:
-                DataFrame with reordered columns."""
+                DataFrame with reordered columns.
+            """
             new_cols = [col for col in df.columns if first == (col in cols)]
             new_cols += [col for col in df.columns if first != (col in cols)]
             return df[new_cols]
 
         def reindex_a_by_b(
-            df: pd.DataFrame, a: str, b: Optional[Union[str, List[str]]] = None
+            df: pd.DataFrame, a: str, b: str | list[str] | None = None
         ) -> pd.DataFrame:
             """Reindex based on a different col or several columns
-            for b=[0,0,1,1,2,2,2] -> a=[0,1,0,1,0,1,2]"""
+            for b=[0,0,1,1,2,2,2] -> a=[0,1,0,1,0,1,2]
+            """
             grouped_df = df.groupby(b) if b is not None else df
             df.loc[:, a] = rerank(grouped_df[a])
             return df
@@ -347,7 +352,8 @@ class Module(ABC):
     def _init_view(self):
         """Init attributes critical for View.
 
-        Needs to be called at init of a Module."""
+        Needs to be called at init of a Module.
+        """
         modules = ["compartment", "branch", "cell", "network"]
         module_inheritance = [c.__name__.lower() for c in self.__class__.__mro__]
         module_type = next((t for t in modules if t in module_inheritance), None)
@@ -430,7 +436,8 @@ class Module(ABC):
             dtype: defaults to int, but can also reformat float for use in `loc`
 
         Returns:
-            array of indices of shape (N,)"""
+            array of indices of shape (N,)
+        """
         if is_str_all(idx):  # also asserts that the only allowed str == "all"
             return idx
 
@@ -463,7 +470,7 @@ class Module(ABC):
         assert idx.dtype in [
             np_dtype,
             bool,
-        ], f"Invalid dtype, found {str(idx.dtype)} instead of {str([np_dtype, bool])}"
+        ], f"Invalid dtype, found {idx.dtype!s} instead of {[np_dtype, bool]!s}"
 
         return idx.reshape(-1)
 
@@ -473,7 +480,8 @@ class Module(ABC):
         Adds column to nodes/edges dataframes to read of shared params from.
 
         Args:
-            key: key specifying group / view that is in control of the params."""
+            key: key specifying group / view that is in control of the params.
+        """
         if key in ["comp", "branch", "cell"]:
             self.nodes["controlled_by_param"] = self.nodes[f"global_{key}_index"]
             self.edges["controlled_by_param"] = 0
@@ -502,7 +510,8 @@ class Module(ABC):
             sorted: if True, nodes and edges are sorted.
 
         Returns:
-            View for subset of selected nodes and/or edges."""
+            View for subset of selected nodes and/or edges.
+        """
         nodes = self._reformat_index(nodes) if nodes is not None else None
         nodes = self._nodes_in_view if is_str_all(nodes) else nodes
         nodes = np.sort(nodes) if sorted else nodes
@@ -521,7 +530,8 @@ class Module(ABC):
         Determines if global or local indices are used for viewing the module.
 
         Args:
-            scope: either "global" or "local"."""
+            scope: either "global" or "local".
+        """
         assert scope in ["global", "local"], "Invalid scope."
         self._scope = scope
 
@@ -535,7 +545,8 @@ class Module(ABC):
             scope: either "global" or "local".
 
         Returns:
-            View with the specified scope."""
+            View with the specified scope.
+        """
         view = self.view
         view.set_scope(scope)
         return view
@@ -596,7 +607,8 @@ class Module(ABC):
             idx: index of the cell to view.
 
         Returns:
-            View of the module at the specified cell index."""
+            View of the module at the specified cell index.
+        """
         return self._at_nodes("cell", idx)
 
     def branch(self, idx: Any) -> View:
@@ -606,7 +618,8 @@ class Module(ABC):
             idx: index of the branch to view.
 
         Returns:
-            View of the module at the specified branch index."""
+            View of the module at the specified branch index.
+        """
         return self._at_nodes("branch", idx, comp_edge_condition="source_or_sink")
 
     def comp(self, idx: Any) -> View:
@@ -616,7 +629,8 @@ class Module(ABC):
             idx: index of the comp to view.
 
         Returns:
-            View of the module at the specified compartment index."""
+            View of the module at the specified compartment index.
+        """
         return self._at_nodes("comp", idx, comp_edge_condition="source_and_sink")
 
     def edge(self, idx: Any) -> View:
@@ -626,7 +640,8 @@ class Module(ABC):
             idx: index of the edge to view.
 
         Returns:
-            View of the module at the specified edge index."""
+            View of the module at the specified edge index.
+        """
         return self._at_edges("edge", idx)
 
     def loc(self, at: Any) -> View:
@@ -636,7 +651,8 @@ class Module(ABC):
             at: location along the branch.
 
         Returns:
-            View of the module at the specified branch location."""
+            View of the module at the specified branch location.
+        """
         global_comp_idxs = []
         for i in self._branches_in_view:
             ncomp = self.base.ncomp_per_branch[i]
@@ -696,7 +712,8 @@ class Module(ABC):
     def _iter_submodules(self, name: str):
         """Iterate over submoduleslevel.
 
-        Used for `cells`, `branches`, `comps`."""
+        Used for `cells`, `branches`, `comps`.
+        """
         col = self._scope + f"_{name}_index"
         idxs = self.nodes[col].unique()
         for idx in idxs:
@@ -706,14 +723,16 @@ class Module(ABC):
     def cells(self):
         """Iterate over all cells in the module.
 
-        Returns a generator that yields a View of each cell."""
+        Returns a generator that yields a View of each cell.
+        """
         yield from self._iter_submodules("cell")
 
     @property
     def branches(self):
         """Iterate over all branches in the module.
 
-        Returns a generator that yields a View of each branch."""
+        Returns a generator that yields a View of each branch.
+        """
         yield from self._iter_submodules("branch")
 
     @property
@@ -722,7 +741,8 @@ class Module(ABC):
         Can be called on any module, i.e. `net.comps`, `cell.comps` or
         `branch.comps`. `__iter__` does not allow for this.
 
-        Returns a generator that yields a View of each compartment."""
+        Returns a generator that yields a View of each compartment.
+        """
         yield from self._iter_submodules("comp")
 
     def __iter__(self):
@@ -744,7 +764,7 @@ class Module(ABC):
         yield from self._iter_submodules(next_level)
 
     @property
-    def shape(self) -> Tuple[int]:
+    def shape(self) -> tuple[int]:
         """Returns the number of submodules contained in a module.
 
         .. code-block:: python
@@ -765,7 +785,7 @@ class Module(ABC):
 
     def copy(
         self, reset_index: bool = False, as_module: bool = False
-    ) -> Union[Module, View]:
+    ) -> Module | View:
         """Extract part of a module and return a copy of its View or a new module.
 
         This can be used to call `jx.integrate` on part of a Module.
@@ -775,7 +795,8 @@ class Module(ABC):
             as_module: if True, a new module is returned instead of a View.
 
         Returns:
-            A part of the module or a copied view of it."""
+            A part of the module or a copied view of it.
+        """
         view = deepcopy(self)
         warnings.warn("This method is experimental, use at your own risk.")
         # TODO FROM #447: add reset_index, i.e. for parents, nodes, edges etc. such that they
@@ -795,10 +816,11 @@ class Module(ABC):
         """Return type of the module (compartment, branch, cell, network) as string.
 
         This is used to perform asserts for some modules (e.g. network cannot use
-        `set_ncomp`) without having to import the module in `base.py`."""
+        `set_ncomp`) without having to import the module in `base.py`.
+        """
         return self.__class__.__name__.lower()
 
-    def _append_params_and_states(self, param_dict: Dict, state_dict: Dict):
+    def _append_params_and_states(self, param_dict: dict, state_dict: dict):
         """Insert the default params of the module (e.g. radius, length).
 
         This is run at `__init__()`. It does not deal with channels.
@@ -808,7 +830,7 @@ class Module(ABC):
         for state_name, state_value in state_dict.items():
             self.base.nodes[state_name] = state_value
 
-    def _gather_channels_from_constituents(self, constituents: List):
+    def _gather_channels_from_constituents(self, constituents: list):
         """Modify `self.channels` and `self.nodes` with channel info from constituents.
 
         This is run at `__init__()`. It takes all branches of constituents (e.g.
@@ -854,7 +876,7 @@ class Module(ABC):
         self.base.jaxnodes = {}
         for key, value in self.base.nodes.to_dict(orient="list").items():
             # inds = jnp.arange(len(value))
-            values = -1 * jnp.ones((self._n_nodes))
+            values = -1 * jnp.ones(self._n_nodes)
             values = values.at[self.base.nodes.index.to_numpy()].set(value)
             self.base.jaxnodes[key] = values
 
@@ -872,12 +894,12 @@ class Module(ABC):
 
     def show(
         self,
-        param_names: Optional[Union[str, List[str]]] = None,
+        param_names: str | list[str] | None = None,
         *,
         indices: bool = True,
         params: bool = True,
         states: bool = True,
-        channel_names: Optional[List[str]] = None,
+        channel_names: list[str] | None = None,
     ) -> pd.DataFrame:
         """Print detailed information about the Module or a view of it.
 
@@ -908,7 +930,7 @@ class Module(ABC):
             sum([list(ch.channel_states) for ch in self.channels], []) if states else []
         )
 
-        if not param_names is None:
+        if param_names is not None:
             cols = (
                 inds + [c for c in cols if c in param_names]
                 if params
@@ -918,7 +940,7 @@ class Module(ABC):
         return nodes[cols]
 
     @only_allow_module
-    def _init_solvers(self, allowed_nodes_per_level: Optional[int] = None):
+    def _init_solvers(self, allowed_nodes_per_level: int | None = None):
         """Initialize the morphology such that it can be processed by the solvers.
 
         Args:
@@ -949,7 +971,7 @@ class Module(ABC):
         self._indptr_jax_spsolve = indptr
 
     def _init_solver_jaxley_dhs_solve(
-        self, allowed_nodes_per_level: Optional[int] = 1, root: int = 0
+        self, allowed_nodes_per_level: int | None = 1, root: int = 0
     ) -> None:
         """Create module attributes for indexing with the `jaxley.dhs` voltage volver.
 
@@ -1058,7 +1080,7 @@ class Module(ABC):
             parents[nodes[:, 0]] = nodes[:, 1]
         self._dhs_solve_indexer["parent_lookup"] = parents.astype(int)
 
-    def set(self, key: str, val: Union[float, jnp.ndarray]):
+    def set(self, key: str, val: float | jnp.ndarray):
         """Set parameter of module (or its view) to a new value.
 
         Note that this function can not be called within `jax.jit` or `jax.grad`.
@@ -1123,8 +1145,8 @@ class Module(ABC):
     def data_set(
         self,
         key: str,
-        val: Union[float, jnp.ndarray],
-        param_state: Optional[List[Dict]],
+        val: float | jnp.ndarray,
+        param_state: list[dict] | None,
     ):
         """Set parameter of module (or its view) to a new value within `jit`.
 
@@ -1163,7 +1185,7 @@ class Module(ABC):
         return param_state
 
     def set_ncomp(
-        self, ncomp: int, min_radius: Optional[float] = None, initialize: bool = True
+        self, ncomp: int, min_radius: float | None = None, initialize: bool = True
     ):
         """Set the number of compartments with which the branch is discretized.
 
@@ -1365,7 +1387,7 @@ class Module(ABC):
     def make_trainable(
         self,
         key: str,
-        init_val: Optional[Union[float, list]] = None,
+        init_val: float | list | None = None,
         verbose: bool = True,
     ):
         """Make a parameter trainable.
@@ -1472,7 +1494,7 @@ class Module(ABC):
                 f"parameters: {self.base.num_trainable_params}"
             )
 
-    def write_trainables(self, trainable_params: List[Dict[str, jnp.ndarray]]):
+    def write_trainables(self, trainable_params: list[dict[str, jnp.ndarray]]):
         """Write the trainables into `.nodes` and `.edges`.
 
         This allows to, e.g., visualize trained networks with `.vis()`.
@@ -1530,7 +1552,7 @@ class Module(ABC):
             "function returns a list of distances (to all endpoints)."
         ),
     )
-    def distance(self, endpoint: "View") -> float:
+    def distance(self, endpoint: View) -> float:
         """Return the direct distance between two compartments.
 
         This function computes the direct distance. To compute the pathwise distance,
@@ -1546,7 +1568,6 @@ class Module(ABC):
 
     def delete_trainables(self):
         """Removes all trainable parameters from the module."""
-
         if isinstance(self, View):
             trainables_and_inds = self._filter_trainables(is_viewed=False)
             self.base.indices_set_by_trainables = trainables_and_inds[0]
@@ -1583,10 +1604,11 @@ class Module(ABC):
         else:
             self.base.nodes.loc[self._nodes_in_view, group_name] = True
 
-    def _get_state_names(self) -> Tuple[List, List]:
+    def _get_state_names(self) -> tuple[list, list]:
         """Collect all recordable / clampable states in the membrane and synapses.
 
-        Returns states separated by comps and edges."""
+        Returns states separated by comps and edges.
+        """
         channel_states = [
             name for c in self.channels + self.pumps for name in c.channel_states
         ]
@@ -1599,7 +1621,7 @@ class Module(ABC):
             synapse_states + self.synapse_current_names,
         )
 
-    def get_parameters(self) -> List[Dict[str, jnp.ndarray]]:
+    def get_parameters(self) -> list[dict[str, jnp.ndarray]]:
         """Get all trainable parameters.
 
         The returned parameters should be passed to
@@ -1612,7 +1634,7 @@ class Module(ABC):
         return self.trainable_params
 
     @only_allow_module
-    def get_all_parameters(self, pstate: List[Dict]) -> Dict[str, jnp.ndarray]:
+    def get_all_parameters(self, pstate: list[dict]) -> dict[str, jnp.ndarray]:
         # TODO FROM #447: MAKE THIS WORK FOR VIEW?
         """Return all parameters (and coupling conductances) needed to simulate.
 
@@ -1716,7 +1738,7 @@ class Module(ABC):
         return params
 
     @only_allow_module
-    def _get_states_from_nodes_and_edges(self) -> Dict[str, jnp.ndarray]:
+    def _get_states_from_nodes_and_edges(self) -> dict[str, jnp.ndarray]:
         """Return states as they are set in the `.nodes` and `.edges` tables.
 
         TODO FROM #447: MAKE THIS WORK FOR VIEW?
@@ -1734,8 +1756,8 @@ class Module(ABC):
 
     @only_allow_module
     def get_all_states(
-        self, pstate: List[Dict], all_params, delta_t: float
-    ) -> Dict[str, jnp.ndarray]:
+        self, pstate: list[dict], all_params, delta_t: float
+    ) -> dict[str, jnp.ndarray]:
         # TODO FROM #447: MAKE THIS WORK FOR VIEW?
         """Get the full initial state of the module from jaxnodes and trainables.
 
@@ -1972,7 +1994,7 @@ class Module(ABC):
         else:
             self.base.recordings = pd.DataFrame().from_dict({})
 
-    def stimulate(self, current: Optional[jnp.ndarray] = None, verbose: bool = True):
+    def stimulate(self, current: jnp.ndarray | None = None, verbose: bool = True):
         """Insert a stimulus into the compartment.
 
         current must be a 1d array or have batch dimension of size `(num_compartments, )`
@@ -2003,7 +2025,7 @@ class Module(ABC):
     def _external_input(
         self,
         key: str,
-        values: Optional[jnp.ndarray],
+        values: jnp.ndarray | None,
         verbose: bool = True,
     ):
         comp_states, edge_states = self._get_state_names()
@@ -2043,9 +2065,9 @@ class Module(ABC):
     def data_stimulate(
         self,
         current: jnp.ndarray,
-        data_stimuli: Optional[Tuple[jnp.ndarray, pd.DataFrame]] = None,
+        data_stimuli: tuple[jnp.ndarray, pd.DataFrame] | None = None,
         verbose: bool = False,
-    ) -> Tuple[jnp.ndarray, pd.DataFrame]:
+    ) -> tuple[jnp.ndarray, pd.DataFrame]:
         """Insert a stimulus into the module within jit (or grad).
 
         Args:
@@ -2061,7 +2083,7 @@ class Module(ABC):
         self,
         state_name: str,
         state_array: jnp.ndarray,
-        data_clamps: Optional[Tuple[jnp.ndarray, pd.DataFrame]] = None,
+        data_clamps: tuple[jnp.ndarray, pd.DataFrame] | None = None,
         verbose: bool = False,
     ):
         """Insert a clamp into the module within jit (or grad).
@@ -2086,7 +2108,7 @@ class Module(ABC):
         self,
         state_name: str,
         state_array: jnp.ndarray,
-        data_external_input: Optional[Tuple[jnp.ndarray, pd.DataFrame]],
+        data_external_input: tuple[jnp.ndarray, pd.DataFrame] | None,
         view: pd.DataFrame,
         verbose: bool = False,
     ):
@@ -2135,7 +2157,7 @@ class Module(ABC):
         """Removes all stimuli from the module."""
         self.delete_clamps("i")
 
-    def delete_clamps(self, state_name: Optional[str] = None):
+    def delete_clamps(self, state_name: str | None = None):
         """Removes all clamps of the given state from the module."""
         all_externals = list(self.externals.keys())
         if "i" in all_externals:
@@ -2158,11 +2180,12 @@ class Module(ABC):
             else:
                 pass  # does not have to be deleted if not in externals
 
-    def insert(self, channel: Union[Channel, Pump]):
+    def insert(self, channel: Channel | Pump):
         """Insert a channel or pump into the module.
 
         Args:
-            channel: The channel to insert."""
+            channel: The channel to insert.
+        """
         name = channel._name
 
         assert name not in self.group_names, (
@@ -2234,11 +2257,12 @@ class Module(ABC):
         self.base.diffusion_states.remove(state)
         self.base.nodes.drop(columns=[f"axial_diffusion_{state}"], inplace=True)
 
-    def delete(self, channel: Union[Channel, Pump]):
+    def delete(self, channel: Channel | Pump):
         """Remove a channel or pump from the module.
 
         Args:
-            channel: The channel to remove."""
+            channel: The channel to remove.
+        """
         name = channel._name
         channel_names = [c._name for c in self.channels + self.pumps]
         all_channel_names = [c._name for c in self.base.channels]
@@ -2270,14 +2294,14 @@ class Module(ABC):
     @only_allow_module
     def step(
         self,
-        u: Dict[str, jnp.ndarray],
+        u: dict[str, jnp.ndarray],
         delta_t: float,
-        external_inds: Dict[str, jnp.ndarray],
-        externals: Dict[str, jnp.ndarray],
-        params: Dict[str, jnp.ndarray],
+        external_inds: dict[str, jnp.ndarray],
+        externals: dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
         solver: str = "bwd_euler",
         voltage_solver: str = "jaxley.stone",
-    ) -> Dict[str, jnp.ndarray]:
+    ) -> dict[str, jnp.ndarray]:
         """One step of solving the Ordinary Differential Equation.
 
         This function is called inside of `integrate` and increments the state of the
@@ -2300,7 +2324,7 @@ class Module(ABC):
             The updated state of the module.
         """
         # Extract the external inputs
-        if "i" in externals.keys():
+        if "i" in externals:
             i_current = externals["i"]
             i_inds = external_inds["i"]
             i_ext = self._get_external_input(u["v"], i_inds, i_current, params["area"])
@@ -2370,7 +2394,7 @@ class Module(ABC):
                 state_vals["linear_terms"] += [ion_linear_term]
                 state_vals["constant_terms"] += [ion_const_term]
                 state_vals["axial_conductances"] += [
-                    params[f"axial_conductances"][ion_name]
+                    params["axial_conductances"][ion_name]
                 ]
 
         # Stack all states such that they can be handled by `vmap` in the solve.
@@ -2383,7 +2407,7 @@ class Module(ABC):
             state_vals[state_name] = jnp.stack(state_vals[state_name])
 
         # Clamp for channels and synapses.
-        for key in externals.keys():
+        for key in externals:
             if key not in ["i", "v"]:
                 u[key] = u[key].at[external_inds[key]].set(externals[key])
 
@@ -2500,19 +2524,19 @@ class Module(ABC):
             u[ion_name] = updated_states[counter + 1]
 
         # Clamp for voltages.
-        if "v" in externals.keys():
+        if "v" in externals:
             u["v"] = u["v"].at[external_inds["v"]].set(externals["v"])
 
         return u
 
     def _step_channels(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         delta_t: float,
-        channels: List[Channel],
+        channels: list[Channel],
         channel_nodes: pd.DataFrame,
-        params: Dict[str, jnp.ndarray],
-    ) -> Tuple[Dict[str, jnp.ndarray], Tuple[jnp.ndarray, jnp.ndarray]]:
+        params: dict[str, jnp.ndarray],
+    ) -> tuple[dict[str, jnp.ndarray], tuple[jnp.ndarray, jnp.ndarray]]:
         """One step of integration of the channels and of computing their current."""
         states = self._step_channels_state(
             states, delta_t, channels, channel_nodes, params
@@ -2526,10 +2550,10 @@ class Module(ABC):
         self,
         states,
         delta_t,
-        channels: List[Channel],
+        channels: list[Channel],
         channel_nodes: pd.DataFrame,
-        params: Dict[str, jnp.ndarray],
-    ) -> Dict[str, jnp.ndarray]:
+        params: dict[str, jnp.ndarray],
+    ) -> dict[str, jnp.ndarray]:
         """One integration step of the channels."""
         voltages = states["v"]
 
@@ -2566,12 +2590,12 @@ class Module(ABC):
 
     def _channel_currents(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         delta_t: float,
-        channels: List[Channel],
+        channels: list[Channel],
         channel_nodes: pd.DataFrame,
-        params: Dict[str, jnp.ndarray],
-    ) -> Tuple[Dict[str, jnp.ndarray], Tuple[jnp.ndarray, jnp.ndarray]]:
+        params: dict[str, jnp.ndarray],
+    ) -> tuple[dict[str, jnp.ndarray], tuple[jnp.ndarray, jnp.ndarray]]:
         """Return the current through each channel.
 
         This is also updates `state` because the `state` also contains the current.
@@ -2631,11 +2655,11 @@ class Module(ABC):
     def _channel_current_components(
         self,
         modified_state: jnp.ndarray,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         delta_t: float,
         channel: Channel,
         indices: pd.DataFrame,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
     ):
         """Computes current through a channel and its linear and const components.
 
@@ -2672,12 +2696,12 @@ class Module(ABC):
 
     def _step_synapse(
         self,
-        u: Dict[str, jnp.ndarray],
-        syn_channels: List[Channel],
-        params: Dict[str, jnp.ndarray],
+        u: dict[str, jnp.ndarray],
+        syn_channels: list[Channel],
+        params: dict[str, jnp.ndarray],
         delta_t: float,
         edges: pd.DataFrame,
-    ) -> Tuple[Dict[str, jnp.ndarray], Tuple[jnp.ndarray, jnp.ndarray]]:
+    ) -> tuple[dict[str, jnp.ndarray], tuple[jnp.ndarray, jnp.ndarray]]:
         """One step of integration of the channels.
 
         `Network` overrides this method (because it actually has synapses), whereas
@@ -2693,7 +2717,7 @@ class Module(ABC):
         params,
         delta_t,
         edges: pd.DataFrame,
-    ) -> Tuple[Dict[str, jnp.ndarray], Tuple[jnp.ndarray, jnp.ndarray]]:
+    ) -> tuple[dict[str, jnp.ndarray], tuple[jnp.ndarray, jnp.ndarray]]:
         return states, (None, None)
 
     @staticmethod
@@ -2703,8 +2727,7 @@ class Module(ABC):
         i_stim: jnp.ndarray,
         area: float,
     ) -> jnp.ndarray:
-        """
-        Return external input to each compartment in uA / cm^2.
+        """Return external input to each compartment in uA / cm^2.
 
         Args:
             voltages: mV.
@@ -2725,9 +2748,9 @@ class Module(ABC):
 
     def vis(
         self,
-        ax: Optional[Axes] = None,
+        ax: Axes | None = None,
         color: str = "k",
-        dims: Tuple[int] = (0, 1),
+        dims: tuple[int] = (0, 1),
         type: str = "line",
         **kwargs,
     ) -> Axes:
@@ -2871,9 +2894,9 @@ class Module(ABC):
 
     def move_to(
         self,
-        x: Union[float, np.ndarray] = 0.0,
-        y: Union[float, np.ndarray] = 0.0,
-        z: Union[float, np.ndarray] = 0.0,
+        x: float | np.ndarray = 0.0,
+        y: float | np.ndarray = 0.0,
+        z: float | np.ndarray = 0.0,
         update_nodes: bool = False,
     ):
         """Move cells or networks to a location (x, y, z).
@@ -2911,7 +2934,7 @@ class Module(ABC):
         if len(move_by.shape) == 1:
             move_by = np.tile(move_by, (len(self._cells_in_view), 1))
 
-        for cell, offset in zip(cells(), move_by):
+        for cell, offset in zip(cells(), move_by, strict=False):
             for idx in cell._branches_in_view:
                 self.base.xyzr[idx][:, :3] += offset
         if update_nodes:
@@ -2949,8 +2972,8 @@ class Module(ABC):
 
     def copy_node_property_to_edges(
         self,
-        properties_to_import: Union[str, List[str]],
-        pre_or_post: Union[str, List[str]] = ["pre", "post"],
+        properties_to_import: str | list[str],
+        pre_or_post: str | list[str] = ["pre", "post"],
     ) -> Module:
         """Copy a property that is in `node` over to `edges`.
 
@@ -3057,9 +3080,9 @@ class View(Module):
 
     def __init__(
         self,
-        pointer: Union[Module, View],
-        nodes: Optional[np.ndarray] = None,
-        edges: Optional[np.ndarray] = None,
+        pointer: Module | View,
+        nodes: np.ndarray | None = None,
+        edges: np.ndarray | None = None,
         comp_edge_condition: str = "source_or_sink",
     ):
         self.base: Module = pointer.base  # Point to the base module.
@@ -3147,7 +3170,7 @@ class View(Module):
 
     def _set_inds_in_view(
         self,
-        pointer: Union[Module, View],
+        pointer: Module | View,
         nodes: np.ndarray,
         edges: np.ndarray,
         comp_edge_condition="source_or_sink",
@@ -3224,7 +3247,7 @@ class View(Module):
             self._nodes_in_view = nodes
             self._edges_in_view = edges
 
-    def _jax_arrays_in_view(self, pointer: Union[Module, View]):
+    def _jax_arrays_in_view(self, pointer: Module | View):
         """Update jaxnodes/jaxedges to show only those currently in view."""
         a_intersects_b_at = lambda a, b: jnp.intersect1d(a, b, return_indices=True)[1]
         jaxnodes = {} if pointer.jaxnodes is not None else None
@@ -3254,7 +3277,7 @@ class View(Module):
         self.externals = {}
         self.external_inds = {}
         for (name, inds), data in zip(
-            self.base.external_inds.items(), self.base.externals.values()
+            self.base.external_inds.items(), self.base.externals.values(), strict=False
         ):
             in_view = np.isin(inds, self._nodes_in_view)
             inds_in_view = inds[in_view]
@@ -3264,7 +3287,7 @@ class View(Module):
 
     def _filter_trainables(
         self, is_viewed: bool = True
-    ) -> Tuple[List[np.ndarray], List[Dict]]:
+    ) -> tuple[list[np.ndarray], list[dict]]:
         """Filters the trainables inside and outside of the view.
 
         Trainables are split between `indices_set_by_trainables` and `trainable_params`
@@ -3279,11 +3302,12 @@ class View(Module):
 
         Args:
             is_viewed: Toggles between returning the trainables and inds
-                currently inside or outside of the scope of View."""
+                currently inside or outside of the scope of View.
+        """
         índices_set_by_trainables_in_view = []
         trainable_params_in_view = []
         for inds, params in zip(
-            self.base.indices_set_by_trainables, self.base.trainable_params
+            self.base.indices_set_by_trainables, self.base.trainable_params, strict=False
         ):
             pkey, pval = next(iter(params.items()))
             trainable_inds_in_view = None
@@ -3337,21 +3361,21 @@ class View(Module):
         self.indices_set_by_trainables = trainables[0]
         self.trainable_params = trainables[1]
 
-    def _channels_in_view(self, pointer: Union[Module, View]) -> List[Channel]:
+    def _channels_in_view(self, pointer: Module | View) -> list[Channel]:
         """Set channels to show only those in view."""
         names = [name._name for name in pointer.channels]
         channel_in_view = self.nodes[names].any(axis=0)
         channel_in_view = channel_in_view[channel_in_view].index
         return [c for c in pointer.channels if c._name in channel_in_view]
 
-    def _pumps_in_view(self, pointer: Union[Module, View]) -> List[Pump]:
+    def _pumps_in_view(self, pointer: Module | View) -> list[Pump]:
         """Set pumps to show only those in view."""
         names = [name._name for name in pointer.pumps]
         pump_in_view = self.nodes[names].any(axis=0)
         pump_in_view = pump_in_view[pump_in_view].index
         return [c for c in pointer.pumps if c._name in pump_in_view]
 
-    def _set_synapses_in_view(self, pointer: Union[Module, View]):
+    def _set_synapses_in_view(self, pointer: Module | View):
         """Set synapses to show only those in view."""
         viewed_synapses = []
         viewed_params = []
@@ -3373,10 +3397,11 @@ class View(Module):
         cell_nodes = self.nodes.groupby("global_cell_index")
         return cell_nodes["global_branch_index"].nunique().to_list()
 
-    def _xyzr_in_view(self) -> List[np.ndarray]:
+    def _xyzr_in_view(self) -> list[np.ndarray]:
         """Return xyzr coordinates of every branch that is in `_branches_in_view`.
 
-        If a branch is not completely in view, the coordinates are interpolated."""
+        If a branch is not completely in view, the coordinates are interpolated.
+        """
         xyzr = []
         viewed_ncomp_for_branch = self.nodes.groupby("global_branch_index").size()
         for i in self._branches_in_view:
@@ -3449,7 +3474,7 @@ class View(Module):
 
 
 def to_graph(
-    module: "jx.Module", synapses: bool = False, channels: bool = False
+    module: jx.Module, synapses: bool = False, channels: bool = False
 ) -> nx.DiGraph:
     """Export a `jx.Module` as a networkX compartment graph.
 

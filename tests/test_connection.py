@@ -18,7 +18,7 @@ from jaxley.connect import (
     fully_connect,
     sparse_connect,
 )
-from jaxley.synapses import IonotropicSynapse, TestSynapse
+from jaxley.synapses import TestSynapse
 
 
 def test_connect(SimpleBranch, SimpleCell, SimpleNet):

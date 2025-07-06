@@ -1,7 +1,6 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Dict, Optional
 
 import jax
 
@@ -9,7 +8,6 @@ jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 
 import jax.numpy as jnp
-import numpy as np
 
 import jaxley as jx
 from jaxley.channels import Channel
@@ -19,12 +17,12 @@ from jaxley.solver_gate import exponential_euler, save_exp, solve_gate_exponenti
 class Dummy1(Channel):
     """A dummy channel which simply accumulates a state (same state as dummy2)."""
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         self.current_is_in_mA_per_cm2 = True
         super().__init__(name)
         self.channel_params = {}
         self.channel_states = {"Dummy_s": 0.0}
-        self.current_name = f"i_Dummy1"
+        self.current_name = "i_Dummy1"
 
     @staticmethod
     def update_states(u, dt, voltages, params):
@@ -42,12 +40,12 @@ class Dummy1(Channel):
 class Dummy2(Channel):
     """A dummy channel which simply accumulates a state (same state as dummy1)."""
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         self.current_is_in_mA_per_cm2 = True
         super().__init__(name)
         self.channel_params = {}
         self.channel_states = {"Dummy_s": 0.0}
-        self.current_name = f"i_Dummy2"
+        self.current_name = "i_Dummy2"
 
     @staticmethod
     def update_states(u, dt, voltages, params):
@@ -65,7 +63,7 @@ class Dummy2(Channel):
 class CaHVA(Channel):
     """High-Voltage-Activated (HVA) Ca2+ channel"""
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         self.current_is_in_mA_per_cm2 = True
         super().__init__(name)
         self.channel_params = {
@@ -76,7 +74,7 @@ class CaHVA(Channel):
             f"{self._name}_h": 0.1,  # Initial value for h gating variable
             "eCa": 0.0,  # mV, assuming eca for demonstration
         }
-        self.current_name = f"i_Ca"
+        self.current_name = "i_Ca"
         self.META = {
             "reference": "Reuveni, Friedman, Amitai, and Gutnick, J.Neurosci. 1993",
             "mechanism": "HVA Ca2+ channel",
@@ -84,10 +82,10 @@ class CaHVA(Channel):
 
     def update_states(
         self,
-        u: Dict[str, jnp.ndarray],
+        u: dict[str, jnp.ndarray],
         dt: float,
         voltages: float,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
     ):
         """Update state of gating variables."""
         prefix = self._name
@@ -97,7 +95,7 @@ class CaHVA(Channel):
         return {f"{prefix}_m": m_new, f"{prefix}_h": h_new, "eCa": u["eCa"]}
 
     def compute_current(
-        self, u: Dict[str, jnp.ndarray], voltages, params: Dict[str, jnp.ndarray]
+        self, u: dict[str, jnp.ndarray], voltages, params: dict[str, jnp.ndarray]
     ):
         """Compute the current through the channel."""
         prefix = self._name
@@ -136,7 +134,7 @@ class CaPump(Channel):
 
     def __init__(
         self,
-        name: Optional[str] = None,
+        name: str | None = None,
     ):
         self.current_is_in_mA_per_cm2 = True
         super().__init__(name)
@@ -147,9 +145,9 @@ class CaPump(Channel):
             f"{self._name}_minCai": 1e-4,  # Minimum intracellular calcium concentration in mM
         }
         self.channel_states = {
-            f"CaCon_i": 5e-05,  # Initial internal calcium concentration in mM
+            "CaCon_i": 5e-05,  # Initial internal calcium concentration in mM
         }
-        self.current_name = f"i_Ca"
+        self.current_name = "i_Ca"
         self.META = {
             "reference": "Modified from Destexhe et al., 1994",
             "mechanism": "Calcium dynamics",
@@ -174,7 +172,7 @@ class CaPump(Channel):
         cai_inf = minCai + decay * drive_channel
         new_cai = exponential_euler(cai, dt, cai_inf, cai_tau)
 
-        return {f"CaCon_i": new_cai}
+        return {"CaCon_i": new_cai}
 
     def compute_current(self, u, voltages, params):
         """This dynamics model does not directly contribute to the membrane current."""
@@ -188,7 +186,8 @@ class CaPump(Channel):
 def test_shared_state():
     """Test whether two channels can share a state.
 
-    This has to be copied into a notebook and executed with `jax.disable_jit():`."""
+    This has to be copied into a notebook and executed with `jax.disable_jit():`.
+    """
     comp1 = jx.Compartment()
     comp1.insert(Dummy1())
 

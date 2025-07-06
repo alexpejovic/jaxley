@@ -1,7 +1,7 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Dict, List, Union
+from typing import Union
 
 import jax.numpy as jnp
 import networkx as nx
@@ -12,7 +12,7 @@ from jaxley.modules.base import to_graph
 def distance_direct(
     startpoint: "View",
     endpoints: Union["Branch", "Cell", "View"],
-) -> List[float]:
+) -> list[float]:
     """Returns the direct distance between a root and other compartments.
 
     This function uses ``cell.nodes[['x', 'y', 'z']]`` and computes the euclidean
@@ -49,7 +49,7 @@ def distance_direct(
 
 def distance_pathwise(
     startpoint: "View", endpoints: Union["Branch", "Cell", "View"]
-) -> List[float]:
+) -> list[float]:
     """Returns the pathwise distance between a root and other compartments.
 
     We use Dijkstra's algorithm to get the path with the lowest
@@ -96,9 +96,8 @@ def distance_pathwise(
     for _, data in graph.nodes(data=True):
         data.setdefault("length", 0.0)
 
-    def edge_weight(u: int, v: int, d: Dict) -> float:
-        """
-        Args:
+    def edge_weight(u: int, v: int, d: dict) -> float:
+        """Args:
             u: Start node of an edge.
             v: End node of an edge.
             d: Dictionary of edge attributes (unused because all our attributes are

@@ -1,7 +1,6 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Dict, Optional
 
 import jax.numpy as jnp
 
@@ -12,7 +11,7 @@ from jaxley.solver_gate import save_exp, solve_gate_exponential
 class HH(Channel):
     """Hodgkin-Huxley channel based on Sterratt, Graham, Gillies & Einevoll."""
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None) -> None:
         self.current_is_in_mA_per_cm2 = True
 
         super().__init__(name)
@@ -30,15 +29,15 @@ class HH(Channel):
             f"{prefix}_h": 0.2,
             f"{prefix}_n": 0.2,
         }
-        self.current_name = f"i_HH"
+        self.current_name = "i_HH"
 
     def update_states(
         self,
-        states: Dict[str, jnp.ndarray],
-        dt,
-        v,
-        params: Dict[str, jnp.ndarray],
-    ):
+        states: dict[str, jnp.ndarray],
+        dt: float,
+        v: float,
+        params: dict[str, jnp.ndarray],
+    ) -> dict[str, jnp.ndarray]:
         """Return updated HH channel state."""
         prefix = self._name
         m, h, n = states[f"{prefix}_m"], states[f"{prefix}_h"], states[f"{prefix}_n"]
@@ -48,8 +47,8 @@ class HH(Channel):
         return {f"{prefix}_m": new_m, f"{prefix}_h": new_h, f"{prefix}_n": new_n}
 
     def compute_current(
-        self, states: Dict[str, jnp.ndarray], v, params: Dict[str, jnp.ndarray]
-    ):
+        self, states: dict[str, jnp.ndarray], v: float, params: dict[str, jnp.ndarray]
+    ) -> float:
         """Return current through HH channels."""
         prefix = self._name
         m, h, n = states[f"{prefix}_m"], states[f"{prefix}_h"], states[f"{prefix}_n"]
@@ -64,7 +63,7 @@ class HH(Channel):
             + gLeak * (v - params[f"{prefix}_eLeak"])
         )
 
-    def init_state(self, states, v, params, delta_t):
+    def init_state(self, v) -> dict[str, float]:
         """Initialize the state such at fixed point of gate dynamics."""
         prefix = self._name
         alpha_m, beta_m = self.m_gate(v)
@@ -77,19 +76,19 @@ class HH(Channel):
         }
 
     @staticmethod
-    def m_gate(v):
+    def m_gate(v: float) -> tuple[float, float]:
         alpha = 0.1 * _vtrap(-(v + 40), 10)
         beta = 4.0 * save_exp(-(v + 65) / 18)
         return alpha, beta
 
     @staticmethod
-    def h_gate(v):
+    def h_gate(v: float) -> tuple[float, float]:
         alpha = 0.07 * save_exp(-(v + 65) / 20)
         beta = 1.0 / (save_exp(-(v + 35) / 10) + 1)
         return alpha, beta
 
     @staticmethod
-    def n_gate(v):
+    def n_gate(v: float) -> tuple[float, float]:
         alpha = 0.01 * _vtrap(-(v + 55), 10)
         beta = 0.125 * save_exp(-(v + 65) / 80)
         return alpha, beta

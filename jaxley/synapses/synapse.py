@@ -1,7 +1,6 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Dict, Optional, Tuple
 
 import jax.numpy as jnp
 
@@ -18,11 +17,11 @@ class Synapse:
     synapse_params = None
     synapse_states = None
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         self._name = name if name else self.__class__.__name__
 
     @property
-    def name(self) -> Optional[str]:
+    def name(self) -> str | None:
         return self._name
 
     def change_name(self, new_name: str):
@@ -58,12 +57,12 @@ class Synapse:
         return self
 
     def update_states(
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         delta_t: float,
         pre_voltage: jnp.ndarray,
         post_voltage: jnp.ndarray,
-        params: Dict[str, jnp.ndarray],
-    ) -> Dict[str, jnp.ndarray]:
+        params: dict[str, jnp.ndarray],
+    ) -> dict[str, jnp.ndarray]:
         """ODE update step.
 
         Args:
@@ -74,14 +73,15 @@ class Synapse:
             params: Parameters of the synapse. Conductances in `uS`.
 
         Returns:
-            Updated states."""
+            Updated states.
+        """
         raise NotImplementedError
 
     def compute_current(
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         pre_voltage: jnp.ndarray,
         post_voltage: jnp.ndarray,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
     ) -> jnp.ndarray:
         """Return current through one synapse in `nA`.
 

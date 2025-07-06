@@ -7,4 +7,4 @@ from jaxley.modules.cell import Cell
 from jaxley.modules.compartment import Compartment
 from jaxley.modules.network import Network
 
-__all__ = ["Module", "Branch", "Cell", "Compartment", "Network"]
+__all__ = ["Branch", "Cell", "Compartment", "Module", "Network"]

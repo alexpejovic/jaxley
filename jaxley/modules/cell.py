@@ -1,8 +1,6 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Callable, Dict, List, Optional, Tuple, Union
-from warnings import warn
 
 import jax.numpy as jnp
 import numpy as np
@@ -14,7 +12,7 @@ from jaxley.utils.cell_utils import (
     compute_children_and_parents,
     compute_children_indices,
 )
-from jaxley.utils.misc_utils import cumsum_leading_zero, deprecated_kwargs
+from jaxley.utils.misc_utils import cumsum_leading_zero
 
 
 class Cell(Module):
@@ -25,14 +23,14 @@ class Cell(Module):
     and supports intricate cell morphologies.
     """
 
-    cell_params: Dict = {}
-    cell_states: Dict = {}
+    cell_params: dict = {}
+    cell_states: dict = {}
 
     def __init__(
         self,
-        branches: Optional[Union[Branch, List[Branch]]] = None,
-        parents: Optional[List[int]] = None,
-        xyzr: Optional[List[np.ndarray]] = None,
+        branches: Branch | list[Branch] | None = None,
+        parents: list[int] | None = None,
+        xyzr: list[np.ndarray] | None = None,
     ):
         """Initialize a cell.
 
@@ -47,14 +45,14 @@ class Cell(Module):
                 the stick representation coordinates.
         """
         super().__init__()
-        assert isinstance(branches, (Branch, List)) or branches is None, (
+        assert isinstance(branches, (Branch, list)) or branches is None, (
             "Only Branch or List[Branch] is allowed."
         )
         if branches is not None:
             assert parents is not None, (
                 "If `branches` is not a list then you have to set `parents`."
             )
-        if isinstance(branches, List):
+        if isinstance(branches, list):
             assert len(parents) == len(branches), (
                 "Ensure equally many parents, i.e. len(branches) == len(parents)."
             )
@@ -151,7 +149,7 @@ class Cell(Module):
                     }
                 )
                 .astype(int)
-                for ncomp, cumsum_ncomp in zip(self.ncomp_per_branch, self.cumsum_ncomp)
+                for ncomp, cumsum_ncomp in zip(self.ncomp_per_branch, self.cumsum_ncomp, strict=False)
             ]
         )
         comp_edges["type"] = 0

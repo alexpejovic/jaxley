@@ -4,7 +4,6 @@
 import json
 import os
 from copy import deepcopy
-from typing import Optional
 
 import pytest
 
@@ -28,7 +27,8 @@ def SimpleComp():
             force_init: Force the init from scratch. Default is False.
 
         Returns:
-            jx.Compartment()."""
+            jx.Compartment().
+        """
         if "comp" not in comps or force_init:
             comps["comp"] = jx.Compartment()
         return deepcopy(comps["comp"]) if copy and not force_init else comps["comp"]
@@ -55,7 +55,8 @@ def SimpleBranch(SimpleComp):
             force_init: Force the init from scratch. Default is False.
 
         Returns:
-            jx.Branch()."""
+            jx.Branch().
+        """
         if ncomp not in branches or force_init:
             comp = SimpleComp(force_init=force_init)
             branches[ncomp] = jx.Branch([comp] * ncomp)
@@ -85,12 +86,13 @@ def SimpleCell(SimpleBranch):
             force_init: Force the init from scratch. Default is False.
 
         Returns:
-            jx.Cell()."""
+            jx.Cell().
+        """
         if key := (nbranches, ncomp) not in cells or force_init:
             parents = [-1]
             depth = 0
             while nbranches > len(parents):
-                parents = [-1] + [b // 2 for b in range(0, 2**depth - 2)]
+                parents = [-1] + [b // 2 for b in range(2**depth - 2)]
                 depth += 1
             parents = parents[:nbranches]
             branch = SimpleBranch(ncomp=ncomp, force_init=force_init)
@@ -128,7 +130,8 @@ def SimpleNet(SimpleCell):
             force_init: Force the init from scratch. Default is False.
 
         Returns:
-            jx.Network()."""
+            jx.Network().
+        """
         if key := (ncells, nbranches, ncomp, connect) not in nets or force_init:
             net = jx.Network(
                 [SimpleCell(nbranches=nbranches, ncomp=ncomp, force_init=force_init)]
@@ -146,11 +149,10 @@ def SimpleNet(SimpleCell):
 @pytest.fixture(scope="session")
 def SimpleMorphCell():
     """Fixture for creating or retrieving an already created morpholgy."""
-
     cells = {}
 
     def get_or_build_cell(
-        fname: Optional[str] = None,
+        fname: str | None = None,
         ncomp: int = 1,
         max_branch_len: float = 2_000.0,
         ignore_swc_tracing_interruptions: bool = True,
@@ -171,7 +173,8 @@ def SimpleMorphCell():
             force_init: Force the init from scratch. Default is False.
 
         Returns:
-            jx.Cell()."""
+            jx.Cell().
+        """
         dirname = os.path.dirname(__file__)
         default_fname = os.path.join(dirname, "swc_files", "morph_ca1_n120.swc")
         fname = default_fname if fname is None else fname

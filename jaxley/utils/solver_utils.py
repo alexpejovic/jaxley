@@ -1,7 +1,7 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import jax.numpy as jnp
 import networkx as nx
@@ -11,7 +11,7 @@ import pandas as pd
 
 def convert_to_csc(
     num_elements: int, row_ind: np.ndarray, col_ind: np.ndarray
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Convert between two representations for sparse systems.
 
     This is needed because `jax.scipy.linalg.spsolve` requires the `(ind, indptr)`
@@ -44,7 +44,7 @@ def convert_to_csc(
 
 def comp_edges_to_indices(
     comp_edges: pd.DataFrame,
-) -> Tuple[int, jnp.ndarray, jnp.ndarray, jnp.ndarray]:
+) -> tuple[int, jnp.ndarray, jnp.ndarray, jnp.ndarray]:
     """Generates sparse matrix indices from the table of node edges.
 
     This is only used for the `jax.sparse` voltage solver.
@@ -86,18 +86,18 @@ def dhs_permutation_indices(
 ):
     """Return mapping to the DHS solve order, also for lower and upper diagonal vals."""
     edge_data = {}
-    for edge, v in zip(offdiag_inds.T, lowers_and_uppers):
+    for edge, v in zip(offdiag_inds.T, lowers_and_uppers, strict=False):
         edge_data[tuple(edge.tolist())] = v
 
     ordered_comp_edges = {}
-    for i, j in edge_data.keys():
+    for i, j in edge_data:
         new_i = mapping_dict[i]
         new_j = mapping_dict[j]
         ordered_comp_edges[(new_i, new_j)] = edge_data[(i, j)]
 
     lowers = {}
     uppers = {}
-    for ij in ordered_comp_edges.keys():
+    for ij in ordered_comp_edges:
         if ij[0] < ij[1]:
             lowers[ij] = ordered_comp_edges[ij]
         else:
@@ -105,12 +105,12 @@ def dhs_permutation_indices(
 
     # We have to sort lowers and uppers to be in the solve order.
     children = []
-    for key in lowers.keys():
+    for key in lowers:
         children.append(key[1])
     lower_sorting = np.argsort(children)
 
     parents = []
-    for key in uppers.keys():
+    for key in uppers:
         parents.append(key[0])
     upper_sorting = np.argsort(parents)
 
@@ -132,7 +132,7 @@ def dhs_permutation_indices(
 def dhs_solve_index(
     solve_graph: nx.DiGraph,
     allowed_nodes_per_level: int = 1,
-    root: Optional[int] = 0,
+    root: int | None = 0,
 ) -> nx.DiGraph:
     """Given a compartment graph, return a directed graph indicating the solve order.
 
@@ -220,7 +220,7 @@ def bfs_edge_hops(graph: nx.DiGraph, root: Any, allowed_nodes_per_level: int):
         yield u, v, current_depth
 
 
-def dhs_group_comps_into_levels(new_node_order: np.ndarray) -> List[np.ndarray]:
+def dhs_group_comps_into_levels(new_node_order: np.ndarray) -> list[np.ndarray]:
     """Group nodes into levels, such that nodes get processed in parallel when possible.
 
     Args:
@@ -243,7 +243,7 @@ def dhs_group_comps_into_levels(new_node_order: np.ndarray) -> List[np.ndarray]:
     grouping = nodes.groupby("level")
     nodes = grouping["node"].apply(list).to_numpy()
     parents = grouping["parent"].apply(list).to_numpy()
-    nodes_and_parents = [np.stack([n, p]).T for n, p in zip(nodes, parents)]
+    nodes_and_parents = [np.stack([n, p]).T for n, p in zip(nodes, parents, strict=False)]
 
     # `nodes_and_parents` is a List of length `num_levels`. Each element has shape
     # `(num_comps_per_level, 2)`.

@@ -1,8 +1,6 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from abc import ABC, abstractmethod
-from typing import Dict, Optional, Tuple
 
 import jax.numpy as jnp
 
@@ -18,11 +16,11 @@ class Pump:
     channel_states = None
     current_name = None
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         self._name = name if name else self.__class__.__name__
 
     @property
-    def name(self) -> Optional[str]:
+    def name(self) -> str | None:
         """The name of the channel (by default, this is the class name)."""
         return self._name
 
@@ -59,13 +57,13 @@ class Pump:
         return self
 
     def update_states(
-        self, states: Dict[str, jnp.ndarray], v, params: Dict[str, jnp.ndarray]
+        self, states: dict[str, jnp.ndarray], v, params: dict[str, jnp.ndarray]
     ):
         """Update the states of the pump."""
         raise NotImplementedError
 
     def compute_current(
-        self, states: Dict[str, jnp.ndarray], v, params: Dict[str, jnp.ndarray]
+        self, states: dict[str, jnp.ndarray], v, params: dict[str, jnp.ndarray]
     ):
         """Given channel states and voltage, return the change in ion concentration.
 
@@ -81,9 +79,9 @@ class Pump:
 
     def init_state(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         v: jnp.ndarray,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
         delta_t: float,
     ):
         """Initialize states of channel."""

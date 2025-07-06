@@ -1,9 +1,10 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
+import importlib.util
+
 import numpy as np
 import pandas as pd
-import importlib.util
 
 
 def get_segment_xyzrL(section, comp_idx=None, loc=None, ncomp=8):
@@ -72,7 +73,7 @@ def jaxley2neuron_by_coords(jx_cell, neuron_secs, comp_idx=None, loc=None, ncomp
 
     jaxley2neuron_inds = {}
     for i, xyz in enumerate(jaxley_loc_xyz.to_numpy()):
-        d = np.sqrt(((neuron_loc_xyz - xyz) ** 2)).sum(axis=1)
+        d = np.sqrt((neuron_loc_xyz - xyz) ** 2).sum(axis=1)
         jaxley2neuron_inds[i] = d.argmin()
     return jaxley2neuron_inds
 

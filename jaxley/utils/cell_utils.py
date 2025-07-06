@@ -1,8 +1,6 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from math import pi
-from typing import Callable, Dict, List, Optional, Tuple
 
 import jax.numpy as jnp
 import numpy as np
@@ -50,13 +48,12 @@ def linear_segments(
 
 
 def merge_cells(
-    cumsum_num_branches: List[int],
-    cumsum_num_branchpoints: List[int],
-    arrs: List[List[np.ndarray]],
+    cumsum_num_branches: list[int],
+    cumsum_num_branchpoints: list[int],
+    arrs: list[list[np.ndarray]],
     exclude_first: bool = True,
 ) -> np.ndarray:
-    """
-    Build full list of which branches are solved in which iteration.
+    """Build full list of which branches are solved in which iteration.
 
     From the branching pattern of single cells, this "merges" them into a single
     ordering of branches.
@@ -113,7 +110,7 @@ def compute_levels(parents):
 
 def compute_children_in_level(
     levels: np.ndarray, children_row_and_col: np.ndarray
-) -> List[np.ndarray]:
+) -> list[np.ndarray]:
     num_branches = len(levels)
     children_in_each_level = []
     for l in range(1, np.max(levels) + 1):
@@ -153,7 +150,7 @@ def _compute_index_of_child(parents):
     return index_of_child
 
 
-def compute_children_indices(parents) -> List[jnp.ndarray]:
+def compute_children_indices(parents) -> list[jnp.ndarray]:
     """Return all children indices of every branch.
 
     Example:
@@ -174,10 +171,9 @@ def get_num_neighbours(
     ncomp_per_branch: int,
     num_branches: int,
 ):
+    """Number of neighbours of each compartment.
     """
-    Number of neighbours of each compartment.
-    """
-    num_neighbours = 2 * jnp.ones((num_branches * ncomp_per_branch))
+    num_neighbours = 2 * jnp.ones(num_branches * ncomp_per_branch)
     num_neighbours = num_neighbours.at[ncomp_per_branch - 1].set(1.0)
     num_neighbours = num_neighbours.at[jnp.arange(num_branches) * ncomp_per_branch].set(
         num_children + 1.0
@@ -245,8 +241,8 @@ def interpolate_xyzr(loc: float, coords: np.ndarray):
 
 
 def params_to_pstate(
-    params: List[Dict[str, jnp.ndarray]],
-    indices_set_by_trainables: List[jnp.ndarray],
+    params: list[dict[str, jnp.ndarray]],
+    indices_set_by_trainables: list[jnp.ndarray],
 ):
     """Make outputs `get_parameters()` conform with outputs of `.data_set()`.
 
@@ -254,10 +250,11 @@ def params_to_pstate(
     because these indices would also be differentiated by `jax.grad` (as soon as
     the `params` are passed to `def simulate(params)`. Therefore, in `jx.integrate`,
     we run the function to add indices to the dict. The outputs of `params_to_pstate`
-    are of the same shape as the outputs of `.data_set()`."""
+    are of the same shape as the outputs of `.data_set()`.
+    """
     return [
         {"key": list(p.keys())[0], "val": list(p.values())[0], "indices": i}
-        for p, i in zip(params, indices_set_by_trainables)
+        for p, i in zip(params, indices_set_by_trainables, strict=False)
     ]
 
 
@@ -290,13 +287,14 @@ def query_channel_states_and_params(d, keys, idcs):
     will be
     ```states = {'eCa': Array([ 0.,  0.]}```
 
-    Only loops over necessary keys, as opposed to looping over `d.items()`."""
-    return dict(zip(keys, (v[idcs] for v in map(d.get, keys))))
+    Only loops over necessary keys, as opposed to looping over `d.items()`.
+    """
+    return dict(zip(keys, (v[idcs] for v in map(d.get, keys)), strict=False))
 
 
 def compute_children_and_parents(
     branch_edges: pd.DataFrame,
-) -> Tuple[jnp.ndarray, jnp.ndarray, jnp.ndarray, int]:
+) -> tuple[jnp.ndarray, jnp.ndarray, jnp.ndarray, int]:
     """Build indices used during `._init_morph_custom_spsolve()."""
     par_inds = branch_edges["parent_branch_index"].to_numpy()
     child_inds = branch_edges["child_branch_index"].to_numpy()

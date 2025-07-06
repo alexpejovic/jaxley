@@ -9,9 +9,10 @@ jax.config.update("jax_platform_name", "cpu")
 import os
 
 os.environ["XLA_PYTHON_CLIENT_MEM_FRACTION"] = ".8"
+import importlib.util
+
 import numpy as np
 import pytest
-import importlib.util
 
 if importlib.util.find_spec("neuron"):
     from neuron import h

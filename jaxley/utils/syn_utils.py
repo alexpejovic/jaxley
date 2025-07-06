@@ -1,7 +1,6 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from typing import Tuple
 
 import jax.numpy as jnp
 import numpy as np
@@ -13,7 +12,7 @@ def gather_synapes(
     post_syn_comp_inds: np.ndarray,
     current_each_synapse_voltage_term: jnp.ndarray,
     current_each_synapse_constant_term: jnp.ndarray,
-) -> Tuple[jnp.ndarray, jnp.ndarray]:
+) -> tuple[jnp.ndarray, jnp.ndarray]:
     """Compute current at the post synapse.
 
     All this does it that it sums the synaptic currents that come into a particular

@@ -1,8 +1,6 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
-from copy import deepcopy
-from typing import Dict, Optional
 
 import jax
 import pytest
@@ -12,7 +10,7 @@ jax.config.update("jax_platform_name", "cpu")
 
 import jax.numpy as jnp
 import numpy as np
-from jaxley_mech.channels.l5pc import CaHVA, CaLVA
+from jaxley_mech.channels.l5pc import CaHVA
 from jaxley_mech.channels.l5pc import CaPump as CaPumpAsChannel
 
 import jaxley as jx
@@ -27,7 +25,7 @@ class NaPump(Pump):
     Modeled after the calcium channel in Destexhe et al. 1994.
     """
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         super().__init__(name)
         self.channel_params = {
             f"{self._name}_gamma": 0.05,  # Fraction of free calcium (not buffered).
@@ -45,19 +43,19 @@ class NaPump(Pump):
 
     def update_states(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         dt,
         v,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
     ):
         """Update states if necessary (but this pump has no states to update)."""
         return {"NaCon_i": states["NaCon_i"], "i_Na": states["i_Na"]}
 
     def compute_current(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         modified_state,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
     ):
         """Return change of calcium concentration based on calcium current and decay."""
         prefix = self._name
@@ -77,9 +75,9 @@ class NaPump(Pump):
 
     def init_state(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         v: jnp.ndarray,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
         delta_t: float,
     ):
         """Initialize states of channel."""
@@ -91,7 +89,7 @@ class NaNernstReversal(Channel):
 
     def __init__(
         self,
-        name: Optional[str] = None,
+        name: str | None = None,
     ):
         self.current_is_in_mA_per_cm2 = True
         super().__init__(name)
@@ -102,7 +100,7 @@ class NaNernstReversal(Channel):
         }
         self.channel_params = {}
         self.channel_states = {"eNa": 0.0, "NaCon_i": 5e-05, "NaCon_e": 3.0}
-        self.current_name = f"i_Na"
+        self.current_name = "i_Na"
         self.META = {"ion": "Na"}
 
     def update_states(self, u, dt, voltages, params):
@@ -133,7 +131,7 @@ class CaPump2(Pump):
     Modeled after Destexhe et al. 1994.
     """
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         super().__init__(name)
         self.channel_params = {
             f"{self._name}_gamma": 0.05,  # Fraction of free calcium (not buffered).
@@ -151,19 +149,19 @@ class CaPump2(Pump):
 
     def update_states(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         dt,
         v,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
     ):
         """Update states if necessary (but this pump has no states to update)."""
         return {"CaCon_i": states["CaCon_i"], "i_Ca": states["i_Ca"]}
 
     def compute_current(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         modified_state,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
     ):
         """Return change of calcium concentration based on calcium current and decay."""
         prefix = self._name
@@ -183,9 +181,9 @@ class CaPump2(Pump):
 
     def init_state(
         self,
-        states: Dict[str, jnp.ndarray],
+        states: dict[str, jnp.ndarray],
         v: jnp.ndarray,
-        params: Dict[str, jnp.ndarray],
+        params: dict[str, jnp.ndarray],
         delta_t: float,
     ):
         """Initialize states of channel."""
