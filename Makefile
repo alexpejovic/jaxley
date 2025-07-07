@@ -35,7 +35,7 @@ test-all: .venv build  ## Run all tests
 	$(VENV_BIN)/pytest -m "" $(PYTEST_ARGS)
 
 .PHONY: ruff-lint
-ruff-lint: .venv  ## Run lint checks (only)
+ruff-lint: .venv  ## Run lint checks (only ruff)
 	$(VENV_BIN)/ruff check --output-format concise
 
 .PHONY: lint
@@ -49,6 +49,10 @@ fmt: .venv  ## Run autoformatting (and lint)
 	$(VENV_BIN)/ruff check
 	$(VENV_BIN)/typos .
 	-$(VENV_BIN)/mypy
+
+.PHONY: todo
+todo: .venv  ## Get all TODO/FIXME lines
+	$(VENV_BIN)/ruff check --select="FIX"
 
 .PHONY: clean
 clean:  ## Clean up caches and build artifacts
