@@ -149,7 +149,9 @@ class Cell(Module):
                     }
                 )
                 .astype(int)
-                for ncomp, cumsum_ncomp in zip(self.ncomp_per_branch, self.cumsum_ncomp, strict=False)
+                for ncomp, cumsum_ncomp in zip(
+                    self.ncomp_per_branch, self.cumsum_ncomp, strict=False
+                )
             ]
         )
         comp_edges["type"] = 0

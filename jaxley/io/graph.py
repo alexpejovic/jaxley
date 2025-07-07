@@ -803,7 +803,10 @@ def _set_comp_and_branch_index(
             solve_graph.nodes[j]["comp_index"] = comp_index
             node_mapping[j] = comp_index
 
-        if _is_leaf(undirected_comp_graph, j) or undirected_comp_graph.nodes[j]["type"] == "branchpoint":
+        if (
+            _is_leaf(undirected_comp_graph, j)
+            or undirected_comp_graph.nodes[j]["type"] == "branchpoint"
+        ):
             branch_index += 1
 
         # Increase the counter for the compartment index only if the node was a

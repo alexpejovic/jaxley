@@ -355,7 +355,9 @@ def plot_comps(
     if "x" not in module_or_view.nodes.columns:
         module_or_view.compute_compartment_centers()
 
-    for idx, xyzr in zip(module_or_view._branches_in_view, module_or_view.xyzr, strict=False):
+    for idx, xyzr in zip(
+        module_or_view._branches_in_view, module_or_view.xyzr, strict=False
+    ):
         locs = xyzr[:, :3]
         if locs.shape[0] == 1:  # assume spherical comp
             radius = xyzr[:, -1]
@@ -385,7 +387,9 @@ def plot_comps(
             branch_df = module_or_view.nodes[
                 module_or_view.nodes["global_branch_index"] == idx
             ]
-            for l, axis, (i, comp) in zip(cylinder_lens, axes, branch_df.iterrows(), strict=False):
+            for l, axis, (i, comp) in zip(
+                cylinder_lens, axes, branch_df.iterrows(), strict=False
+            ):
                 center = comp[["x", "y", "z"]].astype(float)
                 radius = comp["radius"]
                 length = comp["length"] if true_comp_length else l

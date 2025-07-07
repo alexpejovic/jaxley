@@ -412,7 +412,8 @@ def test_viewing(SimpleCell, SimpleNet):
             [0, 3, 6],
             list(range(0, 27, 3)),
             list(range(0, 9, 3)),
-        ], strict=False,
+        ],
+        strict=False,
     ):
         assert np.all(view.nodes["local_comp_index"] == local_targets), (
             "Indices do not match that of the target"
