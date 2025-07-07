@@ -228,16 +228,13 @@ disable_error_code = [
 
 [[tool.mypy.overrides]]
 module = [
-  "IPython.*",
   "jax.*",
   "matplotlib.*",
-  "torch.*",
 ]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = [
-  "IPython.*",
   "matplotlib.*",
 ]
 follow_imports = "skip"
