@@ -171,8 +171,7 @@ def get_num_neighbours(
     ncomp_per_branch: int,
     num_branches: int,
 ):
-    """Number of neighbours of each compartment.
-    """
+    """Number of neighbours of each compartment."""
     num_neighbours = 2 * jnp.ones(num_branches * ncomp_per_branch)
     num_neighbours = num_neighbours.at[ncomp_per_branch - 1].set(1.0)
     num_neighbours = num_neighbours.at[jnp.arange(num_branches) * ncomp_per_branch].set(

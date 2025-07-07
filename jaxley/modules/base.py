@@ -783,9 +783,7 @@ class Module(ABC):
         shape = tuple(raw_shape[levels.index(module) :])
         return shape
 
-    def copy(
-        self, reset_index: bool = False, as_module: bool = False
-    ) -> Module | View:
+    def copy(self, reset_index: bool = False, as_module: bool = False) -> Module | View:
         """Extract part of a module and return a copy of its View or a new module.
 
         This can be used to call `jx.integrate` on part of a Module.
@@ -3307,7 +3305,9 @@ class View(Module):
         índices_set_by_trainables_in_view = []
         trainable_params_in_view = []
         for inds, params in zip(
-            self.base.indices_set_by_trainables, self.base.trainable_params, strict=False
+            self.base.indices_set_by_trainables,
+            self.base.trainable_params,
+            strict=False,
         ):
             pkey, pval = next(iter(params.items()))
             trainable_inds_in_view = None

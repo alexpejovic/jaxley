@@ -2,7 +2,6 @@
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
 
-
 from jaxley.solver_gate import save_exp
 from jaxley.synapses.synapse import Synapse
 

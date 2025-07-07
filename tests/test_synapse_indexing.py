@@ -110,7 +110,9 @@ def test_set_and_querying_params_two_types(synapse_type, SimpleNet):
     net = SimpleNet(4, 1, 4)
 
     for pre_ind in [0, 1]:
-        for post_ind, synapse in zip([2, 3], [IonotropicSynapse(), synapse_type], strict=False):
+        for post_ind, synapse in zip(
+            [2, 3], [IonotropicSynapse(), synapse_type], strict=False
+        ):
             pre = net.cell(pre_ind).branch(0).loc(0.0)
             post = net.cell(post_ind).branch(0).loc(0.0)
             connect(pre, post, synapse)

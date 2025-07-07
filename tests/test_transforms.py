@@ -174,6 +174,6 @@ def test_user_api(transform, SimpleCell):
 
     flat_params, _ = jax.tree_util.tree_flatten(params)
     flat_reverse, _ = jax.tree_util.tree_flatten(reverse)
-    assert all([np.allclose(a, b) for a, b in zip(flat_params, flat_reverse, strict=False)]), (
-        f"{transform} forward, inverse failed."
-    )
+    assert all(
+        [np.allclose(a, b) for a, b in zip(flat_params, flat_reverse, strict=False)]
+    ), f"{transform} forward, inverse failed."
