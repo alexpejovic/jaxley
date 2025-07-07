@@ -5161,9 +5161,7 @@ def change_attr_in_view(self):
 <span class="normal">3020</span>
 <span class="normal">3021</span>
 <span class="normal">3022</span>
-<span class="normal">3023</span>
-<span class="normal">3024</span>
-<span class="normal">3025</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Module</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="normal">3023</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Module</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Module base class which implements features shared by all modules.</span>
 
 <span class="sd">    Modules are everything that can be passed to `jx.integrate`, i.e. compartments,</span>
@@ -5870,9 +5868,7 @@ def change_attr_in_view(self):
         <span class="n">shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">raw_shape</span><span class="p">[</span><span class="n">levels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">module</span><span class="p">)</span> <span class="p">:])</span>
         <span class="k">return</span> <span class="n">shape</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">reset_index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">as_module</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Module</span> <span class="o">|</span> <span class="n">View</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reset_index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">as_module</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Module</span> <span class="o">|</span> <span class="n">View</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract part of a module and return a copy of its View or a new module.</span>
 
 <span class="sd">        This can be used to call `jx.integrate` on part of a Module.</span>
@@ -8436,7 +8432,9 @@ net.excitatory.set(&quot;radius&quot;, 0.1)
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1579</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1577</span>
+<span class="normal">1578</span>
+<span class="normal">1579</span>
 <span class="normal">1580</span>
 <span class="normal">1581</span>
 <span class="normal">1582</span>
@@ -8457,9 +8455,7 @@ net.excitatory.set(&quot;radius&quot;, 0.1)
 <span class="normal">1597</span>
 <span class="normal">1598</span>
 <span class="normal">1599</span>
-<span class="normal">1600</span>
-<span class="normal">1601</span>
-<span class="normal">1602</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_to_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="normal">1600</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_to_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Add a view of the module to a group.</span>
 
 <span class="sd">    Groups can then be indexed. For example:</span>
@@ -8759,7 +8755,9 @@ net.excitatory.set(&quot;radius&quot;, 0.1)
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2010</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2008</span>
+<span class="normal">2009</span>
+<span class="normal">2010</span>
 <span class="normal">2011</span>
 <span class="normal">2012</span>
 <span class="normal">2013</span>
@@ -8767,9 +8765,7 @@ net.excitatory.set(&quot;radius&quot;, 0.1)
 <span class="normal">2015</span>
 <span class="normal">2016</span>
 <span class="normal">2017</span>
-<span class="normal">2018</span>
-<span class="normal">2019</span>
-<span class="normal">2020</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">clamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">state_array</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="normal">2018</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">clamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">state_array</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Clamp a state to a given value across specified compartments.</span>
 
 <span class="sd">    Args:</span>
@@ -8946,7 +8942,9 @@ are only used for plotting.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2805</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2803</span>
+<span class="normal">2804</span>
+<span class="normal">2805</span>
 <span class="normal">2806</span>
 <span class="normal">2807</span>
 <span class="normal">2808</span>
@@ -9009,9 +9007,7 @@ are only used for plotting.</p>
 <span class="normal">2865</span>
 <span class="normal">2866</span>
 <span class="normal">2867</span>
-<span class="normal">2868</span>
-<span class="normal">2869</span>
-<span class="normal">2870</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">2868</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return xyz coordinates of every branch, based on the branch length.</span>
 
 <span class="sd">    This function should not be called if the morphology was read from an `.swc`</span>
@@ -9189,11 +9185,7 @@ are only used for plotting.</p>
 <span class="normal">802</span>
 <span class="normal">803</span>
 <span class="normal">804</span>
-<span class="normal">805</span>
-<span class="normal">806</span>
-<span class="normal">807</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span> <span class="n">reset_index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">as_module</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Module</span> <span class="o">|</span> <span class="n">View</span><span class="p">:</span>
+<span class="normal">805</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reset_index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">as_module</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Module</span> <span class="o">|</span> <span class="n">View</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract part of a module and return a copy of its View or a new module.</span>
 
 <span class="sd">    This can be used to call `jx.integrate` on part of a Module.</span>
@@ -9319,7 +9311,9 @@ the post-synaptic property (&lsquo;post&rsquo;), or both ([&lsquo;pre&rsquo;, &l
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2970</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2968</span>
+<span class="normal">2969</span>
+<span class="normal">2970</span>
 <span class="normal">2971</span>
 <span class="normal">2972</span>
 <span class="normal">2973</span>
@@ -9372,9 +9366,7 @@ the post-synaptic property (&lsquo;post&rsquo;), or both ([&lsquo;pre&rsquo;, &l
 <span class="normal">3020</span>
 <span class="normal">3021</span>
 <span class="normal">3022</span>
-<span class="normal">3023</span>
-<span class="normal">3024</span>
-<span class="normal">3025</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">copy_node_property_to_edges</span><span class="p">(</span>
+<span class="normal">3023</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">copy_node_property_to_edges</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">properties_to_import</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">pre_or_post</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pre&quot;</span><span class="p">,</span> <span class="s2">&quot;post&quot;</span><span class="p">],</span>
@@ -9518,7 +9510,9 @@ by default because this method is meant to be jitted.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2079</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2077</span>
+<span class="normal">2078</span>
+<span class="normal">2079</span>
 <span class="normal">2080</span>
 <span class="normal">2081</span>
 <span class="normal">2082</span>
@@ -9539,9 +9533,7 @@ by default because this method is meant to be jitted.</p>
 <span class="normal">2097</span>
 <span class="normal">2098</span>
 <span class="normal">2099</span>
-<span class="normal">2100</span>
-<span class="normal">2101</span>
-<span class="normal">2102</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">data_clamp</span><span class="p">(</span>
+<span class="normal">2100</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">data_clamp</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">state_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">state_array</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
@@ -9652,7 +9644,9 @@ function does not modify global state.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1145</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1143</span>
+<span class="normal">1144</span>
+<span class="normal">1145</span>
 <span class="normal">1146</span>
 <span class="normal">1147</span>
 <span class="normal">1148</span>
@@ -9690,9 +9684,7 @@ function does not modify global state.</p>
 <span class="normal">1180</span>
 <span class="normal">1181</span>
 <span class="normal">1182</span>
-<span class="normal">1183</span>
-<span class="normal">1184</span>
-<span class="normal">1185</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">data_set</span><span class="p">(</span>
+<span class="normal">1183</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">data_set</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">val</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
@@ -9803,7 +9795,9 @@ by default because this method is meant to be jitted.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2062</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2060</span>
+<span class="normal">2061</span>
+<span class="normal">2062</span>
 <span class="normal">2063</span>
 <span class="normal">2064</span>
 <span class="normal">2065</span>
@@ -9816,9 +9810,7 @@ by default because this method is meant to be jitted.</p>
 <span class="normal">2072</span>
 <span class="normal">2073</span>
 <span class="normal">2074</span>
-<span class="normal">2075</span>
-<span class="normal">2076</span>
-<span class="normal">2077</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">data_stimulate</span><span class="p">(</span>
+<span class="normal">2075</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">data_stimulate</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">current</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">data_stimuli</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -9887,7 +9879,9 @@ by default because this method is meant to be jitted.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2257</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2255</span>
+<span class="normal">2256</span>
+<span class="normal">2257</span>
 <span class="normal">2258</span>
 <span class="normal">2259</span>
 <span class="normal">2260</span>
@@ -9917,9 +9911,7 @@ by default because this method is meant to be jitted.</p>
 <span class="normal">2284</span>
 <span class="normal">2285</span>
 <span class="normal">2286</span>
-<span class="normal">2287</span>
-<span class="normal">2288</span>
-<span class="normal">2289</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span> <span class="o">|</span> <span class="n">Pump</span><span class="p">):</span>
+<span class="normal">2287</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span> <span class="o">|</span> <span class="n">Pump</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove a channel or pump from the module.</span>
 
 <span class="sd">    Args:</span>
@@ -9974,7 +9966,9 @@ by default because this method is meant to be jitted.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2157</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2155</span>
+<span class="normal">2156</span>
+<span class="normal">2157</span>
 <span class="normal">2158</span>
 <span class="normal">2159</span>
 <span class="normal">2160</span>
@@ -9993,9 +9987,7 @@ by default because this method is meant to be jitted.</p>
 <span class="normal">2173</span>
 <span class="normal">2174</span>
 <span class="normal">2175</span>
-<span class="normal">2176</span>
-<span class="normal">2177</span>
-<span class="normal">2178</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete_clamps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="normal">2176</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete_clamps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Removes all clamps of the given state from the module.&quot;&quot;&quot;</span>
     <span class="n">all_externals</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">externals</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
     <span class="k">if</span> <span class="s2">&quot;i&quot;</span> <span class="ow">in</span> <span class="n">all_externals</span><span class="p">:</span>
@@ -10070,7 +10062,9 @@ by default because this method is meant to be jitted.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2244</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2242</span>
+<span class="normal">2243</span>
+<span class="normal">2244</span>
 <span class="normal">2245</span>
 <span class="normal">2246</span>
 <span class="normal">2247</span>
@@ -10079,9 +10073,7 @@ by default because this method is meant to be jitted.</p>
 <span class="normal">2250</span>
 <span class="normal">2251</span>
 <span class="normal">2252</span>
-<span class="normal">2253</span>
-<span class="normal">2254</span>
-<span class="normal">2255</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@only_allow_module</span>
+<span class="normal">2253</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@only_allow_module</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">delete_diffusion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Deletes ion diffusion in the entire module.</span>
 
@@ -10115,16 +10107,16 @@ by default because this method is meant to be jitted.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1983</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1981</span>
+<span class="normal">1982</span>
+<span class="normal">1983</span>
 <span class="normal">1984</span>
 <span class="normal">1985</span>
 <span class="normal">1986</span>
 <span class="normal">1987</span>
 <span class="normal">1988</span>
 <span class="normal">1989</span>
-<span class="normal">1990</span>
-<span class="normal">1991</span>
-<span class="normal">1992</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete_recordings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">1990</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete_recordings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Removes all recordings from the module.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">View</span><span class="p">):</span>
         <span class="n">base_recs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">recordings</span>
@@ -10156,9 +10148,9 @@ by default because this method is meant to be jitted.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2153</span>
-<span class="normal">2154</span>
-<span class="normal">2155</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete_stimuli</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2151</span>
+<span class="normal">2152</span>
+<span class="normal">2153</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete_stimuli</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Removes all stimuli from the module.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">delete_clamps</span><span class="p">(</span><span class="s2">&quot;i&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -10183,7 +10175,9 @@ by default because this method is meant to be jitted.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1566</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1564</span>
+<span class="normal">1565</span>
+<span class="normal">1566</span>
 <span class="normal">1567</span>
 <span class="normal">1568</span>
 <span class="normal">1569</span>
@@ -10192,9 +10186,7 @@ by default because this method is meant to be jitted.</p>
 <span class="normal">1572</span>
 <span class="normal">1573</span>
 <span class="normal">1574</span>
-<span class="normal">1575</span>
-<span class="normal">1576</span>
-<span class="normal">1577</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete_trainables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">1575</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete_trainables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Removes all trainable parameters from the module.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">View</span><span class="p">):</span>
         <span class="n">trainables_and_inds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_trainables</span><span class="p">(</span><span class="n">is_viewed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -10259,7 +10251,9 @@ by default because this method is meant to be jitted.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2225</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2223</span>
+<span class="normal">2224</span>
+<span class="normal">2225</span>
 <span class="normal">2226</span>
 <span class="normal">2227</span>
 <span class="normal">2228</span>
@@ -10274,9 +10268,7 @@ by default because this method is meant to be jitted.</p>
 <span class="normal">2237</span>
 <span class="normal">2238</span>
 <span class="normal">2239</span>
-<span class="normal">2240</span>
-<span class="normal">2241</span>
-<span class="normal">2242</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@only_allow_module</span>
+<span class="normal">2240</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@only_allow_module</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">diffuse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Diffuse a particular state across compartments with Fickian diffusion.</span>
 
@@ -10349,7 +10341,9 @@ use <code>distance_pathwise()</code>.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1543</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1541</span>
+<span class="normal">1542</span>
+<span class="normal">1543</span>
 <span class="normal">1544</span>
 <span class="normal">1545</span>
 <span class="normal">1546</span>
@@ -10368,9 +10362,7 @@ use <code>distance_pathwise()</code>.</p>
 <span class="normal">1559</span>
 <span class="normal">1560</span>
 <span class="normal">1561</span>
-<span class="normal">1562</span>
-<span class="normal">1563</span>
-<span class="normal">1564</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@deprecated</span><span class="p">(</span>
+<span class="normal">1562</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@deprecated</span><span class="p">(</span>
     <span class="s2">&quot;0.11.0&quot;</span><span class="p">,</span>
     <span class="p">(</span>
         <span class="s2">&quot; Instead, please use, e.g., &quot;</span>
@@ -10596,7 +10588,9 @@ function will default to different building methods.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1633</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1631</span>
+<span class="normal">1632</span>
+<span class="normal">1633</span>
 <span class="normal">1634</span>
 <span class="normal">1635</span>
 <span class="normal">1636</span>
@@ -10696,9 +10690,7 @@ function will default to different building methods.</p>
 <span class="normal">1730</span>
 <span class="normal">1731</span>
 <span class="normal">1732</span>
-<span class="normal">1733</span>
-<span class="normal">1734</span>
-<span class="normal">1735</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@only_allow_module</span>
+<span class="normal">1733</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@only_allow_module</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_all_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pstate</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
     <span class="c1"># TODO FROM #447: MAKE THIS WORK FOR VIEW?</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return all parameters (and coupling conductances) needed to simulate.</span>
@@ -10908,7 +10900,9 @@ function will default to different building methods.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1754</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1752</span>
+<span class="normal">1753</span>
+<span class="normal">1754</span>
 <span class="normal">1755</span>
 <span class="normal">1756</span>
 <span class="normal">1757</span>
@@ -10948,9 +10942,7 @@ function will default to different building methods.</p>
 <span class="normal">1791</span>
 <span class="normal">1792</span>
 <span class="normal">1793</span>
-<span class="normal">1794</span>
-<span class="normal">1795</span>
-<span class="normal">1796</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@only_allow_module</span>
+<span class="normal">1794</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@only_allow_module</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_all_states</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">pstate</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">all_params</span><span class="p">,</span> <span class="n">delta_t</span><span class="p">:</span> <span class="nb">float</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
@@ -11041,7 +11033,9 @@ function will default to different building methods.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1621</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1619</span>
+<span class="normal">1620</span>
+<span class="normal">1621</span>
 <span class="normal">1622</span>
 <span class="normal">1623</span>
 <span class="normal">1624</span>
@@ -11049,9 +11043,7 @@ function will default to different building methods.</p>
 <span class="normal">1626</span>
 <span class="normal">1627</span>
 <span class="normal">1628</span>
-<span class="normal">1629</span>
-<span class="normal">1630</span>
-<span class="normal">1631</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="normal">1629</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get all trainable parameters.</span>
 
 <span class="sd">    The returned parameters should be passed to</span>
@@ -11116,7 +11108,9 @@ function will default to different building methods.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1831</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1829</span>
+<span class="normal">1830</span>
+<span class="normal">1831</span>
 <span class="normal">1832</span>
 <span class="normal">1833</span>
 <span class="normal">1834</span>
@@ -11160,9 +11154,7 @@ function will default to different building methods.</p>
 <span class="normal">1872</span>
 <span class="normal">1873</span>
 <span class="normal">1874</span>
-<span class="normal">1875</span>
-<span class="normal">1876</span>
-<span class="normal">1877</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@only_allow_module</span>
+<span class="normal">1875</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@only_allow_module</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">init_states</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta_t</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.025</span><span class="p">):</span>
     <span class="c1"># TODO FROM #447: MAKE THIS WORK FOR VIEW?</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize all mechanisms in their steady state.</span>
@@ -11240,7 +11232,9 @@ automatically though, so there is no need for the user to run it manually.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1803</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1801</span>
+<span class="normal">1802</span>
+<span class="normal">1803</span>
 <span class="normal">1804</span>
 <span class="normal">1805</span>
 <span class="normal">1806</span>
@@ -11264,9 +11258,7 @@ automatically though, so there is no need for the user to run it manually.</p>
 <span class="normal">1824</span>
 <span class="normal">1825</span>
 <span class="normal">1826</span>
-<span class="normal">1827</span>
-<span class="normal">1828</span>
-<span class="normal">1829</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">1827</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the module.</span>
 
 <span class="sd">    This function does several things:</span>
@@ -11346,7 +11338,9 @@ automatically though, so there is no need for the user to run it manually.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2180</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2178</span>
+<span class="normal">2179</span>
+<span class="normal">2180</span>
 <span class="normal">2181</span>
 <span class="normal">2182</span>
 <span class="normal">2183</span>
@@ -11387,9 +11381,7 @@ automatically though, so there is no need for the user to run it manually.</p>
 <span class="normal">2218</span>
 <span class="normal">2219</span>
 <span class="normal">2220</span>
-<span class="normal">2221</span>
-<span class="normal">2222</span>
-<span class="normal">2223</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span> <span class="o">|</span> <span class="n">Pump</span><span class="p">):</span>
+<span class="normal">2221</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span> <span class="o">|</span> <span class="n">Pump</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Insert a channel or pump into the module.</span>
 
 <span class="sd">    Args:</span>
@@ -11692,7 +11684,9 @@ total number of parameters.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1384</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1382</span>
+<span class="normal">1383</span>
+<span class="normal">1384</span>
 <span class="normal">1385</span>
 <span class="normal">1386</span>
 <span class="normal">1387</span>
@@ -11798,9 +11792,7 @@ total number of parameters.</p>
 <span class="normal">1487</span>
 <span class="normal">1488</span>
 <span class="normal">1489</span>
-<span class="normal">1490</span>
-<span class="normal">1491</span>
-<span class="normal">1492</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">make_trainable</span><span class="p">(</span>
+<span class="normal">1490</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">make_trainable</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">init_val</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -12013,7 +12005,9 @@ total number of parameters.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2872</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2870</span>
+<span class="normal">2871</span>
+<span class="normal">2872</span>
 <span class="normal">2873</span>
 <span class="normal">2874</span>
 <span class="normal">2875</span>
@@ -12029,9 +12023,7 @@ total number of parameters.</p>
 <span class="normal">2885</span>
 <span class="normal">2886</span>
 <span class="normal">2887</span>
-<span class="normal">2888</span>
-<span class="normal">2889</span>
-<span class="normal">2890</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span>
+<span class="normal">2888</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">update_nodes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Move cells or networks by adding to their (x, y, z) coordinates.</span>
@@ -12112,7 +12104,9 @@ cell is moved to the specified location.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2892</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2890</span>
+<span class="normal">2891</span>
+<span class="normal">2892</span>
 <span class="normal">2893</span>
 <span class="normal">2894</span>
 <span class="normal">2895</span>
@@ -12156,9 +12150,7 @@ cell is moved to the specified location.</p>
 <span class="normal">2933</span>
 <span class="normal">2934</span>
 <span class="normal">2935</span>
-<span class="normal">2936</span>
-<span class="normal">2937</span>
-<span class="normal">2938</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">move_to</span><span class="p">(</span>
+<span class="normal">2936</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">move_to</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="n">y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
@@ -12275,7 +12267,9 @@ cell is moved to the specified location.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2940</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2938</span>
+<span class="normal">2939</span>
+<span class="normal">2940</span>
 <span class="normal">2941</span>
 <span class="normal">2942</span>
 <span class="normal">2943</span>
@@ -12301,9 +12295,7 @@ cell is moved to the specified location.</p>
 <span class="normal">2963</span>
 <span class="normal">2964</span>
 <span class="normal">2965</span>
-<span class="normal">2966</span>
-<span class="normal">2967</span>
-<span class="normal">2968</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">rotate</span><span class="p">(</span>
+<span class="normal">2966</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">rotate</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">degrees</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rotation_axis</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;xy&quot;</span><span class="p">,</span> <span class="n">update_nodes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Rotate jaxley modules clockwise. Used only for visualization.</span>
@@ -12679,7 +12671,9 @@ must be of shape <code>(len(num_compartments))</code>.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1083</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1081</span>
+<span class="normal">1082</span>
+<span class="normal">1083</span>
 <span class="normal">1084</span>
 <span class="normal">1085</span>
 <span class="normal">1086</span>
@@ -12737,9 +12731,7 @@ must be of shape <code>(len(num_compartments))</code>.</p>
 <span class="normal">1138</span>
 <span class="normal">1139</span>
 <span class="normal">1140</span>
-<span class="normal">1141</span>
-<span class="normal">1142</span>
-<span class="normal">1143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="normal">1141</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set parameter of module (or its view) to a new value.</span>
 
 <span class="sd">    Note that this function can not be called within `jax.jit` or `jax.grad`.</span>
@@ -12892,7 +12884,9 @@ computation time. If <code>False</code>, then the user has to run
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1187</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1185</span>
+<span class="normal">1186</span>
+<span class="normal">1187</span>
 <span class="normal">1188</span>
 <span class="normal">1189</span>
 <span class="normal">1190</span>
@@ -13085,9 +13079,7 @@ computation time. If <code>False</code>, then the user has to run
 <span class="normal">1377</span>
 <span class="normal">1378</span>
 <span class="normal">1379</span>
-<span class="normal">1380</span>
-<span class="normal">1381</span>
-<span class="normal">1382</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_ncomp</span><span class="p">(</span>
+<span class="normal">1380</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_ncomp</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">ncomp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">min_radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">initialize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the number of compartments with which the branch is discretized.</span>
@@ -13498,7 +13490,9 @@ shown.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">895</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">893</span>
+<span class="normal">894</span>
+<span class="normal">895</span>
 <span class="normal">896</span>
 <span class="normal">897</span>
 <span class="normal">898</span>
@@ -13541,9 +13535,7 @@ shown.</p>
 <span class="normal">935</span>
 <span class="normal">936</span>
 <span class="normal">937</span>
-<span class="normal">938</span>
-<span class="normal">939</span>
-<span class="normal">940</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span>
+<span class="normal">938</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">param_names</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
@@ -13767,7 +13759,9 @@ coefficient matrix of the ODE system. Either of [&ldquo;jaxley.thomas&rdquo;,
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2291</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2289</span>
+<span class="normal">2290</span>
+<span class="normal">2291</span>
 <span class="normal">2292</span>
 <span class="normal">2293</span>
 <span class="normal">2294</span>
@@ -14001,9 +13995,7 @@ coefficient matrix of the ODE system. Either of [&ldquo;jaxley.thomas&rdquo;,
 <span class="normal">2522</span>
 <span class="normal">2523</span>
 <span class="normal">2524</span>
-<span class="normal">2525</span>
-<span class="normal">2526</span>
-<span class="normal">2527</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@only_allow_module</span>
+<span class="normal">2525</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@only_allow_module</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">u</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
@@ -14299,7 +14291,9 @@ on the data and that should not be learned). For stimuli that depend on data
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1994</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1992</span>
+<span class="normal">1993</span>
+<span class="normal">1994</span>
 <span class="normal">1995</span>
 <span class="normal">1996</span>
 <span class="normal">1997</span>
@@ -14311,9 +14305,7 @@ on the data and that should not be learned). For stimuli that depend on data
 <span class="normal">2003</span>
 <span class="normal">2004</span>
 <span class="normal">2005</span>
-<span class="normal">2006</span>
-<span class="normal">2007</span>
-<span class="normal">2008</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stimulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="normal">2006</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stimulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Insert a stimulus into the compartment.</span>
 
 <span class="sd">    current must be a 1d array or have batch dimension of size `(num_compartments, )`</span>
@@ -14355,7 +14347,9 @@ differentiated. <code>.to_jax()</code> copies the <code>.nodes</code> to <code>.
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">865</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">863</span>
+<span class="normal">864</span>
+<span class="normal">865</span>
 <span class="normal">866</span>
 <span class="normal">867</span>
 <span class="normal">868</span>
@@ -14381,9 +14375,7 @@ differentiated. <code>.to_jax()</code> copies the <code>.nodes</code> to <code>.
 <span class="normal">888</span>
 <span class="normal">889</span>
 <span class="normal">890</span>
-<span class="normal">891</span>
-<span class="normal">892</span>
-<span class="normal">893</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@only_allow_module</span>
+<span class="normal">891</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@only_allow_module</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">to_jax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="c1"># TODO FROM #447: Make this work for View?</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Move `.nodes` to `.jaxnodes`.</span>
@@ -14542,7 +14534,9 @@ two of them.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2746</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">2744</span>
+<span class="normal">2745</span>
+<span class="normal">2746</span>
 <span class="normal">2747</span>
 <span class="normal">2748</span>
 <span class="normal">2749</span>
@@ -14597,9 +14591,7 @@ two of them.</p>
 <span class="normal">2798</span>
 <span class="normal">2799</span>
 <span class="normal">2800</span>
-<span class="normal">2801</span>
-<span class="normal">2802</span>
-<span class="normal">2803</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">vis</span><span class="p">(</span>
+<span class="normal">2801</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">vis</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">ax</span><span class="p">:</span> <span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span>
@@ -14711,7 +14703,9 @@ two of them.</p>
 
             <details class="quote">
               <summary>Source code in <code>jaxley/modules/base.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1494</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1492</span>
+<span class="normal">1493</span>
+<span class="normal">1494</span>
 <span class="normal">1495</span>
 <span class="normal">1496</span>
 <span class="normal">1497</span>
@@ -14756,9 +14750,7 @@ two of them.</p>
 <span class="normal">1536</span>
 <span class="normal">1537</span>
 <span class="normal">1538</span>
-<span class="normal">1539</span>
-<span class="normal">1540</span>
-<span class="normal">1541</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">write_trainables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trainable_params</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]):</span>
+<span class="normal">1539</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">write_trainables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trainable_params</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Write the trainables into `.nodes` and `.edges`.</span>
 
 <span class="sd">    This allows to, e.g., visualize trained networks with `.vis()`.</span>
@@ -15632,7 +15624,9 @@ and supports intricate cell morphologies.</p>
 <span class="normal">220</span>
 <span class="normal">221</span>
 <span class="normal">222</span>
-<span class="normal">223</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Cell</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Cell</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A cell made up of one or multiple branches (with branchpoints).</span>
 
 <span class="sd">    This class defines a single cell that can be simulated by itself or</span>
@@ -15766,7 +15760,9 @@ and supports intricate cell morphologies.</p>
                     <span class="p">}</span>
                 <span class="p">)</span>
                 <span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">ncomp</span><span class="p">,</span> <span class="n">cumsum_ncomp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncomp_per_branch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cumsum_ncomp</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">ncomp</span><span class="p">,</span> <span class="n">cumsum_ncomp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ncomp_per_branch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cumsum_ncomp</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
             <span class="p">]</span>
         <span class="p">)</span>
         <span class="n">comp_edges</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
