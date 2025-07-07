@@ -3,15 +3,17 @@
 
 import numpy as np
 
+from jaxley.modules import View
+from jaxley.synapses import Synapse
 
-def is_same_network(pre: "View", post: "View") -> bool:
+def is_same_network(pre: View, post: View) -> bool:
     """Check if views are from the same network."""
     is_in_net = "network" in pre.base.__class__.__name__.lower()
     is_in_same_net = pre.base is post.base
     return is_in_net and is_in_same_net
 
 
-def sample_comp(cell_view: "View", num: int = 1, replace=True) -> "CompartmentView":
+def sample_comp(cell_view: View, num: int = 1, replace=True) -> View:
     """Sample a compartment from a cell.
 
     Returns View with shape (num, num_cols).
@@ -20,9 +22,9 @@ def sample_comp(cell_view: "View", num: int = 1, replace=True) -> "CompartmentVi
 
 
 def connect(
-    pre: "View",
-    post: "View",
-    synapse_type: "Synapse",
+    pre: View,
+    post: View,
+    synapse_type: Synapse,
 ):
     """Connect specific compartments of a network with a synapse.
 
@@ -78,9 +80,9 @@ def connect(
 
 
 def fully_connect(
-    pre_cell_view: "View",
-    post_cell_view: "View",
-    synapse_type: "Synapse",
+    pre_cell_view: View,
+    post_cell_view: View,
+    synapse_type: Synapse,
     random_post_comp: bool = False,
 ):
     """Fully (densely) connect cells of a network with synapses.
@@ -146,9 +148,9 @@ def fully_connect(
 
 
 def sparse_connect(
-    pre_cell_view: "View",
-    post_cell_view: "View",
-    synapse_type: "Synapse",
+    pre_cell_view: View,
+    post_cell_view: View,
+    synapse_type: Synapse,
     p: float,
     random_post_comp: bool = False,
 ):
@@ -258,9 +260,9 @@ def sparse_connect(
 
 
 def connectivity_matrix_connect(
-    pre_cell_view: "View",
-    post_cell_view: "View",
-    synapse_type: "Synapse",
+    pre_cell_view: View,
+    post_cell_view: View,
+    synapse_type: Synapse,
     connectivity_matrix: np.ndarray[bool],
     random_post_comp: bool = False,
 ):

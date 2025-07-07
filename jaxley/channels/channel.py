@@ -1,6 +1,7 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 from __future__ import annotations
+from abc import abstractmethod
 
 import jax.numpy as jnp
 
@@ -79,12 +80,14 @@ class Channel:
         }
         return self
 
+    @abstractmethod
     def update_states(
         self, states: None, dt: None, v: None, params: None
     ) -> tuple[jnp.ndarray, tuple[jnp.ndarray, jnp.ndarray]]:
         """Return the updated states."""
-        raise NotImplementedError
+        pass
 
+    @abstractmethod
     def compute_current(
         self, states: dict[str, jnp.ndarray], v: float, params: dict[str, jnp.ndarray]
     ):
@@ -98,8 +101,9 @@ class Channel:
         Returns:
             Current in `uA/cm2`.
         """
-        raise NotImplementedError
+        pass
 
+    @abstractmethod
     def init_state(
         self,
         states: dict[str, jnp.ndarray],
@@ -108,4 +112,4 @@ class Channel:
         delta_t: float,
     ) -> dict:
         """Initialize states of channel."""
-        return {}
+        pass
