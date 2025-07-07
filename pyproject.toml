@@ -63,6 +63,7 @@ doc = [
 dev = [
     "jaxley-mech",
     "neuron",
+    "pandas-stubs",
     "pytest",
     "pyright",
     "optax",
