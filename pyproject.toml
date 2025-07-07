@@ -63,7 +63,6 @@ doc = [
 dev = [
     "jaxley-mech",
     "neuron",
-    "pandas-stubs",
     "pytest",
     "pyright",
     "optax",
@@ -73,6 +72,10 @@ lint = [
     "ruff",
     "mypy[faster-cache]",
     "typos",
+]
+stubs = [
+    "pandas-stubs",
+    "types-networkx",
 ]
 
 [tool.pytest.ini_options]

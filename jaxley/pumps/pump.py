@@ -1,10 +1,12 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
+from __future__ import annotations
+from abc import ABC, abstractmethod
+
 from jax import Array
 from jax.typing import ArrayLike
 
-
-class Pump:
+class Pump(ABC):
     """Pump base class. All pumps inherit from this class.
 
     A pump in Jaxley is everything that modifies the intracellular ion concentrations.
@@ -17,13 +19,15 @@ class Pump:
 
     def __init__(self, name: str | None = None):
         self._name = name if name else self.__class__.__name__
+        self.channel_params = {}
+        self.channel_states = {}
 
     @property
     def name(self) -> str | None:
         """The name of the channel (by default, this is the class name)."""
         return self._name
 
-    def change_name(self, new_name: str):
+    def change_name(self, new_name: str) -> Pump:
         """Change the pump name.
 
         Args:
@@ -55,12 +59,14 @@ class Pump:
         }
         return self
 
+    @abstractmethod
     def update_states(
         self, states: dict[str, Array], v, params: dict[str, Array]
     ) -> None:
         """Update the states of the pump."""
         raise NotImplementedError
 
+    @abstractmethod
     def compute_current(
         self, states: dict[str, Array], v, params: dict[str, Array]
     ) -> None:
@@ -76,12 +82,13 @@ class Pump:
         """
         raise NotImplementedError
 
+    @abstractmethod
     def init_state(
         self,
         states: dict[str, ArrayLike],
         v: ArrayLike,
         params: dict[str, ArrayLike],
         delta_t: float,
-    ):
+    ) -> dict:
         """Initialize states of channel."""
         return {}
