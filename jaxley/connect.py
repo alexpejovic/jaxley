@@ -3,7 +3,7 @@
 
 import numpy as np
 
-from jaxley.modules import View
+from jaxley.modules.base import View
 from jaxley.synapses import Synapse
 
 def is_same_network(pre: View, post: View) -> bool:
@@ -25,7 +25,7 @@ def connect(
     pre: View,
     post: View,
     synapse_type: Synapse,
-):
+) -> None:
     """Connect specific compartments of a network with a synapse.
 
     The pre- and postsynaptic compartments must be compartments of the
@@ -84,7 +84,7 @@ def fully_connect(
     post_cell_view: View,
     synapse_type: Synapse,
     random_post_comp: bool = False,
-):
+) -> None:
     """Fully (densely) connect cells of a network with synapses.
 
     Connections are from branch 0 location 0 of the pre-synaptic cell to branch 0
@@ -153,7 +153,7 @@ def sparse_connect(
     synapse_type: Synapse,
     p: float,
     random_post_comp: bool = False,
-):
+) -> None:
     """Sparsely (densely) connect cells of a network with synapses.
 
     Connections are from branch 0 location 0 of the pre-synaptic cell to branch 0
@@ -265,7 +265,7 @@ def connectivity_matrix_connect(
     synapse_type: Synapse,
     connectivity_matrix: np.ndarray[bool],
     random_post_comp: bool = False,
-):
+) -> None:
     """Connect cells of a network with synapses via a boolean connectivity matrix.
 
     Entries > 0 in the matrix indicate a connection between the corresponding cells.

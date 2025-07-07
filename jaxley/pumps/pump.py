@@ -1,30 +1,33 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
-
+from __future__ import annotations
 
 import jax.numpy as jnp
 
+from abc import ABC, abstractmethod
 
-class Pump:
+class Pump(ABC):
     """Pump base class. All pumps inherit from this class.
 
     A pump in Jaxley is everything that modifies the intracellular ion concentrations.
     """
 
-    _name = None
-    channel_params = None
-    channel_states = None
-    current_name = None
+    _name: str
+    channel_params: dict[str, jnp.ndarray] 
+    channel_states: dict[str, jnp.ndarray] 
+    current_name: str
 
     def __init__(self, name: str | None = None):
         self._name = name if name else self.__class__.__name__
+        self.channel_params = {}
+        self.channel_states = {}
 
     @property
     def name(self) -> str | None:
         """The name of the channel (by default, this is the class name)."""
         return self._name
 
-    def change_name(self, new_name: str):
+    def change_name(self, new_name: str) -> Pump:
         """Change the pump name.
 
         Args:
@@ -56,15 +59,17 @@ class Pump:
         }
         return self
 
+    @abstractmethod
     def update_states(
         self, states: dict[str, jnp.ndarray], v, params: dict[str, jnp.ndarray]
-    ):
+    ) -> None:
         """Update the states of the pump."""
         raise NotImplementedError
 
+    @abstractmethod
     def compute_current(
         self, states: dict[str, jnp.ndarray], v, params: dict[str, jnp.ndarray]
-    ):
+    ) -> None:
         """Given channel states and voltage, return the change in ion concentration.
 
         Args:
@@ -77,12 +82,13 @@ class Pump:
         """
         raise NotImplementedError
 
+    @abstractmethod
     def init_state(
         self,
         states: dict[str, jnp.ndarray],
         v: jnp.ndarray,
         params: dict[str, jnp.ndarray],
         delta_t: float,
-    ):
+    ) -> dict:
         """Initialize states of channel."""
         return {}
