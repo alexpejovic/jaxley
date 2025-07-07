@@ -138,23 +138,33 @@ indent-width = 4
 select = [
   "ANN", # flake8-annotations
   "B", # flake8-bugbear
+  "BLE", # flake8-blind-except
   "C4", # flake8-comprehensions
+  "C901", # complex-structure
   "D", # flake8-docstrings
+  "DTZ", # flake8-datetimez
   "E", # pycodestyle
   "EM", # flake8-errmsg
   "F", # pyflakes
+  "FURB", # refurb
   "FA", # flake8-future-annotations
-  "FBT001", # flake8-boolean-trap
+  "FBT", # flake8-boolean-trap
+  "FLY002", # static-join-to-f-string
   "I", # isort
   "ICN", # flake8-import-conventions
   "INT", # flake8-gettext
+  "ISC", # flake8-implicit-str-concat
+  "NPY", # NumPy rules
   "PERF", # perflint
+  "PD", # pandas-vet
   "PIE", # flake8-pie
+  # "PL", # pylint
   "PT", # flake8-pytest-style
   "PTH", # flake8-use-pathlib
   "PYI", # flake8-pyi
   "RUF", # ruff-specific rules
   "SIM", # flake8-simplify
+  "T10", # flake8-debugger
   "TCH", # flake8-type-checking
   "TD", # flake8-todos
   "TID", # flake8-tidy-imports
@@ -170,15 +180,16 @@ ignore = [
   # "ANN401", # Dynamically typed expressions (Any) are disallowed
   # "D401", # Relax NumPy docstring convention: first line should be imperative
   # "E501", # Line length regulated by formatter
-  # "PT011", # pytest.raises is too broad, set match or use a more specific exception
-  # "PYI041", # Use float instead of int | float
+  "FBT003", # Boolean positional arguments in function calls
+  "PLR2004", # magic-value-comparison
+  "PT011", # pytest.raises is too broad, set match or use a more specific exception
   # "RUF022", # `__all__` is not sorted
   # "RUF005", # Consider expression instead of concatenation
   # "SIM102", # Use a single `if` statement instead of nested `if` statements
   # "SIM108", # Use ternary operator
   # "SIM114", # Combine `if` branches
-  # "TD002", # Missing author in TODO
-  # "TD003", # Missing issue link on the line following this TODO
+  "TD002", # Missing author in TODO
+  "TD003", # Missing issue link on the line following this TODO
   # "TRY003", # Avoid specifying long messages outside the exception class
 ]
 exclude = ["*.ipynb"]
