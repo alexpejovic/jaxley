@@ -4,6 +4,7 @@ PYTHONPATH=
 SHELL=bash
 VENV=.venv
 PROJECT=pyproject.toml
+TUTORIALS=docs/tutorials
 
 ifeq ($(OS),Windows_NT)
 	VENV_BIN=$(VENV)/Scripts
@@ -53,6 +54,14 @@ fmt: .venv  ## Run autoformatting (and lint)
 .PHONY: todo
 todo: .venv  ## Get all TODO/FIXME lines
 	$(VENV_BIN)/ruff check --select="FIX"
+
+.PHONY: test-notebooks
+test-notebooks: .venv  ## Test all jupyter notebook tutorials
+	for notebook in $(TUTORIALS)/*.ipynb; do \
+	  echo "Testing $$notebook"; \
+	  $(VENV_BIN)/jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=600 "$$notebook"; \
+	done
+	find $(TUTORIALS)/*nbconvert.ipynb -delete
 
 .PHONY: clean
 clean:  ## Clean up caches and build artifacts
