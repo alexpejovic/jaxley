@@ -85,7 +85,9 @@ def test_diverse_synapse_types(SimpleNet):
     """Runs `.get_all_parameters()` and checks if the output is as expected."""
     net = SimpleNet(4, 1, 1)
     for pre_ind in [0, 1]:
-        for post_ind, syn in zip([2, 3], [IonotropicSynapse(), TestSynapse()], strict=False):
+        for post_ind, syn in zip(
+            [2, 3], [IonotropicSynapse(), TestSynapse()], strict=False
+        ):
             pre = net.cell(pre_ind).branch(0).loc(0.0)
             post = net.cell(post_ind).branch(0).loc(0.0)
             connect(pre, post, syn)

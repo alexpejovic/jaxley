@@ -243,7 +243,9 @@ def dhs_group_comps_into_levels(new_node_order: np.ndarray) -> list[np.ndarray]:
     grouping = nodes.groupby("level")
     nodes = grouping["node"].apply(list).to_numpy()
     parents = grouping["parent"].apply(list).to_numpy()
-    nodes_and_parents = [np.stack([n, p]).T for n, p in zip(nodes, parents, strict=False)]
+    nodes_and_parents = [
+        np.stack([n, p]).T for n, p in zip(nodes, parents, strict=False)
+    ]
 
     # `nodes_and_parents` is a List of length `num_levels`. Each element has shape
     # `(num_comps_per_level, 2)`.

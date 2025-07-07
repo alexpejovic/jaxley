@@ -97,7 +97,9 @@ def test_graph_import_export_cycle(
             assert np.all(re_xyzr == xyzr)
 
         re_imported_mechs = re_module.channels + re_module.synapses
-        for re_mech, mech in zip(re_imported_mechs, module.channels + module.synapses, strict=False):
+        for re_mech, mech in zip(
+            re_imported_mechs, module.channels + module.synapses, strict=False
+        ):
             assert np.all(re_mech.name == mech.name)
 
         # ensure exported graph and re-exported graph are equal

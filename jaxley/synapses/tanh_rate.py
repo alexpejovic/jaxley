@@ -8,8 +8,7 @@ from jaxley.synapses.synapse import Synapse
 
 
 class TanhRateSynapse(Synapse):
-    """Compute synaptic current for tanh synapse (no state).
-    """
+    """Compute synaptic current for tanh synapse (no state)."""
 
     def __init__(self, name: str | None = None):
         super().__init__(name)

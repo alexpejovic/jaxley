@@ -2,14 +2,12 @@
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 
 
-
 from jaxley.solver_gate import save_exp
 from jaxley.synapses.synapse import Synapse
 
 
 class TestSynapse(Synapse):
-    """Compute syanptic current and update synapse state for a test synapse.
-    """
+    """Compute syanptic current and update synapse state for a test synapse."""
 
     __test__ = False  # Not a unit test - pytest ignores
 
