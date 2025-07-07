@@ -1,12 +1,7 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
-<<<<<<< HEAD
-from abc import ABC, abstractmethod
-from typing import Dict, Optional, Tuple
-from warnings import warn
-=======
 from __future__ import annotations
->>>>>>> 080c752 (implemented automatic ruff lint fixes)
+from abc import abstractmethod
 
 from jax import Array
 from jax.typing import ArrayLike
@@ -86,10 +81,14 @@ class Channel:
         }
         return self
 
-    def update_states(self, states, dt, v, params) -> tuple[Array, tuple[Array, Array]]:
+    @abstractmethod
+    def update_states(
+        self, states, dt, v, params
+    ) -> tuple[Array, tuple[Array, Array]]:
         """Return the updated states."""
-        raise NotImplementedError
+        pass
 
+    @abstractmethod
     def compute_current(
         self, states: dict[str, Array], v: float, params: dict[str, Array]
     ):
@@ -103,8 +102,9 @@ class Channel:
         Returns:
             Current in `uA/cm2`.
         """
-        raise NotImplementedError
+        pass
 
+    @abstractmethod
     def init_state(
         self,
         states: dict[str, ArrayLike],
@@ -113,4 +113,4 @@ class Channel:
         delta_t: float,
     ) -> dict:
         """Initialize states of channel."""
-        return {}
+        pass

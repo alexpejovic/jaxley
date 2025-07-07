@@ -970,11 +970,7 @@ class Module(ABC):
         self._indptr_jax_spsolve = indptr
 
     def _init_solver_jaxley_dhs_solve(
-<<<<<<< HEAD
-        self, allowed_nodes_per_level: Optional[int] = None, root: int = 0
-=======
         self, allowed_nodes_per_level: int | None = 1, root: int = 0
->>>>>>> 080c752 (implemented automatic ruff lint fixes)
     ) -> None:
         """Create module attributes for indexing with the `jaxley.dhs` voltage volver.
 

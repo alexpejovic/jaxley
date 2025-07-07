@@ -1,12 +1,5 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
-<<<<<<< HEAD
-from abc import ABC, abstractmethod
-from typing import Dict, Optional, Tuple
-=======
-
->>>>>>> 080c752 (implemented automatic ruff lint fixes)
-
 from jax import Array
 from jax.typing import ArrayLike
 
