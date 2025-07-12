@@ -39,6 +39,10 @@ test-all: .venv build  ## Run all tests
 ruff-lint: .venv  ## Run lint checks (only ruff)
 	$(VENV_BIN)/ruff check --output-format concise
 
+.PHONY: type-lint
+type-lint: .venv  ## Run lint checks (only mypy)
+	-$(VENV_BIN)/mypy
+
 .PHONY: lint
 lint: .venv  ## Run lint checks (only)
 	$(VENV_BIN)/ruff check
