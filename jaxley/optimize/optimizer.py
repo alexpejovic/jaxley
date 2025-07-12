@@ -3,7 +3,6 @@
 from collections.abc import Callable
 from typing import Any
 
-from jax import Array
 from jax.typing import ArrayLike
 
 

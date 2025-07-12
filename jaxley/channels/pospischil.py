@@ -1,8 +1,11 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
+<<<<<<< HEAD
 from typing import Optional
 
 from jax import Array
+=======
+>>>>>>> b022d9f (remove unused imports)
 from jax.typing import ArrayLike
 
 from jaxley.channels import Channel
