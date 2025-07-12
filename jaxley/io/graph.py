@@ -181,7 +181,7 @@ def _add_edge_lengths(graph: nx.Graph, min_len: float = 1e-5) -> nx.DiGraph:
         )
         # min_len ensures that 2 nodes cannot lie on top of each other
         # this is important for the compartmentalization
-        graph.edges[i, j]["l"] = d_ij if d_ij >= min_len else min_len
+        graph.edges[i, j]["l"] = max(d_ij, min_len)
     return graph
 
 

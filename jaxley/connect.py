@@ -6,6 +6,7 @@ import numpy as np
 from jaxley.modules.base import View
 from jaxley.synapses import Synapse
 
+
 def is_same_network(pre: View, post: View) -> bool:
     """Check if views are from the same network."""
     is_in_net = "network" in pre.base.__class__.__name__.lower()

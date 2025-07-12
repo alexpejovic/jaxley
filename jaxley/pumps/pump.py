@@ -1,10 +1,11 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 from __future__ import annotations
-from abc import ABC, abstractmethod
-
 from jax import Array
 from jax.typing import ArrayLike
+
+from abc import ABC, abstractmethod
+
 
 class Pump(ABC):
     """Pump base class. All pumps inherit from this class.

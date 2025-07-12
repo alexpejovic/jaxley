@@ -8,8 +8,8 @@ from jaxley.connect import (
 )
 from jaxley.integrate import integrate
 from jaxley.io.swc import read_swc
-from jaxley.optimize.transforms import ParamTransform
 from jaxley.modules import Branch, Cell, Compartment, Module, Network
+from jaxley.optimize.transforms import ParamTransform
 from jaxley.stimulus import datapoint_to_step_currents, step_current
 
 __all__ = [
@@ -18,12 +18,12 @@ __all__ = [
     "Compartment",
     "Module",
     "Network",
+    "ParamTransform",
     "connect",
     "connectivity_matrix_connect",
     "datapoint_to_step_currents",
     "fully_connect",
     "integrate",
-    "ParamTransform",
     "read_swc",
     "sparse_connect",
     "step_current",
