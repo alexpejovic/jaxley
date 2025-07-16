@@ -83,9 +83,7 @@ class Channel:
         return self
 
     @abstractmethod
-    def update_states(
-        self, states, dt, v, params
-    ) -> tuple[Array, tuple[Array, Array]]:
+    def update_states(self, states, dt, v, params) -> tuple[Array, tuple[Array, Array]]:
         """Return the updated states."""
 
     @abstractmethod

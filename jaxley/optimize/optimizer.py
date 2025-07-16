@@ -3,7 +3,7 @@
 from collections.abc import Callable
 from typing import Any
 
-from jax.typing import ArrayLike
+from jax import Array
 
 
 class TypeOptimizer:
