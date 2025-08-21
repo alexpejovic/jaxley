@@ -1,10 +1,11 @@
 # This file is part of Jaxley, a differentiable neuroscience simulator. Jaxley is
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 import jax.numpy as jnp
+from jax import Array
 from jax.typing import ArrayLike
 
 
-def save_exp(x, max_value: float = 20.0):
+def save_exp(x: ArrayLike, max_value: float = 20.0) -> Array:
     """Clip the input to a maximum value and return its exponential."""
     x = jnp.clip(x, a_max=max_value)
     return jnp.exp(x)

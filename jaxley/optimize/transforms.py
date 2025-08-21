@@ -39,6 +39,30 @@ class SigmoidTransform(Transform):
         self.width = upper - lower
 
     def forward(self, x: ArrayLike) -> Array:
+        """Apply a forward Sigmoid transformation.
+
+        Args:
+            x (ArrayLike): input array or scalar
+
+        Returns:
+            An array containing each element of x under the sigmoid transformation.
+
+        Example usage
+        ^^^^^^^^^^^^^
+
+        The most common use is to define respective transformations on all the
+        parameters of a module, and use the forward function to apply the
+        transformation:
+
+        ::
+
+            transform = jt.ParamTransform(
+                [{"Na_gNa": jt.SigmoidTransform(0.0, 1.0)}]
+            )
+
+            transformed_params = transform.forward(parameters)
+            print(transformed_params)
+        """
         y = 1.0 / (1.0 + save_exp(-x))
         return self.lower + self.width * y
 
