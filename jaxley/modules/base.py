@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import warnings
-from abc import ABC, abstractmethod
+from abc import ABC
 from copy import deepcopy
 from itertools import chain
-from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, Union
+from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
 from warnings import warn
 
 import jax.numpy as jnp
@@ -49,6 +49,7 @@ from jaxley.utils.morph_attributes import (
     split_xyzr_into_equal_length_segments,
 )
 from jaxley.utils.plot_utils import plot_comps, plot_graph, plot_morph
+from jaxley.utils.query import IntegrationData
 from jaxley.utils.solver_utils import (
     comp_edges_to_indices,
     convert_to_csc,
@@ -56,7 +57,6 @@ from jaxley.utils.solver_utils import (
     dhs_permutation_indices,
     dhs_solve_index,
 )
-from jaxley.utils.query import IntegrationData
 
 
 def only_allow_module(func):
@@ -279,9 +279,9 @@ class Module(ABC):
         supported_parents = ["network", "cell", "branch"]  # cannot index into comp
 
         not_group_view = self._current_view not in self.group_names
-        assert (
-            self._current_view in supported_parents or not_group_view
-        ), "Lazy indexing is only supported for `Network`, `Cell`, `Branch` and Views thereof."
+        assert self._current_view in supported_parents or not_group_view, (
+            "Lazy indexing is only supported for `Network`, `Cell`, `Branch` and Views thereof."
+        )
         index = index if isinstance(index, tuple) else (index,)
 
         child_views = self._childviews()
@@ -1041,7 +1041,7 @@ class Module(ABC):
             sum([list(ch.channel_states) for ch in self.channels], []) if states else []
         )
 
-        if not param_names is None:
+        if param_names is not None:
             cols = (
                 inds + [c for c in cols if c in param_names]
                 if params
@@ -1594,9 +1594,9 @@ class Module(ABC):
         assert data is not None, f"Key '{key}' not found in nodes or edges"
         not_nan = ~data[key].isna()
         data = data.loc[not_nan].copy()
-        assert (
-            len(data) > 0
-        ), "No settable parameters found in the selected compartments."
+        assert len(data) > 0, (
+            "No settable parameters found in the selected compartments."
+        )
 
         grouped_view = data.groupby("controlled_by_param")
         # Because of this `x.index.values` we cannot support `make_trainable()` on
@@ -1959,7 +1959,7 @@ class Module(ABC):
                 states[key] = states[key].at[inds].set(set_param[:, None])
 
         # Add to the states the initial current through every channel.
-        states, _ = self.base._channel_currents(
+        states = self.base._get_channel_current_state(
             states, delta_t, self.channels + self.pumps, self.nodes, all_params
         )
 
@@ -2138,7 +2138,7 @@ class Module(ABC):
         self.base.recordings = self.base.recordings.loc[~has_duplicates]
         if verbose:
             print(
-                f"Added {len(in_view)-sum(has_duplicates)} recordings. See `.recordings` for details."
+                f"Added {len(in_view) - sum(has_duplicates)} recordings. See `.recordings` for details."
             )
 
     def _update_view(self):
@@ -2424,9 +2424,9 @@ class Module(ABC):
             simulated_concentrations = jx.integrate(cell, t_max=5.0)
 
         """
-        assert not isinstance(
-            self, View
-        ), "You can only diffuse ions in the entire module."
+        assert not isinstance(self, View), (
+            "You can only diffuse ions in the entire module."
+        )
 
         self.base.diffusion_states.append(state)
         self.base.nodes.loc[self._nodes_in_view, f"axial_diffusion_{state}"] = 1.0
@@ -2447,9 +2447,9 @@ class Module(ABC):
         Args:
             state: Name of the state that should no longer be diffused.
         """
-        assert (
-            state in self.base.diffusion_states
-        ), f"State {state} is not part of `self.diffusion_states`."
+        assert state in self.base.diffusion_states, (
+            f"State {state} is not part of `self.diffusion_states`."
+        )
         self.base.diffusion_states.remove(state)
         self.base.nodes.drop(columns=[f"axial_diffusion_{state}"], inplace=True)
 
@@ -2637,7 +2637,7 @@ class Module(ABC):
                 state_vals["linear_terms"] += [ion_linear_term]
                 state_vals["constant_terms"] += [ion_const_term]
                 state_vals["axial_conductances"] += [
-                    params[f"axial_conductances"][ion_name]
+                    params["axial_conductances"][ion_name]
                 ]
 
         # Stack all states such that they can be handled by `vmap` in the solve.
@@ -2801,11 +2801,11 @@ class Module(ABC):
         voltages = states["v"]
 
         # Update states of the channels.
-        for channel_query_item in self.integration_data.channel_query_list:
+        for channel_query_item in self.integration_data.channel_state_queries:
             channel = channel_query_item.channel
             channel_params = channel_query_item.params
             channel_states = channel_query_item.states
-            channel_indices = channel_query_item.indicies 
+            channel_indices = channel_query_item.indicies
 
             states_updated = channel.update_states(
                 channel_states, delta_t, voltages[channel_indices], channel_params
@@ -2841,15 +2841,13 @@ class Module(ABC):
         for name in self.membrane_current_names:
             current_states[name] = jnp.zeros_like(modified_state)
 
-        for channel in channels:
-            name = channel._name
-            if isinstance(channel, Channel):
-                modified_state_name = "v"
-            else:
-                modified_state_name = channel.ion_name
-            modified_state = states[modified_state_name]
+        for query in self.integration_data.channel_current_queries:
 
-            indices = channel_nodes.loc[channel_nodes[name]].index.to_numpy()
+            channel = query.channel
+            modified_state = query.modified_state
+            modified_state_name = query.modified_state_name
+            indices = query.indicies
+
             current, linear_term, const_term = self._channel_current_components(
                 modified_state,
                 states,
@@ -2880,6 +2878,57 @@ class Module(ABC):
         linear_terms["v"] *= 1000.0
         const_terms["v"] *= 1000.0
         return states, (linear_terms, const_terms)
+
+    def _get_channel_current_state(
+        self,
+        states: dict[str, Array],
+        delta_t: float,
+        channels: List[Channel],
+        channel_nodes: pd.DataFrame,
+        params: dict[str, Array],
+    ) -> tuple[dict[str, Array], tuple[Array, Array]]:
+        """Return the current through each channel.
+
+        This is also updates `state` because the `state` also contains the current.
+        """
+        # Compute current through channels.
+        modified_state = states["v"]
+        current_states = {}
+        for name in self.membrane_current_names:
+            current_states[name] = jnp.zeros_like(modified_state)
+
+        for channel in channels:
+
+            name = channel._name
+            if isinstance(channel, Channel):
+                modified_state_name = "v"
+            else:
+                modified_state_name = channel.ion_name
+            modified_state = states[modified_state_name]
+
+            indices = channel_nodes.loc[channel_nodes[name]].index.to_numpy()
+
+            current, linear_term, const_term = self._channel_current_components(
+                modified_state,
+                states,
+                delta_t,
+                channel,
+                indices,
+                params,
+            )
+
+            # Save the current (for the unperturbed voltage) as a state that will
+            # also be passed to the state update.
+            current_states[channel.current_name] = (
+                current_states[channel.current_name].at[indices].add(current)
+            )
+
+        # Copy the currents into the `state` dictionary such that they can be
+        # recorded and used by `Channel.update_states()`.
+        for name in self.membrane_current_names:
+            states[name] = current_states[name]
+
+        return states
 
     def _channel_current_components(
         self,
@@ -3079,7 +3128,7 @@ class Module(ABC):
                     num_children_of_parent = num_children[parents[b]]
                     if num_children_of_parent > 1:
                         y_offset = (
-                            ((index_of_child[b] / (num_children_of_parent - 1))) - 0.5
+                            (index_of_child[b] / (num_children_of_parent - 1)) - 0.5
                         ) * y_offset_multiplier[levels[b]]
                     else:
                         y_offset = 0.0
