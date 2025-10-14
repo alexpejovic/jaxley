@@ -56,6 +56,7 @@ from jaxley.utils.solver_utils import (
     dhs_permutation_indices,
     dhs_solve_index,
 )
+from jaxley.utils.query import IntegrationData
 
 
 def only_allow_module(func):
@@ -206,6 +207,9 @@ class Module(ABC):
         # For debugging the solver. Will be empty by default and only filled if
         # `self._init_morph_for_debugging` is run.
         self.debug_states = {}
+
+        # Data needed to run integrate()
+        self.integration_data: IntegrationData | None = None
 
         # needs to be set at the end
         self.base: Module = self
@@ -2797,25 +2801,11 @@ class Module(ABC):
         voltages = states["v"]
 
         # Update states of the channels.
-        indices = channel_nodes.index.to_numpy()
-        for channel in channels:
-            channel_param_names = list(channel.channel_params)
-            channel_param_names += [
-                "radius",
-                "length",
-                "axial_resistivity",
-                "capacitance",
-            ]
-            channel_state_names = list(channel.channel_states)
-            channel_state_names += self.membrane_current_names
-            channel_indices = indices[channel_nodes[channel._name].astype(bool)]
-
-            channel_params = query_channel_states_and_params(
-                params, channel_param_names, channel_indices
-            )
-            channel_states = query_channel_states_and_params(
-                states, channel_state_names, channel_indices
-            )
+        for channel_query_item in self.integration_data.channel_query_list:
+            channel = channel_query_item.channel
+            channel_params = channel_query_item.params
+            channel_states = channel_query_item.states
+            channel_indices = channel_query_item.indicies 
 
             states_updated = channel.update_states(
                 channel_states, delta_t, voltages[channel_indices], channel_params
