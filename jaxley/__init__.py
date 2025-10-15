@@ -10,7 +10,7 @@ from jaxley.connect import (
 )
 from jaxley.integrate import integrate
 from jaxley.io.swc import read_swc
-from jaxley.modules import *
+from jaxley.modules import Module, Branch, Cell, Compartment, Network
 from jaxley.optimize import ParamTransform
 from jaxley.stimulus import datapoint_to_step_currents, step_current
 

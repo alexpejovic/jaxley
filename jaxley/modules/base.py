@@ -2602,43 +2602,43 @@ class Module(ABC):
             "axial_conductances": [params["axial_conductances"]["v"]],
         }
 
-        for ion_name in self.pumped_ions:
-            if ion_name not in self.diffusion_states:
-                # If an ion is pumped but _not_ diffused, we update the state of the ion
-                # (i.e., its concentration) with implicit Euler. We could also use
-                # exponential-euler here, but we use implicit Euler for consistency with
-                # the case of the ion being diffused. TODO: In the long run, we should
-                # give the user the option to specify the solver.
-                #
-                # Implicit Euler for diagonal system (i.e. all compartments are
-                # independent):
-                #
-                # v_dot = const + v * linear
-                # v_n = v_{n+1} - dt * (const + v_{n+1} * linear)
-                # ...
-                # v_{n+1} = (v_n + dt * const) / (1 - dt * linear)
-                u[ion_name] = (u[ion_name] + delta_t * const_terms[ion_name]) / (
-                    1 + delta_t * linear_terms[ion_name]
-                )
+        # for ion_name in self.pumped_ions:
+        #     if ion_name not in self.diffusion_states:
+        #         # If an ion is pumped but _not_ diffused, we update the state of the ion
+        #         # (i.e., its concentration) with implicit Euler. We could also use
+        #         # exponential-euler here, but we use implicit Euler for consistency with
+        #         # the case of the ion being diffused. TODO: In the long run, we should
+        #         # give the user the option to specify the solver.
+        #         #
+        #         # Implicit Euler for diagonal system (i.e. all compartments are
+        #         # independent):
+        #         #
+        #         # v_dot = const + v * linear
+        #         # v_n = v_{n+1} - dt * (const + v_{n+1} * linear)
+        #         # ...
+        #         # v_{n+1} = (v_n + dt * const) / (1 - dt * linear)
+        #         u[ion_name] = (u[ion_name] + delta_t * const_terms[ion_name]) / (
+        #             1 + delta_t * linear_terms[ion_name]
+        #         )
 
-        for ion_name in self.diffusion_states:
-            if ion_name not in self.pumped_ions:
-                # Ions that are not pumped have no active component.
-                ion_linear_term = jnp.zeros_like(u[ion_name])
-                ion_const_term = jnp.zeros_like(u[ion_name])
-            else:
-                ion_linear_term = linear_terms[ion_name]
-                ion_const_term = const_terms[ion_name]
-            # Append the states of the pumps if they are diffusing (the user must
-            # manually specify ion diffusion with `cell.diffuse(ion_state_name)`). Note
-            # that these values are _not_ divided by the capacitance `cm`.
-            if ion_name in self.diffusion_states:
-                state_vals["states"] += [u[ion_name]]
-                state_vals["linear_terms"] += [ion_linear_term]
-                state_vals["constant_terms"] += [ion_const_term]
-                state_vals["axial_conductances"] += [
-                    params["axial_conductances"][ion_name]
-                ]
+        # for ion_name in self.diffusion_states:
+        #     if ion_name not in self.pumped_ions:
+        #         # Ions that are not pumped have no active component.
+        #         ion_linear_term = jnp.zeros_like(u[ion_name])
+        #         ion_const_term = jnp.zeros_like(u[ion_name])
+        #     else:
+        #         ion_linear_term = linear_terms[ion_name]
+        #         ion_const_term = const_terms[ion_name]
+        #     # Append the states of the pumps if they are diffusing (the user must
+        #     # manually specify ion diffusion with `cell.diffuse(ion_state_name)`). Note
+        #     # that these values are _not_ divided by the capacitance `cm`.
+        #     if ion_name in self.diffusion_states:
+        #         state_vals["states"] += [u[ion_name]]
+        #         state_vals["linear_terms"] += [ion_linear_term]
+        #         state_vals["constant_terms"] += [ion_const_term]
+        #         state_vals["axial_conductances"] += [
+        #             params["axial_conductances"][ion_name]
+        #         ]
 
         # Stack all states such that they can be handled by `vmap` in the solve.
         for state_name in [
@@ -2837,9 +2837,9 @@ class Module(ABC):
             linear_terms[name] = jnp.zeros_like(states[name])
             const_terms[name] = jnp.zeros_like(states[name])
 
-        current_states = {}
-        for name in self.membrane_current_names:
-            current_states[name] = jnp.zeros_like(modified_state)
+        # current_states = {}
+        # for name in self.membrane_current_names:
+        #     current_states[name] = jnp.zeros_like(modified_state)
 
         for query in self.integration_data.channel_current_queries:
 
@@ -2865,14 +2865,14 @@ class Module(ABC):
 
             # Save the current (for the unperturbed voltage) as a state that will
             # also be passed to the state update.
-            current_states[channel.current_name] = (
-                current_states[channel.current_name].at[indices].add(current)
-            )
+            # current_states[channel.current_name] = (
+            #     current_states[channel.current_name].at[indices].add(current)
+            # )
 
         # Copy the currents into the `state` dictionary such that they can be
         # recorded and used by `Channel.update_states()`.
-        for name in self.membrane_current_names:
-            states[name] = current_states[name]
+        # for name in self.membrane_current_names:
+        #     states[name] = current_states[name]
 
         # * 1_000.0 to convert from mA/cm^2 to uA/cm^2.
         linear_terms["v"] *= 1000.0

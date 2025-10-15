@@ -1,6 +1,7 @@
-from typing import NamedTuple
+from __future__ import annotations
 
-import jax.numpy as jnp
+from typing import TYPE_CHECKING, NamedTuple
+
 import numpy as np
 from jax import Array
 
@@ -9,6 +10,9 @@ from jaxley.utils.cell_utils import (
     params_to_pstate,
     query_channel_states_and_params,
 )
+
+if TYPE_CHECKING:
+    from jaxley.modules import Module
 
 
 class ChannelStateQuery(NamedTuple):
@@ -32,7 +36,7 @@ class IntegrationData(NamedTuple):
 
 # Arguments are the same as the ones passed into integrate and init_fn!!!
 def query_integration_data(
-    module,  # TODO: Figure out how to add Module type here without circular importing
+    module: Module,  # TODO: Figure out how to add Module type here without circular importing
     params: list[dict[str, Array]] = [],
     all_states: dict | None = None,
     param_state: list[dict] | None = None,
@@ -60,7 +64,7 @@ def query_integration_data(
 
 
 def _query_channel_states(
-    module,
+    module: Module,
     all_params: dict[str, Array],
     all_states: dict[str, Array],
 ) -> tuple[list, list]:
@@ -98,7 +102,7 @@ def _query_channel_states(
 
 
 def _query_channel_current(
-    module,
+    module: Module,
     all_params: dict[str, Array],
     all_states: dict[str, Array],
 ) -> tuple[dict[str, Array], tuple[Array, Array]]:
