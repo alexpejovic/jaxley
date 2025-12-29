@@ -14,14 +14,15 @@ class RateFlyvis(Channel):
     def __init__(self, name: Optional[str] = None):
         self.current_is_in_mA_per_cm2 = True
         super().__init__(name)
-        self.channel_params = {f"{self.name}_tau": 1.0}
+        self.channel_params = {f"{self.name}_tau": 1.0, f"{self.name}_rest": 0.0}
         self.channel_states = {}
         self.current_name = f"{self.name}_rate"
 
     def update_states(self, states, dt, v, params):
         """Voltages get pulled towards zero."""
         tau = params[f"{self.name}_tau"]
-        return {"v": (1 - (dt / tau)) * v}
+        rest = params[f"{self.name}_rest"]
+        return {"v": (1 - (dt / tau)) * v + ((dt / tau) * rest)}
 
     def compute_current(self, states, v, params):
         return jnp.zeros((1,))
