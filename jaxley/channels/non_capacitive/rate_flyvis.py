@@ -3,7 +3,7 @@
 
 from typing import Optional
 
-import jax.numpy as jnp
+from jax import Array
 
 from jaxley.channels import Channel
 
@@ -14,18 +14,36 @@ class RateFlyvis(Channel):
     def __init__(self, name: Optional[str] = None):
         self.current_is_in_mA_per_cm2 = True
         super().__init__(name)
-        self.channel_params = {f"{self.name}_tau": 1.0, f"{self.name}_rest": 0.0}
+        self.channel_params = {f"{self.name}_rest": 0.0}
         self.channel_states = {}
         self.current_name = f"{self.name}_rate"
 
-    def update_states(self, states, dt, v, params):
+    def update_states(
+        self,
+        states: dict[str, Array],
+        params: dict[str, Array],
+        voltage: Array,
+        delta_t: float,
+    ):
         """Voltages get pulled towards zero."""
-        tau = params[f"{self.name}_tau"]
+        tau = params["capacitance"]
         rest = params[f"{self.name}_rest"]
-        return {"v": (1 - (dt / tau)) * v + ((dt / tau) * rest)}
+        return {"v": (1 - (delta_t / tau)) * voltage + ((delta_t / tau) * rest)}
 
-    def compute_current(self, states, v, params):
-        return jnp.zeros((1,))
+    def compute_current(
+        self,
+        states: dict[str, Array],
+        params: dict[str, Array],
+        voltage: Array,
+        delta_t: float,
+    ):
+        return 0
 
-    def init_state(self, states, v, params, delta_t):
+    def init_state(
+        self,
+        states: dict[str, Array],
+        params: dict[str, Array],
+        voltage: Array,
+        delta_t: float,
+    ):
         return {}

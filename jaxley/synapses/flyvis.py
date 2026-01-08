@@ -3,6 +3,7 @@
 
 from typing import Dict, Optional
 
+from jax import Array
 from jax.nn import relu
 
 from jaxley.synapses.synapse import Synapse
@@ -25,23 +26,36 @@ class FlyvisBasic(Synapse):
 
     def update_states(
         self,
-        states: Dict,
+        synapse_states: dict[str, Array],
+        synapse_params: dict[str, Array],
+        pre_voltage: Array,
+        post_voltage: Array,
+        pre_states: dict[str, Array],
+        post_states: dict[str, Array],
+        pre_params: dict[str, Array],
+        post_params: dict[str, Array],
         delta_t: float,
-        pre_voltage: float,
-        post_voltage: float,
-        params: Dict,
     ) -> Dict:
         """Return updated synapse state and current."""
         return {}
 
     def compute_current(
-        self, states: Dict, pre_voltage: float, post_voltage: float, params: Dict
+        self,
+        synapse_states: dict[str, Array],
+        synapse_params: dict[str, Array],
+        pre_voltage: Array,
+        post_voltage: Array,
+        pre_states: dict[str, Array],
+        post_states: dict[str, Array],
+        pre_params: dict[str, Array],
+        post_params: dict[str, Array],
+        delta_t: float,
     ) -> float:
         """Return updated synapse state and current."""
         prefix = self._name
-        sign = params[f"{prefix}_sign"]
-        count = params[f"{prefix}_count"]
-        strength = params[f"{prefix}_strength"]
+        sign = synapse_params[f"{prefix}_sign"]
+        count = synapse_params[f"{prefix}_count"]
+        strength = synapse_params[f"{prefix}_strength"]
         weight = sign * count * strength
         current = weight * relu(pre_voltage)
         return current
