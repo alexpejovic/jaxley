@@ -2984,11 +2984,11 @@ class Module(ABC):
             "axial_conductances": [params["axial_conductances"]["v"]],
         }
 
-        jax.debug.print("v_syn_linear_terms={}", v_syn_linear_terms)
-        jax.debug.print("v_syn_const_terms={}", v_syn_const_terms)
-        jax.debug.print("state_vals[\"states\"]={}", state_vals["states"])
-        jax.debug.print("state_vals[\"linear_terms\"]={}", state_vals["linear_terms"])
-        jax.debug.print("state_vals[\"constant_terms\"]={}", state_vals["constant_terms"])
+        # jax.debug.print("v_syn_linear_terms={}", v_syn_linear_terms)
+        # jax.debug.print("v_syn_const_terms={}", v_syn_const_terms)
+        # jax.debug.print("state_vals[\"states\"]={}", state_vals["states"])
+        # jax.debug.print("state_vals[\"linear_terms\"]={}", state_vals["linear_terms"])
+        # jax.debug.print("state_vals[\"constant_terms\"]={}", state_vals["constant_terms"])
 
         for ion_name in self.pumped_ions:
             if ion_name not in self.diffusion_states:
