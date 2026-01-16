@@ -23,6 +23,7 @@ class FlyvisBasic(Synapse):
             f"{prefix}_strength": 1.0,
         }
         self.synapse_states = {}
+        # self.node_params = {"capacitance": 10.0}
 
     def update_states(
         self,
@@ -58,4 +59,6 @@ class FlyvisBasic(Synapse):
         strength = synapse_params[f"{prefix}_strength"]
         weight = sign * count * strength
         current = weight * relu(pre_voltage)
-        return current
+        print(post_params)
+        # capacitance = post_params["capacitance"]
+        return current # / capacitance
