@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import functools
 import warnings
+from copy import deepcopy
 from abc import ABC
 from copy import deepcopy
 from itertools import chain
@@ -2252,6 +2253,7 @@ class Module(ABC):
         # Add to the states the initial current through every synapse.
         states, _ = self.base._synapse_currents(
             states,
+            states["v"],
             self.synapses,
             all_params,
             delta_t,
@@ -2956,6 +2958,8 @@ class Module(ABC):
         else:
             i_ext = 0.0
 
+        pre_channel_voltages = u["v"]
+
         # Steps of the channel & pump states and computes the current through these
         # channels and pumps.
         u, (linear_terms, const_terms) = self._step_channels(
@@ -2965,6 +2969,7 @@ class Module(ABC):
         # Step of the synapse.
         u, (v_syn_linear_terms, v_syn_const_terms) = self._step_synapse(
             u,
+            pre_channel_voltages,
             self.synapses,
             params,
             delta_t,
@@ -2983,12 +2988,6 @@ class Module(ABC):
             # `cell_utils.py` in the `compute_axial_conductances` method.
             "axial_conductances": [params["axial_conductances"]["v"]],
         }
-
-        # jax.debug.print("v_syn_linear_terms={}", v_syn_linear_terms)
-        # jax.debug.print("v_syn_const_terms={}", v_syn_const_terms)
-        # jax.debug.print("state_vals[\"states\"]={}", state_vals["states"])
-        # jax.debug.print("state_vals[\"linear_terms\"]={}", state_vals["linear_terms"])
-        # jax.debug.print("state_vals[\"constant_terms\"]={}", state_vals["constant_terms"])
 
         for ion_name in self.pumped_ions:
             if ion_name not in self.diffusion_states:
@@ -3358,6 +3357,7 @@ class Module(ABC):
     def _step_synapse(
         self,
         u: dict[str, Array],
+        pre_channel_voltages: Array,
         syn_channels: list[Channel],
         params: dict[str, Array],
         delta_t: float,

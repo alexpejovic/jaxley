@@ -267,21 +267,23 @@ class Network(Module):
     def _step_synapse(
         self,
         states: Dict,
+        pre_channel_voltages: Array,
         syn_channels: List,
         params: Dict,
         delta_t: float,
         edges: pd.DataFrame,
     ) -> tuple[dict, tuple[Array, Array]]:
         """Perform one step of the synapses and obtain their currents."""
-        states = self._step_synapse_state(states, syn_channels, params, delta_t, edges)
+        states = self._step_synapse_state(states, pre_channel_voltages, syn_channels, params, delta_t, edges)
         states, current_terms = self._synapse_currents(
-            states, syn_channels, params, delta_t, edges
+            states, pre_channel_voltages, syn_channels, params, delta_t, edges
         )
         return states, current_terms
 
     def _step_synapse_state(
         self,
         states: Dict,
+        pre_channel_voltages: Array,
         syn_channels: List,
         params: Dict,
         delta_t: float,
@@ -347,6 +349,7 @@ class Network(Module):
     def _synapse_currents(
         self,
         states: Dict,
+        pre_channel_voltages: Array,
         syn_channels: List,
         params: Dict,
         delta_t: float,
@@ -396,7 +399,7 @@ class Network(Module):
 
             # Compute slope and offset of the current through every synapse.
             pre_v_and_perturbed = jnp.stack(
-                [voltages[pre_inds], voltages[pre_inds] + diff]
+                [pre_channel_voltages[pre_inds], pre_channel_voltages[pre_inds] + diff]
             )
             post_v_and_perturbed = jnp.stack(
                 [voltages[post_inds], voltages[post_inds] + diff]
