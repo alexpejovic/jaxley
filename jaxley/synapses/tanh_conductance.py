@@ -48,6 +48,12 @@ class TanhConductanceSynapse(Synapse):
         tanh_pre_voltage = jax.nn.relu(
             (pre_voltage - params[f"{prefix}_x_offset"]) * params[f"{prefix}_slope"]
         )
-        linear = tanh_pre_voltage * params[f"{prefix}_gS"] * params[f"{prefix}_count"]
-        constant = linear * params[f"{prefix}_e_syn"]
-        return linear, constant
+        # linear = tanh_pre_voltage * params[f"{prefix}_gS"] * params[f"{prefix}_count"]
+        # constant = linear * params[f"{prefix}_e_syn"]
+        # return linear, constant
+        current = (
+            tanh_pre_voltage
+            * params[f"{prefix}_gS"] * params[f"{prefix}_count"]
+            * (post_voltage - params[f"{prefix}_e_syn"])
+        )
+        return current
