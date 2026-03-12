@@ -289,15 +289,15 @@ class Network(Module):
     ) -> Dict:
         voltages = states["v"]
 
-        grouped_syns = edges.groupby("type", sort=False, group_keys=False)
-        pre_syn_inds = grouped_syns["pre_index"].apply(list)
-        post_syn_inds = grouped_syns["post_index"].apply(list)
-        synapse_names = list(grouped_syns.indices.keys())
+        # grouped_syns = edges.groupby("type", sort=False, group_keys=False)
+        # pre_syn_inds = grouped_syns["pre_index"].apply(list)
+        # post_syn_inds = grouped_syns["post_index"].apply(list)
+        # synapse_names = list(grouped_syns.indices.keys())
 
         for i, synapse_type in enumerate(syn_channels):
-            assert (
-                synapse_names[i] == synapse_type._name
-            ), "Mixup in the ordering of synapses. Please create an issue on Github."
+            # assert (
+            #     synapse_names[i] == synapse_type._name
+            # ), "Mixup in the ordering of synapses. Please create an issue on Github."
             synapse_param_names = list(synapse_type.synapse_params.keys())
             synapse_state_names = list(synapse_type.synapse_states.keys())
 
@@ -308,8 +308,11 @@ class Network(Module):
             for s in synapse_state_names:
                 synapse_states[s] = states[s]
 
-            pre_inds = np.asarray(pre_syn_inds[synapse_names[i]])
-            post_inds = np.asarray(post_syn_inds[synapse_names[i]])
+            # pre_inds = np.asarray(pre_syn_inds[synapse_names[i]])
+            # post_inds = np.asarray(post_syn_inds[synapse_names[i]])
+
+            pre_inds = self.pre_syn_inds
+            post_inds = self.post_syn_inds
 
             # State updates.
             states_updated = synapse_type.update_states(
@@ -336,10 +339,10 @@ class Network(Module):
     ) -> tuple[dict, tuple[Array, Array]]:
         voltages = states["v"]
 
-        grouped_syns = edges.groupby("type", sort=False, group_keys=False)
-        pre_syn_inds = grouped_syns["pre_index"].apply(list)
-        post_syn_inds = grouped_syns["post_index"].apply(list)
-        synapse_names = list(grouped_syns.indices.keys())
+        # grouped_syns = edges.groupby("type", sort=False, group_keys=False)
+        # pre_syn_inds = grouped_syns["pre_index"].apply(list)
+        # post_syn_inds = grouped_syns["post_index"].apply(list)
+        # synapse_names = list(grouped_syns.indices.keys())
 
         syn_voltage_terms = jnp.zeros_like(voltages)
         syn_constant_terms = jnp.zeros_like(voltages)
@@ -347,9 +350,9 @@ class Network(Module):
         # offset.
         diff = 1e-3
         for i, synapse_type in enumerate(syn_channels):
-            assert (
-                synapse_names[i] == synapse_type._name
-            ), "Mixup in the ordering of synapses. Please create an issue on Github."
+            # assert (
+            #     synapse_names[i] == synapse_type._name
+            # ), "Mixup in the ordering of synapses. Please create an issue on Github."
             synapse_param_names = list(synapse_type.synapse_params.keys())
             synapse_state_names = list(synapse_type.synapse_states.keys())
 
@@ -361,8 +364,11 @@ class Network(Module):
                 synapse_states[s] = states[s]
 
             # Get pre and post indexes of the current synapse type.
-            pre_inds = np.asarray(pre_syn_inds[synapse_names[i]])
-            post_inds = np.asarray(post_syn_inds[synapse_names[i]])
+            # pre_inds = np.asarray(pre_syn_inds[synapse_names[i]])
+            # post_inds = np.asarray(post_syn_inds[synapse_names[i]])
+
+            pre_inds = self.pre_syn_inds
+            post_inds = self.post_syn_inds
 
             # Compute slope and offset of the current through every synapse.
             pre_v_and_perturbed = jnp.stack(
