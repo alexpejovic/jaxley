@@ -140,9 +140,15 @@ class FlyvisConductanceSynapse(Synapse):
         delta_t: float,
     ) -> float:
         prefix = self._name
+        # return (
+        #     synapse_params[f"{prefix}_count"]
+        #     * synapse_params[f"{prefix}_strength"]
+        #     * self.nonlinearity(pre_voltage)
+        #     # * synapse_params[f"{prefix}_r"]
+        # )
         return (
             synapse_params[f"{prefix}_count"]
             * synapse_params[f"{prefix}_strength"]
-            * self.nonlinearity(pre_voltage)
-            * (synapse_params[f"{prefix}_r"] - post_voltage)
+            * (self.nonlinearity(pre_voltage) - synapse_params[f"{prefix}_r"])
+            # * self.nonlinearity(pre_voltage)
         )

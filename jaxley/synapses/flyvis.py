@@ -58,7 +58,5 @@ class FlyvisBasic(Synapse):
         count = synapse_params[f"{prefix}_count"]
         strength = synapse_params[f"{prefix}_strength"]
         weight = sign * count * strength
-        current = weight * relu(pre_voltage)
-        print(post_params)
-        # capacitance = post_params["capacitance"]
-        return current # / capacitance
+        current = -weight * relu(pre_voltage)
+        return current
