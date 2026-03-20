@@ -26,6 +26,7 @@ from jaxley.channels import Channel
 from jaxley.pumps import Pump
 from jaxley.solver_voltage import (
     step_voltage_explicit,
+    step_voltage_explicit_flyvis,
     step_voltage_exponential,
     step_voltage_implicit_with_dhs_solve,
     step_voltage_implicit_with_jax_spsolve,
@@ -3042,7 +3043,7 @@ class Module(ABC):
                 u[key] = u[key].at[external_inds[key]].set(externals[key])
 
         # Add solver specific arguments.
-        if solver == "fwd_euler":
+        if solver == "fwd_euler" or solver == "flyvis_exp_euler":
             solver_kwargs = {
                 "sinks": np.asarray(self._comp_edges["sink"].to_list()),
                 "sources": np.asarray(self._comp_edges["source"].to_list()),
@@ -3147,6 +3148,12 @@ class Module(ABC):
             vmapped = vmap(step_voltage_explicit, in_axes=(0, 0, 0, 0, *nones, None))
             updated_states = vmapped(
                 *state_vals.values(), *solver_kwargs.values(), delta_t
+            )
+        elif solver == "flyvis_exp_euler":
+            nones = [None] * len(solver_kwargs)
+            vmapped = vmap(step_voltage_explicit_flyvis, in_axes=(0, 0, 0, 0, *nones, None, None))
+            updated_states = vmapped(
+                *state_vals.values(), *solver_kwargs.values(), cm, delta_t
             )
         elif solver == "exp_euler":
             # Why the if-case? See explanation in `if solver in ["bwd_euler", ...]`.
