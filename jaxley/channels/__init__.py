@@ -6,7 +6,6 @@ from jaxley.channels.hh import HH, K, Leak, Na
 from jaxley.channels.non_capacitive.izhikevich import Izhikevich
 from jaxley.channels.non_capacitive.rate import Rate
 from jaxley.channels.non_capacitive.rate_flyvis import RateFlyvis
-from jaxley.channels.non_capacitive.rate_flyvis_exp import RateFlyvisExp
 from jaxley.channels.non_capacitive.rate_flyvis_cur import RateFlyvisCurrent
 from jaxley.channels.non_capacitive.spike import Fire
 
@@ -19,7 +18,6 @@ __all__ = [
     "Izhikevich",
     "Rate",
     "RateFlyvis",
-    "RateFlyvisExp",
     "RateFlyvisCurrent",
     "Fire",
 ]
