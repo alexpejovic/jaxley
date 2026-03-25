@@ -107,7 +107,7 @@ class FlyvisConductanceSynapse(Synapse):
             f"{prefix}_strength": 1e-4,  # uS
             f"{prefix}_r": -35.0,  # mV
         }
-        self.synapse_states = {}
+        self.synapse_states = {f"{prefix}_s": 0.0}
         self.node_params = {}
         self.node_states = {}
         self.nonlinearity = nonlinearity
@@ -125,7 +125,12 @@ class FlyvisConductanceSynapse(Synapse):
         delta_t: float,
     ) -> Dict:
         """Return updated synapse state and current."""
-        return {}
+        prefix = self._name
+        return {
+            f"{prefix}_s": synapse_params[f"{prefix}_count"]
+            * synapse_params[f"{prefix}_strength"]
+            * self.nonlinearity(pre_voltage)
+        }
 
     def compute_current(
         self,
@@ -140,15 +145,6 @@ class FlyvisConductanceSynapse(Synapse):
         delta_t: float,
     ) -> float:
         prefix = self._name
-        # return (
-        #     synapse_params[f"{prefix}_count"]
-        #     * synapse_params[f"{prefix}_strength"]
-        #     * self.nonlinearity(pre_voltage)
-        #     # * synapse_params[f"{prefix}_r"]
-        # )
-        return (
-            synapse_params[f"{prefix}_count"]
-            * synapse_params[f"{prefix}_strength"]
-            * (self.nonlinearity(pre_voltage) - synapse_params[f"{prefix}_r"])
-            # * self.nonlinearity(pre_voltage)
+        return synapse_states[f"{prefix}_s"] * (
+            post_voltage - synapse_params[f"{prefix}_r"]
         )

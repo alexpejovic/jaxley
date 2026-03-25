@@ -2,7 +2,6 @@
 # licensed under the Apache License Version 2.0, see <https://www.apache.org/licenses/>
 from typing import Any, Dict
 
-import jax
 import jax.numpy as jnp
 import numpy as np
 from jax import Array
@@ -322,6 +321,7 @@ def step_voltage_explicit(
     new_voltates = voltages + delta_t * update
     return new_voltates
 
+
 def step_voltage_explicit_flyvis(
     voltages: ArrayLike,
     voltage_terms: ArrayLike,
@@ -337,7 +337,28 @@ def step_voltage_explicit_flyvis(
     """Solve one timestep of branched nerve equations with explicit exponential (flyvis)."""
     update = -voltage_terms * voltages + constant_terms
     update *= cm
-    new_voltates = voltages + (1 - jnp.exp(-delta_t/cm)) * update
+    new_voltates = voltages + (1 - jnp.exp(-delta_t / cm)) * update
+    return new_voltates
+
+
+def step_voltage_first_order_exp_euler(
+    voltages: ArrayLike,
+    voltage_terms: ArrayLike,
+    constant_terms: ArrayLike,
+    axial_conductances: ArrayLike,
+    sinks,
+    sources,
+    types,
+    n_nodes,
+    cm,
+    delta_t: float,
+) -> Array:
+    """Solve one timestep of branched nerve equations with explicit exponential (flyvis)."""
+    v_inf = constant_terms / voltage_terms
+    t_eff = cm / voltage_terms
+    new_voltates = voltages * (jnp.exp(-delta_t / t_eff)) + v_inf * (
+        1 - jnp.exp(-delta_t / t_eff)
+    )
     return new_voltates
 
 
@@ -452,7 +473,7 @@ def step_voltage_implicit_with_stone(
     """Solve one timestep of branched nerve equations with implicit (backward) Euler."""
     if np.sum(np.isin(types, [1, 2, 3, 4])) > 0:
         raise NotImplementedError(
-            f"The stone solver is not implemented for branched morphologies."
+            "The stone solver is not implemented for branched morphologies."
         )
     axial_conductances = delta_t * axial_conductances
 

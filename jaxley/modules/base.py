@@ -27,6 +27,7 @@ from jaxley.pumps import Pump
 from jaxley.solver_voltage import (
     step_voltage_explicit,
     step_voltage_explicit_flyvis,
+    step_voltage_first_order_exp_euler,
     step_voltage_exponential,
     step_voltage_implicit_with_dhs_solve,
     step_voltage_implicit_with_jax_spsolve,
@@ -3043,7 +3044,7 @@ class Module(ABC):
                 u[key] = u[key].at[external_inds[key]].set(externals[key])
 
         # Add solver specific arguments.
-        if solver == "fwd_euler" or solver == "flyvis_exp_euler":
+        if solver == "fwd_euler" or solver == "flyvis_exp_euler" or solver == "first_order_exp_euler":
             solver_kwargs = {
                 "sinks": np.asarray(self._comp_edges["sink"].to_list()),
                 "sources": np.asarray(self._comp_edges["source"].to_list()),
@@ -3152,6 +3153,14 @@ class Module(ABC):
         elif solver == "flyvis_exp_euler":
             nones = [None] * len(solver_kwargs)
             vmapped = vmap(step_voltage_explicit_flyvis, in_axes=(0, 0, 0, 0, *nones, None, None))
+            updated_states = vmapped(
+                *state_vals.values(), *solver_kwargs.values(), cm, delta_t
+            )
+        elif solver == "first_order_exp_euler":
+            state_vals["linear_terms"] = jnp.stack([((linear_terms["v"] / 1000.0) + v_syn_linear_terms)])
+            state_vals["constant_terms"] = jnp.stack([((const_terms["v"] / 1000.0) + i_ext + v_syn_const_terms)])
+            nones = [None] * len(solver_kwargs)
+            vmapped = vmap(step_voltage_first_order_exp_euler, in_axes=(0, 0, 0, 0, *nones, None, None))
             updated_states = vmapped(
                 *state_vals.values(), *solver_kwargs.values(), cm, delta_t
             )
