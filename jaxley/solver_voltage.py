@@ -322,25 +322,6 @@ def step_voltage_explicit(
     return new_voltates
 
 
-def step_voltage_explicit_flyvis(
-    voltages: ArrayLike,
-    voltage_terms: ArrayLike,
-    constant_terms: ArrayLike,
-    axial_conductances: ArrayLike,
-    sinks,
-    sources,
-    types,
-    n_nodes,
-    cm,
-    delta_t: float,
-) -> Array:
-    """Solve one timestep of branched nerve equations with explicit exponential (flyvis)."""
-    update = -voltage_terms * voltages + constant_terms
-    update *= cm
-    new_voltates = voltages + (1 - jnp.exp(-delta_t / cm)) * update
-    return new_voltates
-
-
 def step_voltage_first_order_exp_euler(
     voltages: ArrayLike,
     voltage_terms: ArrayLike,
