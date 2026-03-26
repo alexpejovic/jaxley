@@ -146,5 +146,5 @@ class FlyvisConductanceSynapse(Synapse):
     ) -> float:
         prefix = self._name
         return synapse_states[f"{prefix}_s"] * (
-            post_voltage - synapse_params[f"{prefix}_r"]
+            synapse_params[f"{prefix}_r"] - post_voltage
         )

@@ -36,7 +36,7 @@ class RateFlyvisCurrent(Channel):
         delta_t: float,
     ):
         rest = params[f"{self.name}_rest"]
-        return voltage - rest
+        return -voltage + rest
 
 
     def init_state(

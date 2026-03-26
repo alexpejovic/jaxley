@@ -335,8 +335,8 @@ def step_voltage_first_order_exp_euler(
     delta_t: float,
 ) -> Array:
     """Solve one timestep of branched nerve equations with explicit exponential (flyvis)."""
-    v_inf = constant_terms / voltage_terms
-    t_eff = cm / voltage_terms
+    v_inf = -constant_terms / voltage_terms
+    t_eff = -cm / voltage_terms
     new_voltates = voltages * (jnp.exp(-delta_t / t_eff)) + v_inf * (
         1 - jnp.exp(-delta_t / t_eff)
     )

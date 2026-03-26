@@ -3151,7 +3151,7 @@ class Module(ABC):
             )
         elif solver == "first_order_exp_euler":
             state_vals["linear_terms"] = jnp.stack([((linear_terms["v"] / 1000.0) + v_syn_linear_terms)])
-            state_vals["constant_terms"] = jnp.stack([((const_terms["v"] / 1000.0) + i_ext + v_syn_const_terms)])
+            state_vals["constant_terms"] = jnp.stack([(-(const_terms["v"] / 1000.0) + i_ext - v_syn_const_terms)])
             nones = [None] * len(solver_kwargs)
             vmapped = vmap(step_voltage_first_order_exp_euler, in_axes=(0, 0, 0, 0, *nones, None, None))
             updated_states = vmapped(
