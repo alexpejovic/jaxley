@@ -99,6 +99,7 @@ from jaxley_mech.channels.pospischil import Na, K, Leak, CaL, CaT, M
 @michaeldeistler)
 - Improved documentation for channels (#766, @michaeldeistler)
 
+- jx.integrate took O(n^2) time with n compartments on the backwards pass. Instead of backpropagating through the forward solve, we now use a custom_jvp (another tridiagonal solve, which is O(n)) (#795 @manuelgloeckler)
 
 # 0.13.0
 
