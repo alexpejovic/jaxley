@@ -337,6 +337,11 @@ def step_voltage_first_order_exp_euler(
     """Solve one timestep of branched nerve equations with explicit exponential (flyvis)."""
     v_inf = -constant_terms / voltage_terms
     t_eff = -cm / voltage_terms
+    # Clamp the effective time constant to be at least `delta_t`, mirroring flyvis'
+    # `clamp_tau=True` (see flyvis `NetworkDynamics.exponential_euler`). Without this,
+    # neurons whose `t_eff < delta_t` (high total synaptic conductance) jump straight to
+    # `v_inf` in one step, whereas flyvis approaches it at a capped rate.
+    t_eff = jnp.maximum(t_eff, delta_t)
     new_voltates = voltages * (jnp.exp(-delta_t / t_eff)) + v_inf * (
         1 - jnp.exp(-delta_t / t_eff)
     )
