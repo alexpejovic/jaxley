@@ -393,7 +393,7 @@ def integrate(
     # Function to efficiently gather recorded states from dict of states
     def gather_recs(state: Dict[str, Array]) -> Array:
         """Return all recorded values, using one gather per recorded state."""
-        parts = jnp.array([state[state_name][inds] for state_name, inds in rec_groups])
+        parts = [state[state_name][inds] for state_name, inds in rec_groups]
         recs = parts[0] if len(parts) == 1 else jnp.concatenate(parts)
         return recs if rec_order is None else recs[rec_order]
 
@@ -453,7 +453,6 @@ def integrate(
         assert (
             nsteps_to_return <= length
         ), "The desired simulation duration is longer than `prod(nested_length)`."
-
         if externals:
             for key in externals.keys():
                 dummy_external = jnp.zeros((size_difference, externals[key].shape[1]))
