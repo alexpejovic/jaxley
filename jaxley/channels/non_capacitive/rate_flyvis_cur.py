@@ -11,6 +11,9 @@ from jaxley.channels import Channel
 class RateFlyvisCurrent(Channel):
     """Rate-based, unit-less, neuron model."""
 
+    # `-v + rest` is linear in voltage, so its slope is exact.
+    exact_linearization = True
+
     def __init__(self, name: Optional[str] = None):
         self.current_is_in_mA_per_cm2 = True
         super().__init__("RateFlyvis")

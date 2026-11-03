@@ -99,6 +99,9 @@ class FlyvisConductanceSynapse(Synapse):
         connect(net.cell(0), net.cell(1), ConductanceSynapse(nonlinearity))
     """
 
+    # The current is linear in the post-synaptic voltage, so its slope is exact.
+    exact_linearization = True
+
     def __init__(self, nonlinearity: Callable = relu, name: Optional[str] = None):
         super().__init__(name)
         prefix = self._name
